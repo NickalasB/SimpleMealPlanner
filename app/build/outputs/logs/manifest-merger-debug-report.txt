@@ -1,0 +1,154 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/appcompat-1.0.0-beta01.aar/84ad20cc747eae49c42cc477fba38718/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-ktx-1.1.0-alpha03.aar/448aa22f2a973a92acb91edf09948350/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.2] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/constraintlayout-1.1.2.aar/51adf3079fc418f9aa959c3a67c223b5/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.fragment:fragment:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/fragment-1.0.0-beta01.aar/fb624408e1616826264b371fbf9bab57/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/vectordrawable-animated-1.0.0-beta01.aar/adcd2267e09a34643e0b11e3a94402c6/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/legacy-support-core-ui-1.0.0-beta01.aar/22e4f5b290a2d51d8d0581072adb5080/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/cursoradapter-1.0.0-beta01.aar/ac0cdb50882c27c6f60a7e5506954f69/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/legacy-support-core-utils-1.0.0-beta01.aar/9fe1376a10f01bc295e0505e10988ddf/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/vectordrawable-1.0.0-beta01.aar/4e1830d4e2621839ae8d065496cd0392/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/loader-1.0.0-beta01.aar/e2be33667f947e4e85d987e9b783c934/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/viewpager-1.0.0-beta01.aar/a7c75d478205f2211c9f62e272998513/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-1.0.0-beta01.aar/8f8db643543bf9632accf82611c188b8/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/drawerlayout-1.0.0-beta01.aar/1daafc690c9f600217b2267be378ab2f/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-1.0.0-beta01.aar/4de4d0ff02197d0b63c4dab67ba37cf9/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/customview-1.0.0-beta01.aar/52854397f8ec2431e61f2168da53a413/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-1.0.0-beta01.aar/02dcbd1d64a144ddabf3d64718d02295/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-1.0.0-beta01.aar/2ed73c4b297bd506d535fc5e69d0e1b2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha03.aar/406807dcfb59bdf7fd509e7e6dcd202e/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/documentfile-1.0.0-beta01.aar/5365dea8c7b20c1638f5c0dae5efe414/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-1.0.0-beta01.aar/382c108b05b75b5f52175bc8c4f4de05/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/print-1.0.0-beta01.aar/43d93407757e4e04b28511913d2229fd/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0-alpha01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0-alpha01.aar/852e8dc749727a1f744d1c87b8779dad/AndroidManifest.xml:17:1-25:12
+MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/interpolator-1.0.0-beta01.aar/07b1e34afa5539e5c4b286dd1ffccdcc/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-viewmodel-2.0.0-beta01.aar/a811e8993ef40cb2f60c16a5600e0b49/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-runtime-2.0.0.aar/8d06e023e79519b3bb83378fe6707242/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-core-2.0.0-beta01.aar/be0d194247ed70cd02994ff998bacca9/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-runtime-2.0.0-beta01.aar/2ce33dcf74ac40999d1774db25b93649/AndroidManifest.xml:17:1-22:12
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+	package
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:3:11-49
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:1-21:12
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:5:5-19:19
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.2] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/constraintlayout-1.1.2.aar/51adf3079fc418f9aa959c3a67c223b5/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.2] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/constraintlayout-1.1.2.aar/51adf3079fc418f9aa959c3a67c223b5/AndroidManifest.xml:9:5-20
+MERGED from [androidx.core:core:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha03.aar/406807dcfb59bdf7fd509e7e6dcd202e/AndroidManifest.xml:22:5-89
+MERGED from [androidx.core:core:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha03.aar/406807dcfb59bdf7fd509e7e6dcd202e/AndroidManifest.xml:22:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0-alpha01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0-alpha01.aar/852e8dc749727a1f744d1c87b8779dad/AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0-alpha01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0-alpha01.aar/852e8dc749727a1f744d1c87b8779dad/AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha03.aar/406807dcfb59bdf7fd509e7e6dcd202e/AndroidManifest.xml:22:18-86
+	android:supportsRtl
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:10:13-39
+	android:label
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:8:13-45
+	android:roundIcon
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:9:13-58
+	android:icon
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:7:13-47
+	android:allowBackup
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:6:13-39
+	android:theme
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:11:13-44
+activity#com.zonkey.simplemealplanner.MainActivity
+ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:12:9-18:20
+	android:name
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:12:19-47
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:13:13-17:29
+action#android.intent.action.MAIN
+ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:14:17-68
+	android:name
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:14:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:16:17-76
+	android:name
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml:16:27-74
+uses-sdk
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/appcompat-1.0.0-beta01.aar/84ad20cc747eae49c42cc477fba38718/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/appcompat-1.0.0-beta01.aar/84ad20cc747eae49c42cc477fba38718/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-ktx-1.1.0-alpha03.aar/448aa22f2a973a92acb91edf09948350/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-ktx-1.1.0-alpha03.aar/448aa22f2a973a92acb91edf09948350/AndroidManifest.xml:5:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.2] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/constraintlayout-1.1.2.aar/51adf3079fc418f9aa959c3a67c223b5/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.2] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/constraintlayout-1.1.2.aar/51adf3079fc418f9aa959c3a67c223b5/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.fragment:fragment:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/fragment-1.0.0-beta01.aar/fb624408e1616826264b371fbf9bab57/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/fragment-1.0.0-beta01.aar/fb624408e1616826264b371fbf9bab57/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/vectordrawable-animated-1.0.0-beta01.aar/adcd2267e09a34643e0b11e3a94402c6/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/vectordrawable-animated-1.0.0-beta01.aar/adcd2267e09a34643e0b11e3a94402c6/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/legacy-support-core-ui-1.0.0-beta01.aar/22e4f5b290a2d51d8d0581072adb5080/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/legacy-support-core-ui-1.0.0-beta01.aar/22e4f5b290a2d51d8d0581072adb5080/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/cursoradapter-1.0.0-beta01.aar/ac0cdb50882c27c6f60a7e5506954f69/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/cursoradapter-1.0.0-beta01.aar/ac0cdb50882c27c6f60a7e5506954f69/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/legacy-support-core-utils-1.0.0-beta01.aar/9fe1376a10f01bc295e0505e10988ddf/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/legacy-support-core-utils-1.0.0-beta01.aar/9fe1376a10f01bc295e0505e10988ddf/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/vectordrawable-1.0.0-beta01.aar/4e1830d4e2621839ae8d065496cd0392/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/vectordrawable-1.0.0-beta01.aar/4e1830d4e2621839ae8d065496cd0392/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/loader-1.0.0-beta01.aar/e2be33667f947e4e85d987e9b783c934/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/loader-1.0.0-beta01.aar/e2be33667f947e4e85d987e9b783c934/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/viewpager-1.0.0-beta01.aar/a7c75d478205f2211c9f62e272998513/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/viewpager-1.0.0-beta01.aar/a7c75d478205f2211c9f62e272998513/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-1.0.0-beta01.aar/8f8db643543bf9632accf82611c188b8/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-1.0.0-beta01.aar/8f8db643543bf9632accf82611c188b8/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/drawerlayout-1.0.0-beta01.aar/1daafc690c9f600217b2267be378ab2f/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/drawerlayout-1.0.0-beta01.aar/1daafc690c9f600217b2267be378ab2f/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-1.0.0-beta01.aar/4de4d0ff02197d0b63c4dab67ba37cf9/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-1.0.0-beta01.aar/4de4d0ff02197d0b63c4dab67ba37cf9/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/customview-1.0.0-beta01.aar/52854397f8ec2431e61f2168da53a413/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/customview-1.0.0-beta01.aar/52854397f8ec2431e61f2168da53a413/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-1.0.0-beta01.aar/02dcbd1d64a144ddabf3d64718d02295/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-1.0.0-beta01.aar/02dcbd1d64a144ddabf3d64718d02295/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-1.0.0-beta01.aar/2ed73c4b297bd506d535fc5e69d0e1b2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-1.0.0-beta01.aar/2ed73c4b297bd506d535fc5e69d0e1b2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha03.aar/406807dcfb59bdf7fd509e7e6dcd202e/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.1.0-alpha03] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha03.aar/406807dcfb59bdf7fd509e7e6dcd202e/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/documentfile-1.0.0-beta01.aar/5365dea8c7b20c1638f5c0dae5efe414/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/documentfile-1.0.0-beta01.aar/5365dea8c7b20c1638f5c0dae5efe414/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-1.0.0-beta01.aar/382c108b05b75b5f52175bc8c4f4de05/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-1.0.0-beta01.aar/382c108b05b75b5f52175bc8c4f4de05/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/print-1.0.0-beta01.aar/43d93407757e4e04b28511913d2229fd/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/print-1.0.0-beta01.aar/43d93407757e4e04b28511913d2229fd/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0-alpha01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0-alpha01.aar/852e8dc749727a1f744d1c87b8779dad/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0-alpha01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0-alpha01.aar/852e8dc749727a1f744d1c87b8779dad/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/interpolator-1.0.0-beta01.aar/07b1e34afa5539e5c4b286dd1ffccdcc/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/interpolator-1.0.0-beta01.aar/07b1e34afa5539e5c4b286dd1ffccdcc/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-viewmodel-2.0.0-beta01.aar/a811e8993ef40cb2f60c16a5600e0b49/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-viewmodel-2.0.0-beta01.aar/a811e8993ef40cb2f60c16a5600e0b49/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-runtime-2.0.0.aar/8d06e023e79519b3bb83378fe6707242/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-runtime-2.0.0.aar/8d06e023e79519b3bb83378fe6707242/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-core-2.0.0-beta01.aar/be0d194247ed70cd02994ff998bacca9/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-core-2.0.0-beta01.aar/be0d194247ed70cd02994ff998bacca9/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-runtime-2.0.0-beta01.aar/2ce33dcf74ac40999d1774db25b93649/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0-beta01] /Users/nickbradshaw/.gradle/caches/transforms-1/files-1.1/core-runtime-2.0.0-beta01.aar/2ce33dcf74ac40999d1774db25b93649/AndroidManifest.xml:20:5-44
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		ADDED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/nickbradshaw/AndroidStudioProjects/PersonalProjects/SimpleMealPlanner/app/src/main/AndroidManifest.xml
