@@ -1,11 +1,16 @@
 package com.zonkey.simplemealplanner.network
 
-import com.zonkey.simplemealplanner.model.RecipePreview
+import com.zonkey.simplemealplanner.model.RecipeResponse
 import io.reactivex.Observable
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface RecipeService {
 
-    fun searchRecipesByKeyWord(searchParams: String, page: Int): Observable<List<RecipePreview>>
+  @GET("api/")
+  fun getRecipesRequest(
+      @Query("i") ingredients: String = "",
+      @Query("q") searchParameters: String = "",
+      @Query("p") page: Int? = null): Observable<RecipeResponse>
 
-    fun searchRecipesByIngredient(ingredients: String): Observable<List<RecipePreview>>
 }

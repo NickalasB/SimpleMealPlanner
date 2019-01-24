@@ -5,6 +5,6 @@ data class RecipeResponse(
     val version: String,
     val results: List<RecipePreview>
 ) {
-    fun getRecipes() = results
+  fun getRecipes() = results
 }
 
