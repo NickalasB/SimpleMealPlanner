@@ -5,6 +5,8 @@ import android.app.Application
 import com.zonkey.simplemealplanner.di.AppComponent
 import com.zonkey.simplemealplanner.di.AppDaggerModule
 import com.zonkey.simplemealplanner.di.DaggerAppComponent
+import com.zonkey.simplemealplanner.network.RecipeService
+import com.zonkey.simplemealplanner.network.RetrofitInstance
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -38,5 +40,11 @@ class RecipeApp : Application(),
 
     appComponent.inject(this)
 
+    initializeApiClient()
+  }
+
+  private fun initializeApiClient() {
+    RetrofitInstance().getRetrofitInstance().create(
+        RecipeService::class.java)
   }
 }
