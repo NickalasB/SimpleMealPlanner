@@ -12,5 +12,4 @@ interface RecipeService {
       @Query("i") ingredients: String = "",
       @Query("q") searchParameters: String = "",
       @Query("p") page: Int? = null): Observable<RecipeResponse>
-
 }

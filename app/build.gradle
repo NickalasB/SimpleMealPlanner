@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion Integer.parseInt("$compile_sdk_version")
@@ -20,20 +21,26 @@ android {
     }
 }
 
+kapt { javacOptions { option("-Xmaxerrs", 10000) } }
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.core:core-ktx:$ktx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
     //Dagger2
+    compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger:$dagger_version"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
+
     implementation "com.google.dagger:dagger-android:$dagger_android_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_android_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_android_version"
+
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
