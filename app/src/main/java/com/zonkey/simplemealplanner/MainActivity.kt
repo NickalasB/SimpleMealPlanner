@@ -1,8 +1,10 @@
 package com.zonkey.simplemealplanner
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,24 +19,43 @@ class MainActivity : AppCompatActivity() {
 
   private val compositeDisposable = CompositeDisposable()
 
+  private lateinit var recyclerView: RecyclerView
+  private lateinit var viewAdapter: RecyclerView.Adapter<*>
+  private lateinit var viewManager: RecyclerView.LayoutManager
+
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    getTestRecipes()
+  }
+
+  private fun getTestRecipes() {
+
     compositeDisposable.add(
         recipeRepository.searchRecipesByIngredient("cheese, ham")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { recipeList ->
+              viewManager = LinearLayoutManager(this)
+              viewAdapter = RecipeCardAdapter(recipeList)
+
+              recyclerView = findViewById<RecyclerView>(R.id.recipe_card_recycler_view).apply {
+                setHasFixedSize(true)
+                layoutManager = viewManager
+                adapter = viewAdapter
+              }
+
+            }
             .doOnComplete {
-              Toast.makeText(this, "onComplete Called!", Toast.LENGTH_SHORT).show()
+              //              Toast.makeText(this, "onComplete Called!", Toast.LENGTH_SHORT).show()
             }
             .doOnError {
-              Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
+              //              Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
             .subscribe()
     )
-
   }
 
 }
