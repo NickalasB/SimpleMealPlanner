@@ -1,6 +1,7 @@
 package com.zonkey.simplemealplanner
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.home_page_progress
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
   private fun getTestRecipes() {
 
     compositeDisposable.add(
-        recipeRepository.searchRecipesByIngredient("cheese, ham")
+        recipeRepository.getRecipesByKeyWord("Cheese and ham pockets")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { recipeList ->
@@ -48,10 +50,13 @@ class MainActivity : AppCompatActivity() {
               }
 
             }
+            .doOnSubscribe { home_page_progress.visibility = View.VISIBLE }
             .doOnComplete {
-              //              Toast.makeText(this, "onComplete Called!", Toast.LENGTH_SHORT).show()
+              home_page_progress.visibility = View.GONE
+
             }
             .doOnError {
+              home_page_progress.visibility = View.GONE
               //              Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
             .subscribe()
