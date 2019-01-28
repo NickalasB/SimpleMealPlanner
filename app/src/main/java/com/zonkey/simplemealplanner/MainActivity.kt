@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
   private fun getTestRecipes() {
 
     compositeDisposable.add(
-        recipeRepository.getRecipesByKeyWord("Cheese and ham pockets")
+        recipeRepository.getEdamamRecipes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { recipeList ->
@@ -49,15 +50,17 @@ class MainActivity : AppCompatActivity() {
                 adapter = viewAdapter
               }
 
+              val recipeJaon = Gson().toJson(recipeList)
+
             }
             .doOnSubscribe { home_page_progress.visibility = View.VISIBLE }
             .doOnComplete {
               home_page_progress.visibility = View.GONE
 
             }
-            .doOnError {
+            .doOnError { e ->
+              //ToDo proper error handling
               home_page_progress.visibility = View.GONE
-              //              Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
             .subscribe()
     )

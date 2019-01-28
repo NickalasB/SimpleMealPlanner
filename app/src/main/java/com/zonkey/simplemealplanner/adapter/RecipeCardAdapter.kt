@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.zonkey.simplemealplanner.model.RecipePreview
+import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.edamam.Ingredient
 
-class RecipeCardAdapter constructor(private val recipes: List<RecipePreview>) :
+class RecipeCardAdapter (private val recipes: List<Hit>) :
     RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
@@ -31,13 +32,13 @@ class RecipeCardAdapter constructor(private val recipes: List<RecipePreview>) :
     private val recipeLink: TextView = recipeCardView.findViewById(
         com.zonkey.simplemealplanner.R.id.recipe_card_link)
 
-    fun displayRecipe(recipe: RecipePreview) {
-      val ingredientsText = "Ingredients ${recipe.ingredients}"
+    fun displayRecipe(hit: Hit) {
+      val recipe = hit.recipe
+      val items: List<Ingredient> = recipe.ingredients
+      val ingredientsText = "Ingredients: $items"
+      val recipeLinkText = "Link: ${recipe.uri}"
 
-      val items: List<String> = recipe.ingredients.split(",")
-
-      val recipeLinkText = "Link ${recipe.href}"
-      recipeTitle.text = recipe.title
+      recipeTitle.text = hit.recipe.label
       recipeIngredients.text = ingredientsText
       recipeLink.text = recipeLinkText
     }

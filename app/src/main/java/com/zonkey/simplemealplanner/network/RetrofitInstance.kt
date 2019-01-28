@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitInstance {
 
   fun getRetrofitInstance(): Retrofit = Retrofit.Builder()
-      .baseUrl(BASE_URL)
+      .baseUrl(EDAMAM_BASE_URL)
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create())
       .build()

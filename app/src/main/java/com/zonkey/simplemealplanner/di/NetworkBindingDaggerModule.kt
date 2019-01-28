@@ -3,7 +3,7 @@ package com.zonkey.simplemealplanner.di
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.zonkey.simplemealplanner.network.BASE_URL
+import com.zonkey.simplemealplanner.network.EDAMAM_BASE_URL
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -43,7 +43,7 @@ class NetworkBindingDaggerModule {
   fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
       .addConverterFactory(GsonConverterFactory.create(gson))
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .baseUrl(BASE_URL)
+      .baseUrl(EDAMAM_BASE_URL)
       .client(okHttpClient)
       .build()
 }
