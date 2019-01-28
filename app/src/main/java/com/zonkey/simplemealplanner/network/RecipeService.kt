@@ -16,12 +16,12 @@ interface RecipeService {
 
   @GET("search")
   fun getEdamamRecipesRequest(
-      @Query("q") queryText: String = "Chicken soup",
+      @Query("q") queryText: String = "Pork Chops",
       @Query("app_id") appId: String = "3763ab0e",
       @Query("app_key") appKey: String = "769489cdf6326639c81bfe5f3e54d491",
       @Query("from") from: Int = 0,
-      @Query("calories") calories: String = "591-722",
-      @Query("to") to: Int = 3): Observable<Hits>
+//      @Query("calories") calories: String = "591-722",
+      @Query("to") to: Int = 20): Observable<Hits>
 //  @Query("diet") diet: Enum<Diet> = Diet.HIGH_PROTEIN)
 
 

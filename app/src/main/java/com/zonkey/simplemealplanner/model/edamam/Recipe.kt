@@ -11,4 +11,4 @@ data class Recipe(
     val ingredients: List<Ingredient>,
     val totalNutrients: NutrientInfo,
     val totalDaily: NutrientInfo,
-    val dietLabels: Any)
+    val dietLabels: List<Diet>)

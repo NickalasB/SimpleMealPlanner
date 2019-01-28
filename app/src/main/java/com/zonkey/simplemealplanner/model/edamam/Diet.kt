@@ -8,5 +8,66 @@ enum class Diet {
   @SerializedName("high-fiber")
   HIGH_FIBER,
   @SerializedName("high-protein")
-  HIGH_PROTEIN
+  HIGH_PROTEIN,
+  @SerializedName("low-carb")
+  LOW_CARB,
+  @SerializedName("low_fat")
+  LOW_FAT,
+  @SerializedName("low-sodium")
+  LOW_SODIUM,
+  @SerializedName("alcohol-free")
+  ALCOHOL_FREE,
+  @SerializedName("celery-free")
+  CELERY_FREE,
+  @SerializedName("crustacean-free")
+  CRUSTACEAN_FREE,
+  @SerializedName("dairy-free")
+  DAIRY_FREE,
+  @SerializedName("egg-free")
+  EGG_FREE,
+  @SerializedName("fish-free")
+  FISH_FREE,
+  @SerializedName("gluten-free")
+  GLUTEN_FREE,
+  @SerializedName("kidney-friendly")
+  KIDNEY_FRIENDLY,
+  @SerializedName("kosher")
+  KOSHER,
+  @SerializedName("low-potassium")
+  LOW_POTASSIUM,
+  @SerializedName("lupine-free")
+  LUPINE_FREE,
+  @SerializedName("mustard-free")
+  MUSTART_FREE,
+  @SerializedName("No-oil-added")
+  NO_OIL_ADDED,
+  @SerializedName("low-sugar")
+  LOW_SUGER,
+  @SerializedName("paleo")
+  PALEO,
+  @SerializedName("peanut-free")
+  PEANUT_FREE,
+  @SerializedName("pescatarian")
+  PESCATARIAN,
+  @SerializedName("pork-free")
+  PORK_FREE,
+  @SerializedName("red-meat-free")
+  RED_MEAT_FREE,
+  @SerializedName("sesame-free")
+  SESAME_GREE,
+  @SerializedName("shellfish-free")
+  SHELLFISH_FREE,
+  @SerializedName("soy-free")
+  SOY_FREE,
+  @SerializedName("sugar-conscious")
+  SUGAR_CONSCIOUS,
+  @SerializedName("tree-nut-free")
+  TREE_NUT_FREE,
+  @SerializedName("vegan")
+  VEGAN,
+  @SerializedName("vegetarian")
+  VEGETARIAN,
+  @SerializedName("wheat-free")
+  WHEAT_FREE
 }
+
