@@ -11,18 +11,28 @@ const val EDAMAM_BASE_URL = "https://api.edamam.com/"
 interface RecipeService {
 
   //info https://developer.edamam.com/edamam-docs-recipe-api
-
   //example "https://api.edamam.com/search?q=chicken&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=3&calories=591-722&health=alcohol-free"
 
+  /**
+   * The makeup of a recipe search request
+   * @param queryText the search term/s
+   * @param appId your edamam-issued application ID
+   * @param appKey your edamam-issued application key
+   * @param from first result index (default 0)
+   * @param to last result index
+   * @param maxIngredients maxium number of ingredients
+   * @param calories a range of total calories formatted as a string "500-600"
+   * will return all recipes with which have between 500 and 600 kcal per serving
+   */
   @GET("search")
   fun getEdamamRecipesRequest(
-      @Query("q") queryText: String = "Pork Chops",
+      @Query("q") queryText: String? = "Salmon",
       @Query("app_id") appId: String = "3763ab0e",
       @Query("app_key") appKey: String = "769489cdf6326639c81bfe5f3e54d491",
       @Query("from") from: Int = 0,
-//      @Query("calories") calories: String = "591-722",
-      @Query("to") to: Int = 20): Observable<Hits>
-//  @Query("diet") diet: Enum<Diet> = Diet.HIGH_PROTEIN)
+      @Query("to") to: Int = 20,
+      @Query("ingr") maxIngredients: Int = 4,
+      @Query("calories") calories: String = "591-722"): Observable<Hits>
 
 
   //info http://www.recipepuppy.com/about/api/

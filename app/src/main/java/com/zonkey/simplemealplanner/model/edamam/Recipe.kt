@@ -5,10 +5,14 @@ data class Recipe(
     val label: String,
     val image: String,
     val source: String,
+    val url: String,
     val yield: Int,
+    val dietLabels: List<Diet>,
+    val healthLabels: List<Diet>,
+    val ingredientLines: List<String>,
+    val ingredients: List<Ingredient>,
     val calories: Float,
     val totalWeight: Float,
-    val ingredients: List<Ingredient>,
     val totalNutrients: NutrientInfo,
-    val totalDaily: NutrientInfo,
-    val dietLabels: List<Diet>)
+    val totalDaily: NutrientInfo
+)
