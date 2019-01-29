@@ -3,6 +3,7 @@
     package="com.zonkey.simplemealplanner">
 
   <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="ACCESS_NETWORK_STATE"/>
 
   <application
       android:name=".RecipeApp"
