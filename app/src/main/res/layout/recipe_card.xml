@@ -5,7 +5,9 @@
     android:id="@+id/recipe_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="16dp"
     card_view:cardCornerRadius="4dp"
     >
 
@@ -27,13 +29,22 @@
         tools:text="Cheeseburger"
         />
 
+    <ImageView
+        android:id="@+id/recipe_card_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:contentDescription="Recipe Image"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_title"
+        />
+
     <TextView
         android:id="@+id/recipe_card_servings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_title"
+        card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_image"
         tools:text="4 servings"
         />
 
@@ -41,7 +52,7 @@
         android:id="@+id/recipe_card_calories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_servings"
         tools:text="600 cals/serving"
@@ -51,7 +62,7 @@
         android:id="@+id/recipe_card_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:autoLink="web"
         android:ellipsize="end"
         card_view:layout_constraintStart_toStartOf="parent"
