@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.model.edamam.Hit
-import com.zonkey.simplemealplanner.model.edamam.Ingredient
+import kotlin.math.roundToInt
 
-class RecipeCardAdapter (private val recipes: List<Hit>) :
+class RecipeCardAdapter(private val recipes: List<Hit>) :
     RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
@@ -25,22 +26,22 @@ class RecipeCardAdapter (private val recipes: List<Hit>) :
   }
 
   class RecipeCardViewHolder(recipeCardView: CardView) : RecyclerView.ViewHolder(recipeCardView) {
-    private val recipeTitle: TextView = recipeCardView.findViewById(
-        com.zonkey.simplemealplanner.R.id.recipe_card_title)
-    private val recipeIngredients: TextView = recipeCardView.findViewById(
-        com.zonkey.simplemealplanner.R.id.recipe_card_ingredients)
-    private val recipeLink: TextView = recipeCardView.findViewById(
-        com.zonkey.simplemealplanner.R.id.recipe_card_link)
+    private val recipeTitle: TextView = recipeCardView.findViewById(R.id.recipe_card_title)
+    private val recipeLink: TextView = recipeCardView.findViewById(R.id.recipe_card_link)
+    private val recipeServing: TextView = recipeCardView.findViewById(R.id.recipe_card_servings)
+    private val recipeCalories: TextView = recipeCardView.findViewById(R.id.recipe_card_calories)
 
     fun displayRecipe(hit: Hit) {
       val recipe = hit.recipe
-      val items: List<Ingredient> = recipe.ingredients
-      val ingredientsText = "Ingredients: $items"
-      val recipeLinkText = "Link: ${recipe.uri}"
+      val linkText = "Link: ${recipe.url}"
+      val servings = "Servings: ${recipe.yield}"
+      val calsPerServing = recipe.calories.roundToInt() / recipe.yield
+      val caloriesText = "Calories/serving: $calsPerServing"
 
       recipeTitle.text = hit.recipe.label
-      recipeIngredients.text = ingredientsText
-      recipeLink.text = recipeLinkText
+      recipeServing.text = servings
+      recipeLink.text = linkText
+      recipeCalories.text = caloriesText
     }
   }
 }
