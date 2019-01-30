@@ -16,7 +16,8 @@ import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.recipe_search_view
 import javax.inject.Inject
 
 
@@ -43,7 +44,6 @@ class MainActivity : AppCompatActivity() {
     if (Intent.ACTION_SEARCH == intent.action) {
       intent.getStringExtra(SearchManager.QUERY)?.also {
         if (it.isNotEmpty()) {
-          recipe_search_view
           getTestRecipes(it)
         }
       }
