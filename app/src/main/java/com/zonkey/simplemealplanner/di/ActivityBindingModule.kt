@@ -1,6 +1,6 @@
 package com.zonkey.simplemealplanner.di
 
-import com.zonkey.simplemealplanner.MainActivity
+import com.zonkey.simplemealplanner.activity.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

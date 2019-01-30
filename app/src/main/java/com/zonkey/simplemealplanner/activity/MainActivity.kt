@@ -1,11 +1,15 @@
-package com.zonkey.simplemealplanner
+package com.zonkey.simplemealplanner.activity
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
@@ -15,13 +19,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+
 class MainActivity : AppCompatActivity() {
 
   @Inject
   lateinit var recipeRepository: RecipeRepository
 
   private val compositeDisposable = CompositeDisposable()
-
   private lateinit var recyclerView: RecyclerView
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
@@ -31,13 +35,27 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    getTestRecipes()
+    val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+    recipe_search_view.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+    recipe_search_view.setIconifiedByDefault(false)
+    recipe_search_view.isSubmitButtonEnabled = true
+
+    if (Intent.ACTION_SEARCH == intent.action) {
+      intent.getStringExtra(SearchManager.QUERY)?.also {
+        if (it.isNotEmpty()) {
+          recipe_search_view
+          getTestRecipes(it)
+        }
+      }
+    } else {
+      getTestRecipes("Salmon")
+    }
   }
 
-  private fun getTestRecipes() {
+  private fun getTestRecipes(queryText: String) {
 
     compositeDisposable.add(
-        recipeRepository.getEdamamRecipes(queryText = "Turtle")
+        recipeRepository.getEdamamRecipes(queryText = queryText)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { recipeList ->
@@ -49,14 +67,11 @@ class MainActivity : AppCompatActivity() {
                 layoutManager = viewManager
                 adapter = viewAdapter
               }
-
-              val recipeJaon = Gson().toJson(recipeList)
-
+              val recipeJson = Gson().toJson(recipeList)
             }
             .doOnSubscribe { home_page_progress.visibility = View.VISIBLE }
             .doOnComplete {
               home_page_progress.visibility = View.GONE
-
             }
             .doOnError { e ->
               //ToDo proper error handling
@@ -65,5 +80,4 @@ class MainActivity : AppCompatActivity() {
             .subscribe()
     )
   }
-
 }
