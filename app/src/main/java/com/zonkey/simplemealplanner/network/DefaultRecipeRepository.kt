@@ -8,12 +8,13 @@ import javax.inject.Inject
 class DefaultRecipeRepository @Inject constructor(
     private val recipeService: RecipeService) : RecipeRepository {
 
-  override fun getEdamamRecipes(): Observable<List<Hit>> {
-    return recipeService.getEdamamRecipesRequest().map { hits -> hits.getHitList() }
+  override fun getEdamamRecipes(queryText: String): Observable<List<Hit>> {
+    return recipeService.getEdamamRecipesRequest(
+        queryText = queryText).map { hits -> hits.getHitList() }
   }
 
-  override fun getEdamamHits(): Observable<Hits> {
-    return recipeService.getEdamamRecipesRequest().map { hits -> hits.getHit() }
+  override fun getEdamamHits(queryText: String): Observable<Hits> {
+    return recipeService.getEdamamRecipesRequest(queryText = queryText).map { hits -> hits.getHit() }
   }
 
 //  override fun getRecipePuppyRecipesByKeyword(keyWords: String,

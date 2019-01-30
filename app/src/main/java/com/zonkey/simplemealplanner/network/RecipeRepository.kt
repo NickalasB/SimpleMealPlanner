@@ -6,9 +6,9 @@ import io.reactivex.Observable
 
 interface RecipeRepository {
 
-  fun getEdamamHits(): Observable<Hits>
+  fun getEdamamHits(queryText: String): Observable<Hits>
 
-  fun getEdamamRecipes(): Observable<List<Hit>>
+  fun getEdamamRecipes(queryText: String): Observable<List<Hit>>
 
 //  fun getRecipePuppyRecipesByKeyword(keyWords: String,
 //      page: Int = 1): Observable<List<RecipePreview>>

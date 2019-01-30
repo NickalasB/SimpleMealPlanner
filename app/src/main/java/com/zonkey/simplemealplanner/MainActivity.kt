@@ -12,7 +12,7 @@ import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
   private fun getTestRecipes() {
 
     compositeDisposable.add(
-        recipeRepository.getEdamamRecipes()
+        recipeRepository.getEdamamRecipes(queryText = "Turtle")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { recipeList ->
