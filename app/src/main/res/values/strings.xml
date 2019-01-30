@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Simple Meal Planner</string>
+  <string name="recipe_image_content_description">Recipe Image</string>
 </resources>

@@ -5,24 +5,24 @@
     android:id="@+id/recipe_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="16dp"
-    card_view:cardCornerRadius="4dp"
+    android:layout_marginEnd="@dimen/common_margin_double"
+    android:layout_marginStart="@dimen/common_margin_double"
+    android:layout_marginTop="@dimen/common_margin_double"
+    card_view:cardCornerRadius="@dimen/recipe_card_corner_radius"
     >
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:paddingEnd="16dp"
-      android:paddingStart="16dp"
+      android:paddingEnd="@dimen/common_margin_double"
+      android:paddingStart="@dimen/common_margin_double"
       >
 
     <TextView
         android:id="@+id/recipe_card_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="@dimen/title_text_size"
         android:textStyle="bold"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toTopOf="parent"
@@ -31,9 +31,9 @@
 
     <ImageView
         android:id="@+id/recipe_card_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:contentDescription="Recipe Image"
+        android:layout_width="@dimen/recipe_card_image_size"
+        android:layout_height="@dimen/recipe_card_image_size"
+        android:contentDescription="@string/recipe_image_content_description"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_title"
         />
@@ -42,7 +42,7 @@
         android:id="@+id/recipe_card_servings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/common_margin"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_image"
         tools:text="4 servings"
@@ -52,7 +52,7 @@
         android:id="@+id/recipe_card_calories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/common_margin"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_servings"
         tools:text="600 cals/serving"
@@ -62,7 +62,7 @@
         android:id="@+id/recipe_card_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/common_margin"
         android:autoLink="web"
         android:ellipsize="end"
         card_view:layout_constraintStart_toStartOf="parent"
