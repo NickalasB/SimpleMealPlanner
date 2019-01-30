@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.network
 
+import com.zonkey.simplemealplanner.BuildConfig
 import com.zonkey.simplemealplanner.model.edamam.Hits
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -26,14 +27,13 @@ interface RecipeService {
    */
   @GET("search")
   fun getEdamamRecipesRequest(
-      @Query("q") queryText: String? = "Salmon",
-      @Query("app_id") appId: String = "3763ab0e",
-      @Query("app_key") appKey: String = "769489cdf6326639c81bfe5f3e54d491",
+      @Query("q") queryText: String,
+      @Query("app_id") appId: String = BuildConfig.edamam_app_id,
+      @Query("app_key") appKey: String = BuildConfig.edamam_app_key,
       @Query("from") from: Int = 0,
       @Query("to") to: Int = 20,
-      @Query("ingr") maxIngredients: Int = 4,
-      @Query("calories") calories: String = "591-722"): Observable<Hits>
-
+      @Query("ingr") maxIngredients: Int? = 99,
+      @Query("calories") calories: String? = "1-9000"): Observable<Hits>
 
   //info http://www.recipepuppy.com/about/api/
 //
