@@ -28,8 +28,8 @@ interface RecipeService {
   @GET("search")
   fun getEdamamRecipesRequest(
       @Query("q") queryText: String,
-      @Query("app_id") appId: String = BuildConfig.edamam_app_id,
-      @Query("app_key") appKey: String = BuildConfig.edamam_app_key,
+      @Query("app_id") appId: String = BuildConfig.EDAMAM_APP_ID,
+      @Query("app_key") appKey: String = BuildConfig.EDAMAM_APP_KEY,
       @Query("from") from: Int = 0,
       @Query("to") to: Int = 20,
       @Query("ingr") maxIngredients: Int? = 99,

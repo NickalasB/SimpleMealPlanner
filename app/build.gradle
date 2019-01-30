@@ -16,8 +16,8 @@ android {
         versionCode Integer.parseInt("$version_code")
         versionName "$version_name"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "edamam_app_id", appKeyProperties['edamam_app_id'])
-        buildConfigField("String", "edamam_app_key", appKeyProperties['edamam_app_key'])
+        buildConfigField("String", "EDAMAM_APP_ID", appKeyProperties['EDAMAM_APP_ID'])
+        buildConfigField("String", "EDAMAM_APP_KEY", appKeyProperties['EDAMAM_APP_KEY'])
     }
     buildTypes {
         release {
