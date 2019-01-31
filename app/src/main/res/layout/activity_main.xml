@@ -28,6 +28,21 @@
       app:layout_constraintTop_toTopOf="parent"
       />
 
+  <TextView
+      android:id="@+id/recipe_empty_search_view"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/common_margin_double"
+      android:gravity="center"
+      android:textSize="@dimen/title_text_size"
+      android:visibility="gone"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Empty search text"
+      />
+
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recipe_card_recycler_view"
       android:layout_width="0dp"

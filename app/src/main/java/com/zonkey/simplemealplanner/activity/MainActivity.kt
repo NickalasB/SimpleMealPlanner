@@ -10,14 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.R.id
+import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
+import com.zonkey.simplemealplanner.model.edamam.Hit
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -41,6 +46,10 @@ class MainActivity : AppCompatActivity() {
     recipe_search_view.setIconifiedByDefault(false)
     recipe_search_view.isSubmitButtonEnabled = true
 
+    handleSearchQuery()
+  }
+
+  private fun handleSearchQuery() {
     if (Intent.ACTION_SEARCH == intent.action) {
       intent.getStringExtra(SearchManager.QUERY)?.also {
         if (it.isNotEmpty()) {
@@ -48,7 +57,8 @@ class MainActivity : AppCompatActivity() {
         }
       }
     } else {
-      getTestRecipes("Salmon")
+      recipe_empty_search_view.visibility = View.VISIBLE
+      recipe_empty_search_view.text = getString(string.recipe_empty_start_text)
     }
   }
 
@@ -59,25 +69,48 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { recipeList ->
-              viewManager = LinearLayoutManager(this)
-              viewAdapter = RecipeCardAdapter(recipeList)
 
-              recyclerView = findViewById<RecyclerView>(R.id.recipe_card_recycler_view).apply {
-                setHasFixedSize(true)
-                layoutManager = viewManager
-                adapter = viewAdapter
-              }
+              setUpAdapter(recipeList)
+
               val recipeJson = Gson().toJson(recipeList)
+
+              if (recipeList.isEmpty()) {
+                displayEmptyResultsView()
+              }
             }
-            .doOnSubscribe { home_page_progress.visibility = View.VISIBLE }
-            .doOnComplete {
-              home_page_progress.visibility = View.GONE
+            .doOnSubscribe {
+              home_page_progress.visibility = View.VISIBLE
+              recipe_empty_search_view.visibility = View.GONE
             }
-            .doOnError { e ->
-              //ToDo proper error handling
+            .doOnComplete { home_page_progress.visibility = View.GONE }
+            .doOnError { error ->
               home_page_progress.visibility = View.GONE
+              displayEmptyResultsView()
+              Timber.e(error, "Bad Search")
             }
             .subscribe()
     )
+  }
+
+  private fun setUpAdapter(
+      recipeList: List<Hit>) {
+    viewManager = LinearLayoutManager(this)
+    viewAdapter = RecipeCardAdapter(recipeList)
+
+    recyclerView = findViewById<RecyclerView>(id.recipe_card_recycler_view).apply {
+      setHasFixedSize(true)
+      layoutManager = viewManager
+      adapter = viewAdapter
+    }
+  }
+
+  private fun displayEmptyResultsView() {
+    recipe_empty_search_view.visibility = View.VISIBLE
+    recipe_empty_search_view.text = getString(string.recipe_empty_error_text)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    compositeDisposable.dispose()
   }
 }
