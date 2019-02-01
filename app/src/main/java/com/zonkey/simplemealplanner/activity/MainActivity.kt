@@ -91,10 +91,9 @@ class MainActivity : AppCompatActivity() {
     )
   }
 
-  private fun setUpAdapter(
-      recipeList: List<Hit>) {
+  private fun setUpAdapter(recipeHits: List<Hit>) {
     viewManager = LinearLayoutManager(this)
-    viewAdapter = RecipeCardAdapter(recipeList)
+    viewAdapter = RecipeCardAdapter(recipeHits)
 
     recyclerView = findViewById<RecyclerView>(id.recipe_card_recycler_view).apply {
       setHasFixedSize(true)
