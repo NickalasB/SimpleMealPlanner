@@ -8,25 +8,16 @@ import javax.inject.Inject
 class DefaultRecipeRepository @Inject constructor(
     private val recipeService: RecipeService) : RecipeRepository {
 
-  override fun getEdamamRecipes(queryText: String): Observable<List<Hit>> {
-    return recipeService.getEdamamRecipesRequest(
-        queryText = queryText).map { hits -> hits.getHitList() }
-  }
+  private var cachedRecipeHits = emptyList<Hit>()
 
   override fun getEdamamHits(queryText: String): Observable<Hits> {
-    return recipeService.getEdamamRecipesRequest(queryText = queryText).map { hits -> hits.getHit() }
+    if (cachedRecipeHits.isEmpty()) {
+      return recipeService.getEdamamHitsQuery(queryText = queryText)
+          .doOnNext { cachedRecipeHits = it.hits }
+    } else {
+      return Observable.just(cachedRecipeHits)
+          .concatMap { recipeService.getEdamamHitsQuery(queryText = queryText) }
+          .doOnNext { cachedRecipeHits = it.hits }
+    }
   }
-
-//  override fun getRecipePuppyRecipesByKeyword(keyWords: String,
-//      page: Int): Observable<List<RecipePreview>> {
-//    return recipeService.getRecipePuppyRecipesRequest(searchParameters = keyWords, page = page)
-//        .map { getRecipeResponse -> getRecipeResponse.getRecipes() }
-//  }
-//
-//  override fun getRecipePuppyRecipesByIngredient(
-//      ingredients: String): Observable<List<RecipePreview>> {
-//    return recipeService.getRecipePuppyRecipesRequest(ingredients = ingredients)
-//        .map { getRecipeResponse -> getRecipeResponse.getRecipes() }
-//  }
-
 }

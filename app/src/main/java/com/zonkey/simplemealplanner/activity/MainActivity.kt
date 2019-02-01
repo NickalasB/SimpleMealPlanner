@@ -63,20 +63,19 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun getTestRecipes(queryText: String) {
-
     compositeDisposable.add(
-        recipeRepository.getEdamamRecipes(queryText = queryText)
+        recipeRepository.getEdamamHits(queryText = queryText)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { recipeList ->
+            .doOnNext { recipeHits ->
 
-              setUpAdapter(recipeList)
+              setUpAdapter(recipeHits.hits)
 
-              val recipeJson = Gson().toJson(recipeList)
-
-              if (recipeList.isEmpty()) {
+              if (recipeHits.hits.isEmpty()) {
                 displayEmptyResultsView()
               }
+
+              val recipeJson = Gson().toJson(recipeHits)
             }
             .doOnSubscribe {
               home_page_progress.visibility = View.VISIBLE
@@ -111,6 +110,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
-    compositeDisposable.dispose()
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
   }
 }

@@ -12,7 +12,7 @@ import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.model.edamam.Hit
 import kotlin.math.roundToInt
 
-class RecipeCardAdapter(private val recipes: List<Hit>) :
+class RecipeCardAdapter(private val recipeHits: List<Hit>) :
     RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
@@ -22,10 +22,10 @@ class RecipeCardAdapter(private val recipes: List<Hit>) :
     return RecipeCardViewHolder(recipeCardView)
   }
 
-  override fun getItemCount() = recipes.size
+  override fun getItemCount() = recipeHits.size
 
   override fun onBindViewHolder(viewHolder: RecipeCardViewHolder, position: Int) {
-    viewHolder.displayRecipe(recipes[position], viewHolder.itemView)
+    viewHolder.displayRecipe(recipeHits[position], viewHolder.itemView)
   }
 
   class RecipeCardViewHolder(recipeCardView: CardView) : RecyclerView.ViewHolder(recipeCardView) {
