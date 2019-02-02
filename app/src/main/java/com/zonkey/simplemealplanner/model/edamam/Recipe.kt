@@ -15,4 +15,23 @@ data class Recipe(
     val totalWeight: Float,
     val totalNutrients: NutrientInfo,
     val totalDaily: NutrientInfo
-)
+) {
+
+  constructor() : this(
+      uri = "",
+      label = "",
+      image = "",
+      source = "",
+      url = "",
+      `yield` = 0,
+      dietLabels = emptyList<Diet>(),
+      healthLabels = emptyList<Diet>(),
+      ingredientLines = emptyList<String>(),
+      ingredients = emptyList<Ingredient>(),
+      calories = 0f,
+      totalWeight = 0f,
+      totalNutrients = NutrientInfo(),
+      totalDaily = NutrientInfo()
+  )
+
+}

@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
 
 def appKeyPropertiesFile = rootProject.file("apikey.properties")
 def appKeyProperties = new Properties()
@@ -40,7 +39,8 @@ dependencies {
   implementation "androidx.cardview:cardview:$card_view_version"
 
   //Firebase
-  implementation "com.google.firebase:firebase-database:$firebase_version"
+  implementation "com.google.firebase:firebase-core:$firebase_core_version"
+  implementation "com.google.firebase:firebase-database:$firebase_database_version"
 
   //Dagger2
   compileOnly 'javax.annotation:jsr250-api:1.0'
@@ -74,3 +74,5 @@ dependencies {
   androidTestImplementation "androidx.test:runner:$test_runner_version"
   androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }
+
+apply plugin: 'com.google.gms.google-services'

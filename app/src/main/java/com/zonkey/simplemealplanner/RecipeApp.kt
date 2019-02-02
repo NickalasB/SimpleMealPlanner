@@ -2,6 +2,7 @@ package com.zonkey.simplemealplanner
 
 import android.app.Activity
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import com.zonkey.simplemealplanner.di.AppComponent
 import com.zonkey.simplemealplanner.di.AppDaggerModule
 import com.zonkey.simplemealplanner.di.DaggerAppComponent
@@ -33,6 +34,8 @@ class RecipeApp : Application(),
   override fun onCreate() {
     super.onCreate()
     instance = this
+
+    FirebaseApp.initializeApp(this)
 
     appComponent = DaggerAppComponent.builder()
         .appDaggerModule(AppDaggerModule(this))
