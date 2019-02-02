@@ -3,6 +3,7 @@ package com.zonkey.simplemealplanner
 import android.app.Activity
 import android.app.Application
 import com.google.firebase.FirebaseApp
+import com.google.firebase.database.FirebaseDatabase
 import com.zonkey.simplemealplanner.di.AppComponent
 import com.zonkey.simplemealplanner.di.AppDaggerModule
 import com.zonkey.simplemealplanner.di.DaggerAppComponent
@@ -35,15 +36,21 @@ class RecipeApp : Application(),
     super.onCreate()
     instance = this
 
-    FirebaseApp.initializeApp(this)
+    initializeFirebase()
+    setUpDagger()
+    initializeApiClient()
+  }
 
+  private fun initializeFirebase() {
+    FirebaseApp.initializeApp(this)
+    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+  }
+
+  private fun setUpDagger() {
     appComponent = DaggerAppComponent.builder()
         .appDaggerModule(AppDaggerModule(this))
         .build()
-
     appComponent.inject(this)
-
-    initializeApiClient()
   }
 
   private fun initializeApiClient() {
