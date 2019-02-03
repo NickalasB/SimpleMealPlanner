@@ -10,7 +10,8 @@ import javax.inject.Singleton
       AppDaggerModule::class,
       ActivityBindingModule::class,
       NetworkBindingDaggerModule::class,
-      RecipeDaggerModule::class
+      RecipeDaggerModule::class,
+      FirebaseBindingDaggerModule::class
     ]
 )
 
