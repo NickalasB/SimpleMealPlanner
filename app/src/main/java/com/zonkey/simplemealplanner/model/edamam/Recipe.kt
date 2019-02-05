@@ -14,7 +14,8 @@ data class Recipe(
     val calories: Float,
     val totalWeight: Float,
     val totalNutrients: NutrientInfo,
-    val totalDaily: NutrientInfo
+    val totalDaily: NutrientInfo,
+    var key: String
 ) {
 
   constructor() : this(
@@ -31,7 +32,8 @@ data class Recipe(
       calories = 0f,
       totalWeight = 0f,
       totalNutrients = NutrientInfo(),
-      totalDaily = NutrientInfo()
+      totalDaily = NutrientInfo(),
+      key = ""
   )
 
 }

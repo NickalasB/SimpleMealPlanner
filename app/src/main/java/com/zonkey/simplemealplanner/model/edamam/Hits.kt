@@ -7,10 +7,5 @@ data class Hits(
     val params: Any,
     val count: Int,
     val more: Boolean,
-    val hits: List<Hit>
-) {
-  fun getHit() = this
-
-  fun getHitList() = hits
-}
+    val hits: List<Hit>)
 

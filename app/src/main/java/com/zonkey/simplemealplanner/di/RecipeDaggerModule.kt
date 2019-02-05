@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.di
 
+import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.network.DefaultRecipeRepository
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import com.zonkey.simplemealplanner.network.RecipeService
@@ -19,5 +20,7 @@ class RecipeDaggerModule {
   @Provides
   @Singleton
   fun provideRecipeRepository(
-      recipeService: RecipeService): RecipeRepository = DefaultRecipeRepository(recipeService)
+      recipeService: RecipeService,
+      firebaseRecipeRepository: FirebaseRecipeRepository): RecipeRepository =
+      DefaultRecipeRepository(recipeService, firebaseRecipeRepository)
 }

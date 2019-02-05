@@ -4,7 +4,7 @@ import com.zonkey.simplemealplanner.model.edamam.Hit
 
 interface FirebaseRecipeRepository {
 
-  fun getRecipes()
+  fun getRecipes(): List<Hit>
 
   fun createRecipes(recipeHits: List<Hit>)
 
