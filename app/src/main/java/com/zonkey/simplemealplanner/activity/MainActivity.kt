@@ -3,20 +3,16 @@ package com.zonkey.simplemealplanner.activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.id
 import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
-import com.zonkey.simplemealplanner.firebase.RECIPE_DB
 import com.zonkey.simplemealplanner.model.edamam.Hit
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
@@ -41,13 +37,6 @@ class MainActivity : AppCompatActivity() {
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
 
-  private lateinit var recipeDatabase: DatabaseReference
-  private lateinit var firebaseInstance: FirebaseDatabase
-
-  private var recipeHitsId = ""
-
-  private lateinit var sharedPreferences: SharedPreferences
-
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
@@ -58,21 +47,14 @@ class MainActivity : AppCompatActivity() {
     recipe_search_view.setIconifiedByDefault(false)
     recipe_search_view.isSubmitButtonEnabled = true
 
-    sharedPreferences = getSharedPreferences("TEST_PREFS", Context.MODE_PRIVATE)
-    recipeHitsId = sharedPreferences.getString("SHARED_PREF_KEY", "") ?: ""
-
-
-    firebaseInstance = FirebaseDatabase.getInstance()
-    recipeDatabase = firebaseInstance.getReference(RECIPE_DB)
-
-    handleSearchQuery(recipeDatabase)
+    handleSearchQuery()
   }
 
-  private fun handleSearchQuery(recipeDatabaseReference: DatabaseReference) {
+  private fun handleSearchQuery() {
     if (Intent.ACTION_SEARCH == intent.action) {
       intent.getStringExtra(SearchManager.QUERY)?.also {
         if (it.isNotEmpty()) {
-          getTestRecipes(it, recipeDatabaseReference)
+          getTestRecipes(it)
         }
       }
     } else {
@@ -81,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun getTestRecipes(queryText: String, recipeDatabase: DatabaseReference) {
+  private fun getTestRecipes(queryText: String) {
     compositeDisposable.add(
         recipeRepository.getEdamamHits(queryText = queryText)
             .subscribeOn(Schedulers.io())
