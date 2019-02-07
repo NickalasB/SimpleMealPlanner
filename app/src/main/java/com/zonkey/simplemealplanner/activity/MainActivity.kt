@@ -8,7 +8,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.id
 import com.zonkey.simplemealplanner.R.string
@@ -16,19 +15,15 @@ import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
 import com.zonkey.simplemealplanner.model.edamam.Hit
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
-import timber.log.Timber
 import javax.inject.Inject
 
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
 
   @Inject
   lateinit var recipeRepository: RecipeRepository
@@ -37,6 +32,8 @@ class MainActivity : AppCompatActivity() {
   private lateinit var recyclerView: RecyclerView
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
+
+  private lateinit var presenter: MainActivityPresenter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
@@ -48,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     recipe_search_view.setIconifiedByDefault(false)
     recipe_search_view.isSubmitButtonEnabled = true
 
+    presenter = MainActivityPresenter(this, recipeRepository)
+
     handleSearchQuery()
   }
 
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     if (Intent.ACTION_SEARCH == intent.action) {
       intent.getStringExtra(SearchManager.QUERY)?.also {
         if (it.isNotEmpty()) {
-          getTestRecipes(it)
+          presenter.getTestRecipes(it, compositeDisposable)
         }
       }
     } else {
@@ -64,37 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun getTestRecipes(queryText: String) {
-    compositeDisposable.add(
-        recipeRepository.getEdamamHits(queryText = queryText)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { recipeHits ->
-
-              recipe_card_query_title.text = queryText
-              setUpAdapter(recipeHits)
-
-              if (recipeHits.isEmpty()) {
-                displayEmptyResultsView()
-              }
-
-              val recipeJson = Gson().toJson(recipeHits)
-            }
-            .doOnSubscribe {
-              home_page_progress.visibility = View.VISIBLE
-              recipe_empty_search_view.visibility = View.GONE
-            }
-            .doOnComplete { home_page_progress.visibility = View.GONE }
-            .doOnError { error ->
-              home_page_progress.visibility = View.GONE
-              displayEmptyResultsView()
-              Timber.e(error, "Bad Search")
-            }
-            .subscribe()
-    )
-  }
-
-  private fun setUpAdapter(recipeHits: List<Hit>) {
+  override fun setUpAdapter(recipeHits: List<Hit>) {
     viewManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     viewAdapter = RecipeCardAdapter(recipeHits)
 
@@ -105,15 +74,20 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun displayEmptyResultsView() {
-    recipe_empty_search_view.visibility = View.VISIBLE
-    recipe_empty_search_view.text = getString(string.recipe_empty_error_text)
+  override fun setEmptySearchViewVisibility(visibility: Int) {
+    recipe_empty_search_view.visibility = visibility
+  }
+
+  override fun setQueryTitleText(queryText: String) {
+    recipe_card_query_title.text = queryText
+  }
+
+  override fun setHomePageProgressVisibility(visibility: Int) {
+    home_page_progress.visibility = visibility
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    if (!compositeDisposable.isDisposed) {
-      compositeDisposable.dispose()
-    }
+    presenter.onDestroy(compositeDisposable)
   }
 }
