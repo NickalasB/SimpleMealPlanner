@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <dimen name="common_margin_quarter">2dp</dimen>
+  <dimen name="common_margin_half">4dp</dimen>
   <dimen name="common_margin">8dp</dimen>
   <dimen name="common_margin_double">16dp</dimen>
   <dimen name="recipe_card_corner_radius">4dp</dimen>
   <dimen name="title_text_size">24sp</dimen>
-  <dimen name="recipe_card_image_size">200dp</dimen>
+  <dimen name="label_text_size">16sp</dimen>
+  <dimen name="recipe_card_image_size">140dp</dimen>
+  <dimen name="recipe_card_height">180dp</dimen>
 </resources>

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.model.edamam.Hit
-import kotlin.math.roundToInt
 
 class RecipeCardAdapter(private val recipeHits: List<Hit>) :
     RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder>() {
@@ -31,26 +30,26 @@ class RecipeCardAdapter(private val recipeHits: List<Hit>) :
   class RecipeCardViewHolder(recipeCardView: CardView) : RecyclerView.ViewHolder(recipeCardView) {
     private val recipeTitle: TextView = recipeCardView.findViewById(R.id.recipe_card_title)
     private val recipeImageView: ImageView = recipeCardView.findViewById(R.id.recipe_card_image)
-    private val recipeLink: TextView = recipeCardView.findViewById(R.id.recipe_card_link)
-    private val recipeServing: TextView = recipeCardView.findViewById(R.id.recipe_card_servings)
-    private val recipeCalories: TextView = recipeCardView.findViewById(R.id.recipe_card_calories)
+//    private val recipeLink: TextView = recipeCardView.findViewById(R.id.recipe_card_link)
+//    private val recipeServing: TextView = recipeCardView.findViewById(R.id.recipe_card_servings)
+//    private val recipeCalories: TextView = recipeCardView.findViewById(R.id.recipe_card_calories)
 
     fun displayRecipe(hit: Hit, itemView: View) {
       val recipe = hit.recipe
-      val linkText = "Link: ${recipe.url}"
-      val servings = "Servings: ${recipe.yield}"
-      val calsPerServing = recipe.calories.roundToInt() / recipe.yield
-      val caloriesText = "Calories/serving: $calsPerServing"
+//      val linkText = "Link: ${recipe.url}"
+//      val servings = "Servings: ${recipe.yield}"
+//      val calsPerServing = recipe.calories.roundToInt() / recipe.yield
+//      val caloriesText = "Calories/serving: $calsPerServing"
 
       recipeTitle.text = hit.recipe.label
 
       Glide.with(itemView)
           .load(hit.recipe.image)
           .into(recipeImageView)
-
-      recipeServing.text = servings
-      recipeLink.text = linkText
-      recipeCalories.text = caloriesText
+//
+//      recipeServing.text = servings
+//      recipeLink.text = linkText
+//      recipeCalories.text = caloriesText
     }
   }
 }

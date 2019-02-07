@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
 import timber.log.Timber
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { recipeHits ->
 
+              recipe_card_query_title.text = queryText
               setUpAdapter(recipeHits)
 
               if (recipeHits.isEmpty()) {
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun setUpAdapter(recipeHits: List<Hit>) {
-    viewManager = LinearLayoutManager(this)
+    viewManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     viewAdapter = RecipeCardAdapter(recipeHits)
 
     recyclerView = findViewById<RecyclerView>(id.recipe_card_recycler_view).apply {
