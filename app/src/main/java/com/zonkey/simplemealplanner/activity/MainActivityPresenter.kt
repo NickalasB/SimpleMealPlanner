@@ -26,7 +26,7 @@ class MainActivityPresenter(
                 view.setEmptySearchViewVisibility(View.VISIBLE)
               }
 
-              val recipeJson = Gson().toJson(recipeHits)
+//              val recipeJson = Gson().toJson(recipeHits)
             }
             .doOnSubscribe {
               view.setHomePageProgressVisibility(View.VISIBLE)

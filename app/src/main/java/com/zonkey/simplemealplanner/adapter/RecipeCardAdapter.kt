@@ -5,13 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.edamam.Recipe
 
-class RecipeCardAdapter(private val recipeHits: List<Hit>) :
+class RecipeCardAdapter(
+    private val recipeHits: List<Hit>,
+    private val clickListener: (Recipe) -> Unit) :
     RecyclerView.Adapter<RecipeCardAdapter.RecipeCardViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCardViewHolder {
@@ -24,32 +28,25 @@ class RecipeCardAdapter(private val recipeHits: List<Hit>) :
   override fun getItemCount() = recipeHits.size
 
   override fun onBindViewHolder(viewHolder: RecipeCardViewHolder, position: Int) {
-    viewHolder.displayRecipe(recipeHits[position], viewHolder.itemView)
+    viewHolder.bind(recipeHits[position], viewHolder.itemView, clickListener)
   }
 
   class RecipeCardViewHolder(recipeCardView: CardView) : RecyclerView.ViewHolder(recipeCardView) {
     private val recipeTitle: TextView = recipeCardView.findViewById(R.id.recipe_card_title)
     private val recipeImageView: ImageView = recipeCardView.findViewById(R.id.recipe_card_image)
-//    private val recipeLink: TextView = recipeCardView.findViewById(R.id.recipe_card_link)
-//    private val recipeServing: TextView = recipeCardView.findViewById(R.id.recipe_card_servings)
-//    private val recipeCalories: TextView = recipeCardView.findViewById(R.id.recipe_card_calories)
 
-    fun displayRecipe(hit: Hit, itemView: View) {
-      val recipe = hit.recipe
-//      val linkText = "Link: ${recipe.url}"
-//      val servings = "Servings: ${recipe.yield}"
-//      val calsPerServing = recipe.calories.roundToInt() / recipe.yield
-//      val caloriesText = "Calories/serving: $calsPerServing"
+    fun bind(hit: Hit, itemView: View, listener: (Recipe) -> Unit) = with(itemView) {
+
+      setOnClickListener {
+        Toast.makeText(itemView.context, "Clicked", Toast.LENGTH_LONG).show()
+        listener(hit.recipe)
+      }
 
       recipeTitle.text = hit.recipe.label
-
       Glide.with(itemView)
           .load(hit.recipe.image)
           .into(recipeImageView)
-//
-//      recipeServing.text = servings
-//      recipeLink.text = linkText
-//      recipeCalories.text = caloriesText
     }
+
   }
 }

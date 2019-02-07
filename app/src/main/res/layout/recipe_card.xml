@@ -8,6 +8,7 @@
     android:layout_marginEnd="@dimen/common_margin_quarter"
     android:layout_marginStart="@dimen/common_margin_quarter"
     android:layout_marginTop="@dimen/common_margin_double"
+    android:foreground="?attr/selectableItemBackground"
     >
 
   <androidx.constraintlayout.widget.ConstraintLayout
