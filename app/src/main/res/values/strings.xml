@@ -4,4 +4,6 @@
   <string name="recipe_search_bar_hit">Search food or ingredients</string>
   <string name="recipe_empty_start_text">Need a little inspiration for dinner tonight? Search for something tasty to get started!</string>
   <string name="recipe_empty_error_text">Oops. Something doesn\'t seem right. Try a different search</string>
+  <string name="recipe_details_serving">Servings:</string>
+  <string name="recipe_detail_calories">Calories per serving:</string>
 </resources>

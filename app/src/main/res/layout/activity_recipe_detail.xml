@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.RecipeDetailActivity"
+    >
+
+  <ImageView
+      android:id="@+id/recipe_detail_Image"
+      android:layout_width="300dp"
+      android:layout_height="300dp"
+      android:layout_marginBottom="@dimen/common_margin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      />
+
+  <TextView
+      android:id="@+id/recipe_detail_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/common_margin"
+      android:textSize="@dimen/title_text_size"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/recipe_detail_Image"
+      />
+
+  <TextView
+      android:id="@+id/recipee_detail_servings"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/common_margin"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/recipe_detail_title"
+      tools:text="Serves 4"
+      />
+
+  <TextView
+      android:id="@+id/recipe_detail_calories"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/common_margin"
+      app:layout_constraintStart_toEndOf="@+id/recipee_detail_servings"
+      app:layout_constraintTop_toBottomOf="@+id/recipe_detail_title"
+      tools:text="Calories per serving: 456"
+      />
+</androidx.constraintlayout.widget.ConstraintLayout>

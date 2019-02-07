@@ -5,11 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.activity.RecipeDetailActivity
 import com.zonkey.simplemealplanner.model.edamam.Hit
 import com.zonkey.simplemealplanner.model.edamam.Recipe
 
@@ -38,8 +39,10 @@ class RecipeCardAdapter(
     fun bind(hit: Hit, itemView: View, listener: (Recipe) -> Unit) = with(itemView) {
 
       setOnClickListener {
-        Toast.makeText(itemView.context, "Clicked", Toast.LENGTH_LONG).show()
         listener(hit.recipe)
+        val intent = RecipeDetailActivity.buildIntent(context)
+        intent.putExtra("RecipeExtra", Gson().toJson(hit.recipe))
+        context.startActivity(intent)
       }
 
       recipeTitle.text = hit.recipe.label
