@@ -1,47 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.zonkey.simplemealplanner.widgets.SingleRecipeCard
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/recipe_card"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/recipe_card_height"
-    android:layout_marginEnd="@dimen/common_margin_quarter"
     android:layout_marginStart="@dimen/common_margin_quarter"
     android:layout_marginTop="@dimen/common_margin_double"
-    android:foreground="?attr/selectableItemBackground"
+    android:background="?attr/selectableItemBackground"
     >
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
-
-    <ImageView
-        android:id="@+id/recipe_card_image"
-        android:layout_width="@dimen/recipe_card_image_size"
-        android:layout_height="@dimen/recipe_card_image_size"
-        android:contentDescription="@string/recipe_image_content_description"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/recipe_card_title"
-        android:layout_width="@dimen/recipe_card_image_size"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:maxLines="2"
-        android:paddingEnd="@dimen/common_margin_half"
-        android:paddingStart="@dimen/common_margin_half"
-        android:textSize="@dimen/label_text_size"
-        android:textStyle="bold"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/recipe_card_image"
-        tools:text="Cheeseburger"
-        />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.zonkey.simplemealplanner.widgets.SingleRecipeCard>

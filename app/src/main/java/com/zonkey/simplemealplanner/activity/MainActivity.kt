@@ -6,12 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.R.id
 import com.zonkey.simplemealplanner.R.string
-import com.zonkey.simplemealplanner.adapter.RecipeCardAdapter
 import com.zonkey.simplemealplanner.model.edamam.Hit
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
@@ -20,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.home_page_progress
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
+import kotlinx.android.synthetic.main.activity_main.test_recipe_card_widget
 import javax.inject.Inject
 
 
@@ -29,9 +26,6 @@ class MainActivity : AppCompatActivity(), MainView {
   lateinit var recipeRepository: RecipeRepository
 
   private val compositeDisposable = CompositeDisposable()
-  private lateinit var recyclerView: RecyclerView
-  private lateinit var viewAdapter: RecyclerView.Adapter<*>
-  private lateinit var viewManager: RecyclerView.LayoutManager
 
   private lateinit var presenter: MainActivityPresenter
 
@@ -64,14 +58,8 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   override fun setUpAdapter(recipeHits: List<Hit>) {
-    viewManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-    viewAdapter = RecipeCardAdapter(recipeHits, {})
-
-    recyclerView = findViewById<RecyclerView>(id.recipe_card_recycler_view).apply {
-      setHasFixedSize(true)
-      layoutManager = viewManager
-      adapter = viewAdapter
-    }
+    val recipes = recipeHits.map { it.recipe }
+    test_recipe_card_widget.setRecipes(recipes)
   }
 
   override fun setEmptySearchViewVisibility(visibility: Int) {

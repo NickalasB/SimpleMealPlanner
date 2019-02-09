@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
+import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.model.edamam.Recipe
 import kotlinx.android.synthetic.main.activity_recipe_detail.recipe_detail_Image
 import kotlinx.android.synthetic.main.activity_recipe_detail.recipe_detail_calories
@@ -26,7 +27,7 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_recipe_detail)
 
-    val recipe = Gson().fromJson(intent.getStringExtra("RecipeExtra"), Recipe::class.java)
+    val recipe = Gson().fromJson(intent.getStringExtra(FULL_RECIPE), Recipe::class.java)
 
     recipe_detail_title.text = recipe.label
 
@@ -34,7 +35,7 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     recipee_detail_servings.text = servingSizeText
 
     val calsPerServing = (recipe.calories / recipe.yield).roundToInt()
-    val caloriesText = "${getString(string.recipe_detail_calories)} ${calsPerServing}"
+    val caloriesText = "${getString(string.recipe_detail_calories)} $calsPerServing"
     recipe_detail_calories.text = caloriesText
 
     Glide.with(this)

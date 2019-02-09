@@ -34,13 +34,13 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/common_margin_double"
       android:gravity="center"
+      android:text="@string/recipe_empty_error_text"
       android:textSize="@dimen/title_text_size"
       android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      android:text="@string/recipe_empty_error_text"
       />
 
   <TextView
@@ -56,13 +56,12 @@
       tools:text="Corn"
       />
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recipe_card_recycler_view"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
+  <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
+      android:id="@+id/test_recipe_card_widget"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/common_margin"
       android:layout_marginStart="@dimen/common_margin"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/recipe_card_query_title"
