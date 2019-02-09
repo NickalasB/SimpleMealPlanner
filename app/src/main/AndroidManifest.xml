@@ -14,7 +14,9 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true">
-    <activity android:name=".activity.RecipeDetailActivity">
+    <activity
+        android:name=".activity.RecipeDetailActivity"
+        android:theme="@style/NoActionBar">
     </activity>
     <activity android:name=".activity.MainActivity">
       <intent-filter>

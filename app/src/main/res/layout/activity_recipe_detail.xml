@@ -1,51 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.RecipeDetailActivity"
+    android:fitsSystemWindows="true"
     >
 
-  <ImageView
-      android:id="@+id/recipe_detail_Image"
-      android:layout_width="300dp"
-      android:layout_height="300dp"
-      android:layout_marginBottom="@dimen/common_margin"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      />
-
-  <TextView
-      android:id="@+id/recipe_detail_title"
-      android:layout_width="wrap_content"
+  <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/detail_toolbar_container"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/common_margin"
-      android:textSize="@dimen/title_text_size"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/recipe_detail_Image"
-      />
+      android:fitsSystemWindows="true"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      >
 
-  <TextView
-      android:id="@+id/recipee_detail_servings"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/common_margin"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/recipe_detail_title"
-      tools:text="Serves 4"
-      />
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/detail_collapsing_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:collapsedTitleGravity="start"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:scrimAnimationDuration="500"
+        >
 
-  <TextView
-      android:id="@+id/recipe_detail_calories"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/common_margin"
-      app:layout_constraintStart_toEndOf="@+id/recipee_detail_servings"
-      app:layout_constraintTop_toBottomOf="@+id/recipe_detail_title"
-      tools:text="Calories per serving: 456"
-      />
-</androidx.constraintlayout.widget.ConstraintLayout>
+      <ImageView
+          android:id="@+id/detail_recipe_image"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:adjustViewBounds="true"
+          android:fitsSystemWindows="true"
+          app:layout_collapseMode="parallax"
+          />
+
+      <androidx.appcompat.widget.Toolbar
+          android:id="@+id/detail_toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:layout_collapseMode="pin"
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          />
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <androidx.core.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      >
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          >
+
+        <TextView
+            android:id="@+id/detail_recipe_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_margin"
+            android:textSize="@dimen/title_text_size"
+            />
+
+        <TextView
+            android:id="@+id/detail_recipe_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin"
+            tools:text="Serves 4"
+            />
+
+        <TextView
+            android:id="@+id/detail_recipe_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin"
+            tools:text="Calories per serving: 456"
+            />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+  </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
