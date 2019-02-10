@@ -6,4 +6,7 @@
   <string name="recipe_empty_error_text">Oops. Something doesn\'t seem right. Try a different search</string>
   <string name="recipe_details_serving">Servings:</string>
   <string name="recipe_detail_calories">Calories per serving:</string>
+  <string name="recipe_detail_card_title">Details</string>
+  <string name="detail_ingredients_label">Ingredients:</string>
+  <string name="bullet">\u25CF</string>
 </resources>

@@ -60,9 +60,12 @@
         >
 
       <LinearLayout
+          android:id="@+id/details_linear_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
+          android:paddingEnd="@dimen/common_margin_double"
+          android:paddingStart="@dimen/common_margin_double"
           >
 
         <TextView
@@ -86,8 +89,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_margin"
+            android:layout_marginTop="@dimen/common_margin_half"
             tools:text="Calories per serving: 456"
             />
+
+        <TextView
+            android:id="@+id/detail_ingredients_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_margin_half"
+            android:layout_marginStart="@dimen/common_margin"
+            android:layout_marginTop="@dimen/common_margin_half"
+            android:textStyle="bold"
+            />
+
+        <!-- Ingredients are added here dynamically from inflating ingredient_line layout-->
+
       </LinearLayout>
     </androidx.cardview.widget.CardView>
   </androidx.core.widget.NestedScrollView>
