@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.model.edamam.Recipe
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
@@ -33,11 +32,11 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     detail_recipe_title.text = recipe.label
     detail_collapsing_toolbar.title = recipe.label
 
-    val servingSizeText = "${getString(string.recipe_details_serving)}${recipe.yield}"
+    val servingSizeText = "${getString(R.string.recipe_details_serving)}${recipe.yield}"
     detail_recipe_servings.text = servingSizeText
 
     val calsPerServing = (recipe.calories / recipe.yield).roundToInt()
-    val caloriesText = "${getString(string.recipe_detail_calories)} $calsPerServing"
+    val caloriesText = "${getString(R.string.recipe_detail_calories)} $calsPerServing"
     detail_recipe_calories.text = caloriesText
 
     Glide.with(this)
