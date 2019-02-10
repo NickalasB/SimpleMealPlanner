@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
@@ -38,6 +39,7 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
 
     detail_recipe_title.text = getString(R.string.recipe_detail_card_title)
     detail_collapsing_toolbar.title = recipe.label
+    detail_collapsing_toolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.whiteText))
 
     val servingSizeText = "${getString(R.string.recipe_details_serving)} ${recipe.yield}"
     detail_recipe_servings.text = servingSizeText

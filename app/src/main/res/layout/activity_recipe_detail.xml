@@ -21,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:collapsedTitleGravity="start"
+        app:collapsedTitleGravity="start|bottom"
+        app:collapsedTitleTextAppearance="@style/DetailToolBarTextCollapsed"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:scrimAnimationDuration="500"
         >
@@ -38,7 +39,7 @@
       <androidx.appcompat.widget.Toolbar
           android:id="@+id/detail_toolbar"
           android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
+          android:layout_height="160dp"
           app:layout_collapseMode="pin"
           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
           />
