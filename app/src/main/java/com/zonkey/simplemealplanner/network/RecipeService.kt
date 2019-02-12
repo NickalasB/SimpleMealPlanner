@@ -29,7 +29,7 @@ interface RecipeService {
       @Query("app_id") appId: String = BuildConfig.EDAMAM_APP_ID,
       @Query("app_key") appKey: String = BuildConfig.EDAMAM_APP_KEY,
       @Query("from") from: Int = 0,
-      @Query("to") to: Int = 20,
+      @Query("to") to: Int = 21,
       @Query("ingr") maxIngredients: Int? = 99,
       @Query("calories") calories: String? = "1-9000"): Observable<Hits>
 }
