@@ -1,6 +1,6 @@
 package com.zonkey.simplemealplanner.network
 
-import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.Hit
 import io.reactivex.Observable
 import javax.inject.Inject
 

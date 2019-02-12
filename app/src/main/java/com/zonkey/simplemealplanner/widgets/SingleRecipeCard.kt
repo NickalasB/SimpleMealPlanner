@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.model.edamam.Recipe
+import com.zonkey.simplemealplanner.model.Recipe
 import kotlinx.android.synthetic.main.recipe_card_view.view.recipe_card_item_image
 import kotlinx.android.synthetic.main.recipe_card_view.view.recipe_card_item_title
 

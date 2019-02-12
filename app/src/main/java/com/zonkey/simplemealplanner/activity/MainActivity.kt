@@ -8,7 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
-import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable

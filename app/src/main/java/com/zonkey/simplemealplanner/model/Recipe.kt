@@ -1,4 +1,4 @@
-package com.zonkey.simplemealplanner.model.edamam
+package com.zonkey.simplemealplanner.model
 
 data class Recipe(
     val uri: String,

@@ -1,6 +1,6 @@
 package com.zonkey.simplemealplanner.firebase
 
-import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.Hit
 
 interface FirebaseRecipeRepository {
 

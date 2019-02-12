@@ -4,7 +4,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.Hit
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,7 +23,8 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
 
         if (dataSnapshot.hasChild(RECIPE_DB)) {
           dataSnapshot.children.forEach {
-            val hit: Hit? = it.getValue(Hit::class.java)
+            val hit: Hit? = it.getValue(
+                Hit::class.java)
             if (hit != null) {
               cachedRecipeHits.add(hit)
             }

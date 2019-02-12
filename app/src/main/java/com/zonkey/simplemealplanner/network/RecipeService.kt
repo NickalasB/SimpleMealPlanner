@@ -1,7 +1,7 @@
 package com.zonkey.simplemealplanner.network
 
 import com.zonkey.simplemealplanner.BuildConfig
-import com.zonkey.simplemealplanner.model.edamam.Hits
+import com.zonkey.simplemealplanner.model.Hits
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query

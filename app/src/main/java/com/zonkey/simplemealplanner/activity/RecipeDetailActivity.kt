@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
-import com.zonkey.simplemealplanner.model.edamam.Recipe
+import com.zonkey.simplemealplanner.model.Recipe
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_ingredients_label
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_calories

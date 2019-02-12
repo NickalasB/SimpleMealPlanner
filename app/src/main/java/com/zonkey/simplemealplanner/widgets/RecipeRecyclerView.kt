@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zonkey.simplemealplanner.adapter.RecipeRecyclerViewAdapter
-import com.zonkey.simplemealplanner.model.edamam.Recipe
+import com.zonkey.simplemealplanner.model.Recipe
 
 private const val COLUMN_COUNT = 3
 

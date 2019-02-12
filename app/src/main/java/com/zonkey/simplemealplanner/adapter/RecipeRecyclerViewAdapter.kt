@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.activity.RecipeDetailActivity
-import com.zonkey.simplemealplanner.model.edamam.Recipe
+import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.utils.inflate
 import kotlinx.android.synthetic.main.recipe_card.view.recipe_card
 

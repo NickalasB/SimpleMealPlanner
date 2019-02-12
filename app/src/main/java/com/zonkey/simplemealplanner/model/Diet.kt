@@ -1,4 +1,4 @@
-package com.zonkey.simplemealplanner.model.edamam
+package com.zonkey.simplemealplanner.model
 
 import com.google.gson.annotations.SerializedName
 

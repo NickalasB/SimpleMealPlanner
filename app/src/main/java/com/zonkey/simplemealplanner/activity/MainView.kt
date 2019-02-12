@@ -1,6 +1,6 @@
 package com.zonkey.simplemealplanner.activity
 
-import com.zonkey.simplemealplanner.model.edamam.Hit
+import com.zonkey.simplemealplanner.model.Hit
 
 interface MainView {
 
