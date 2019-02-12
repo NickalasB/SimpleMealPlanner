@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   override fun setQueryTitleText(queryText: String) {
-    recipe_card_query_title.text = queryText
+    recipe_card_query_title.text = queryText.split(' ').joinToString(" ") { it.capitalize() }
   }
 
   override fun setHomePageProgressVisibility(visibility: Int) {
