@@ -9,4 +9,5 @@
   <string name="recipe_detail_card_title">Details</string>
   <string name="detail_ingredients_label">Ingredients:</string>
   <string name="bullet">\u25CF</string>
+  <string name="recipe_image_transition">recipeImageTransition</string>
 </resources>

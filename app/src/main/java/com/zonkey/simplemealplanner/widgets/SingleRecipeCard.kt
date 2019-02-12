@@ -16,13 +16,13 @@ class SingleRecipeCard @JvmOverloads constructor(
     defStyleAttr: Int = android.R.attr.textViewStyle
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-  var title: String? = null
+  private var title: String? = null
     set(value) {
       field = value
       recipe_card_item_title.text = value
     }
 
-  var imageUrl: String? = null
+  private var imageUrl: String? = null
     set(value) {
       field = value
       Glide.with(this)
