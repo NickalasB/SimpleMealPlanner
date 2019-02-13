@@ -108,6 +108,29 @@
 
         <!-- Ingredients are added here dynamically from inflating ingredient_line layout-->
 
+        <TextView
+            android:id="@+id/detail_recipe_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            tools:text="Source: ChowHound"
+            android:layout_marginTop="@dimen/common_margin"
+            android:layout_marginBottom="@dimen/common_margin_half"
+            android:textStyle="italic"
+            />
+
+        <Button
+            android:id="@+id/detail_recipe_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_margin"
+            android:layout_marginStart="@dimen/common_margin"
+            android:layout_marginTop="@dimen/common_margin_half"
+            android:text="@string/detail_button_text"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:foreground="?attr/selectableItemBackground"
+            />
+
       </LinearLayout>
     </androidx.cardview.widget.CardView>
   </androidx.core.widget.NestedScrollView>
