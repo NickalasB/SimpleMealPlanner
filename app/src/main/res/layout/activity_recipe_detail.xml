@@ -135,7 +135,7 @@
             android:layout_marginTop="@dimen/common_margin_half"
             android:text="@string/detail_button_text"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:foreground="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackground"
             />
 
       </LinearLayout>
