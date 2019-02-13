@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="whiteText">#fdfdfd</color>
+    <color name="mid_translucent_gray">#33000000</color>
+    <color name="light_translucent_gray">#1A000000</color>
 </resources>
