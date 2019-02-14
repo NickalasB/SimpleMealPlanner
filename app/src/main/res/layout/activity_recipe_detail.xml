@@ -22,7 +22,6 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:collapsedTitleGravity="start|bottom"
-        app:collapsedTitleTextAppearance="@style/DetailToolBarTextCollapsed"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         >
 
@@ -134,8 +133,7 @@
             android:layout_marginStart="@dimen/common_margin"
             android:layout_marginTop="@dimen/common_margin_half"
             android:text="@string/detail_button_text"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:background="?attr/selectableItemBackground"
+            style="@style/PrimaryColorButton"
             />
 
       </LinearLayout>

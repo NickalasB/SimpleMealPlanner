@@ -11,9 +11,8 @@
 
   <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
 
-  <style name="DetailToolBarTextCollapsed">
-    <!--<item name="android:textSize">24sp</item>-->
-
+  <style name="PrimaryColorButton" parent="TextAppearance.AppCompat.Button">
+    <item name="android:textColor">#FFFFFF</item>
+    <item name="android:background">@drawable/primary_color_button_selectable</item>
   </style>
-
 </resources>
