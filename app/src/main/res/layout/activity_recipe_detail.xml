@@ -30,19 +30,21 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:adjustViewBounds="true"
-          android:scaleType="fitEnd"
+          android:contentDescription="@string/recipe_image_content_description"
           android:fitsSystemWindows="true"
-          app:layout_collapseMode="parallax"
+          android:scaleType="fitEnd"
           android:transitionName="@string/recipe_image_transition"
+          app:layout_collapseMode="parallax"
           tools:targetApi="lollipop"
           />
 
       <View
           android:layout_width="match_parent"
           android:layout_height="@dimen/detail_scrim_height"
-          android:layout_gravity="bottom"
           android:layout_alignBottom="@+id/detail_recipe_image"
-          android:background="@drawable/scrim_bottom"/>
+          android:layout_gravity="bottom"
+          android:background="@drawable/scrim_bottom"
+          />
 
       <androidx.appcompat.widget.Toolbar
           android:id="@+id/detail_toolbar"
@@ -118,11 +120,11 @@
             android:id="@+id/detail_recipe_source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="Source: ChowHound"
-            android:layout_marginTop="@dimen/common_margin"
             android:layout_marginBottom="@dimen/common_margin_half"
+            android:layout_marginTop="@dimen/common_margin"
+            android:gravity="center"
             android:textStyle="italic"
+            tools:text="Source: ChowHound"
             />
 
         <Button
