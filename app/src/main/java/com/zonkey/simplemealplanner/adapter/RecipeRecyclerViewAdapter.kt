@@ -11,8 +11,8 @@ import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.activity.RecipeDetailActivity
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.utils.inflate
-import kotlinx.android.synthetic.main.recipe_card.view.recipe_card
-import kotlinx.android.synthetic.main.recipe_card_view.view.recipe_card_item_image
+import kotlinx.android.synthetic.main.recipe_preview_view_item.view.recipe_card
+import kotlinx.android.synthetic.main.recipe_preview_view.view.recipe_card_item_image
 
 
 internal const val FULL_RECIPE = "full_recipe"
@@ -28,7 +28,7 @@ class RecipeRecyclerViewAdapter(
       clickListener)
 
   class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-      parent.inflate(R.layout.recipe_card, false)) {
+      parent.inflate(R.layout.recipe_preview_view_item, false)) {
 
     fun bind(recipe: Recipe, listener: (Recipe) -> Unit) =
         with(itemView) {

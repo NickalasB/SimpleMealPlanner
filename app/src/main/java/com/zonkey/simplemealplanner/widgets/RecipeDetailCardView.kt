@@ -15,12 +15,12 @@ import com.zonkey.simplemealplanner.R.layout
 import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.utils.createBitmapFromDrawableRes
-import kotlinx.android.synthetic.main.recipe_detail_card_view.view.detail_ingredients_label
-import kotlinx.android.synthetic.main.recipe_detail_card_view.view.detail_recipe_calories
-import kotlinx.android.synthetic.main.recipe_detail_card_view.view.detail_recipe_link
-import kotlinx.android.synthetic.main.recipe_detail_card_view.view.detail_recipe_servings
-import kotlinx.android.synthetic.main.recipe_detail_card_view.view.detail_recipe_source
-import kotlinx.android.synthetic.main.recipe_detail_card_view.view.detail_recipe_title
+import kotlinx.android.synthetic.main.recipe_detail_view.view.detail_ingredients_label
+import kotlinx.android.synthetic.main.recipe_detail_view.view.detail_recipe_calories
+import kotlinx.android.synthetic.main.recipe_detail_view.view.detail_recipe_link
+import kotlinx.android.synthetic.main.recipe_detail_view.view.detail_recipe_servings
+import kotlinx.android.synthetic.main.recipe_detail_view.view.detail_recipe_source
+import kotlinx.android.synthetic.main.recipe_detail_view.view.detail_recipe_title
 import kotlin.math.roundToInt
 
 class RecipeDetailCardView @JvmOverloads constructor(
@@ -73,7 +73,7 @@ class RecipeDetailCardView @JvmOverloads constructor(
 
 
   init {
-    View.inflate(context, R.layout.recipe_detail_card_view, this)
+    View.inflate(context, R.layout.recipe_detail_view, this)
     orientation = LinearLayout.VERTICAL
     setPadding(
         context.resources.getDimensionPixelSize(R.dimen.common_margin_double),

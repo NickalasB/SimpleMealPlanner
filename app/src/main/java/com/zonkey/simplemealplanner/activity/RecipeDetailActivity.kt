@@ -7,6 +7,7 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -16,6 +17,7 @@ import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.model.Recipe
+import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
 import kotlinx.android.synthetic.main.activity_recipe_detail.detailed_recipe_card_view
 import java.io.Serializable
@@ -38,8 +40,10 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     val recipe = Gson().fromJson(intent.getStringExtra(FULL_RECIPE), Recipe::class.java)
     loadRecipeImage(recipe)
 
-    detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
+    detail_collapsing_toolbar.title = recipe.label
+    detail_collapsing_toolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.whiteText))
 
+    detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
   }
 
   private fun loadRecipeImage(recipe: Recipe) {
