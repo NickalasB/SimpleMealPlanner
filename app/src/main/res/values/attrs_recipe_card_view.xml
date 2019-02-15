@@ -4,4 +4,14 @@
     <attr name="recipe_text"/>
     <attr name="recipe_imageUrl"/>
   </declare-styleable>
+
+  <declare-styleable name="RecipeDetailCardView">
+    <attr name="title"/>
+    <attr name="serving"/>
+    <attr name="calories"/>
+    <attr name="ingredients_label"/>
+    <attr name="source"/>
+    <attr name="link"/>
+    <attr name="button_text"/>
+  </declare-styleable>
 </resources>

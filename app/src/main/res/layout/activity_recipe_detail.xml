@@ -70,75 +70,14 @@
         app:cardUseCompatPadding="true"
         >
 
-      <LinearLayout
-          android:id="@+id/details_linear_layout"
+      <com.zonkey.simplemealplanner.widgets.RecipeDetailCardView
+          android:id="@+id/detailed_recipe_card_view"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingEnd="@dimen/common_margin_double"
-          android:paddingStart="@dimen/common_margin_double"
-          >
+          app:ingredients_label="@string/detail_ingredients_label"
+          app:title="@string/recipe_detail_card_title"
+          />
 
-        <TextView
-            android:id="@+id/detail_recipe_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_margin"
-            android:textSize="@dimen/title_text_size"
-            />
-
-        <TextView
-            android:id="@+id/detail_recipe_servings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin"
-            tools:text="Serves 4"
-            />
-
-        <TextView
-            android:id="@+id/detail_recipe_calories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_margin"
-            android:layout_marginTop="@dimen/common_margin_half"
-            tools:text="Calories per serving: 456"
-            />
-
-        <TextView
-            android:id="@+id/detail_ingredients_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_margin_half"
-            android:layout_marginStart="@dimen/common_margin"
-            android:layout_marginTop="@dimen/common_margin_half"
-            android:textStyle="bold"
-            />
-
-        <!-- Ingredients are added here dynamically from inflating ingredient_line layout-->
-
-        <TextView
-            android:id="@+id/detail_recipe_source"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_margin_half"
-            android:layout_marginTop="@dimen/common_margin"
-            android:gravity="center"
-            android:textStyle="italic"
-            tools:text="Source: ChowHound"
-            />
-
-        <Button
-            android:id="@+id/detail_recipe_link"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_margin"
-            android:layout_marginStart="@dimen/common_margin"
-            android:layout_marginTop="@dimen/common_margin_half"
-            android:text="@string/detail_button_text"
-            style="@style/PrimaryColorButton"
-            />
-
-      </LinearLayout>
     </androidx.cardview.widget.CardView>
   </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
