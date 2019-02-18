@@ -16,7 +16,6 @@ import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.R.drawable
 import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
@@ -27,14 +26,17 @@ import kotlinx.android.synthetic.main.activity_recipe_detail.detail_favorite_but
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_parent_layout
 import kotlinx.android.synthetic.main.activity_recipe_detail.detailed_recipe_card_view
-import java.io.Serializable
 import javax.inject.Inject
 
 
-class RecipeDetailActivity : AppCompatActivity(), Serializable {
+class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   @Inject
   lateinit var firebaseRepo: FirebaseRecipeRepository
+
+  private lateinit var presenter: RecipeDetailActivityPresenter
+
+  override var isSavedRecipe = false
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -44,6 +46,9 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     super.onCreate(savedInstanceState)
     AndroidInjection.inject(this)
     setContentView(R.layout.activity_recipe_detail)
+
+    presenter = RecipeDetailActivityPresenter(this, firebaseRepo)
+
 
     if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
       postponeEnterTransition()
@@ -63,33 +68,21 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
   }
 
   private fun setupFavoriteButton(recipe: Recipe) {
-    val savedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
-
-    setSavedRecipeIcon(savedRecipe)
+    isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
+    presenter.setSavedRecipeIcon(isSavedRecipe)
 
     detail_favorite_button.setOnClickListener {
-      if (savedRecipe) {
-        firebaseRepo.deleteRecipeFromFirebase(recipe)
-        setSavedRecipeIcon(savedRecipe = false)
-        Snackbar.make(detail_recipe_parent_layout, getString(R.string.snackbar_recipe_deleted),
-            Snackbar.LENGTH_SHORT).show()
-      } else {
-        firebaseRepo.saveRecipeToFirebase(recipe)
-        setSavedRecipeIcon(savedRecipe = true)
-        Snackbar.make(detail_recipe_parent_layout, getString(R.string.snackbar_recipe_saved),
-            Snackbar.LENGTH_SHORT).show()
-      }
+      presenter.onFavoriteButtonClicked(isSavedRecipe, recipe)
     }
   }
 
-  private fun setSavedRecipeIcon(savedRecipe: Boolean) {
-    if (savedRecipe) {
-      detail_favorite_button.background = ContextCompat.getDrawable(this,
-          drawable.ic_favorite_red_24dp)
-    } else {
-      detail_favorite_button.background = ContextCompat.getDrawable(this,
-          drawable.ic_favorite_border_red_24dp)
-    }
+  override fun showFavoriteSnackBar(snackBarString: Int) {
+    Snackbar.make(detail_recipe_parent_layout, getString(snackBarString),
+        Snackbar.LENGTH_SHORT).show()
+  }
+
+  override fun setFavoritedButtonIcon(icon: Int) {
+    detail_favorite_button.background = ContextCompat.getDrawable(this, icon)
   }
 
   private fun loadRecipeImage(recipe: Recipe) {
