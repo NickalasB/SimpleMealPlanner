@@ -6,17 +6,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
+import com.zonkey.simplemealplanner.firebase.RECIPE_DB
+import com.zonkey.simplemealplanner.firebase.RECIPE_DB_INSTANCE
 import com.zonkey.simplemealplanner.model.Hit
+import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_main.favorites_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
 import kotlinx.android.synthetic.main.activity_main.test_recipe_card_widget
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -24,6 +33,9 @@ class MainActivity : AppCompatActivity(), MainView {
 
   @Inject
   lateinit var recipeRepository: RecipeRepository
+
+  @Inject
+  lateinit var firebaseDatabase: FirebaseDatabase
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -55,6 +67,28 @@ class MainActivity : AppCompatActivity(), MainView {
       recipe_empty_search_view.visibility = View.VISIBLE
       recipe_empty_search_view.text = getString(string.recipe_empty_start_text)
     }
+  }
+
+  override fun onResume() {
+    super.onResume()
+
+    firebaseDatabase.getReference(RECIPE_DB_INSTANCE).child(
+        RECIPE_DB).addValueEventListener(object : ValueEventListener {
+      override fun onCancelled(error: DatabaseError) {
+        Timber.e(error.toException(), "Problem retrieving recipes from database")
+        recipe_empty_search_view.visibility = View.VISIBLE
+      }
+
+      override fun onDataChange(snapshot: DataSnapshot) {
+        val dbRecipes: List<Recipe?>? = snapshot.children.map { it.getValue(Recipe::class.java) }
+
+        recipe_empty_search_view.visibility = View.GONE
+        dbRecipes?.let {
+          favorites_recipe_card_widget.isFavorite = true
+          favorites_recipe_card_widget.setRecipes(dbRecipes)
+        }
+      }
+    })
   }
 
   override fun setUpAdapter(recipeHits: List<Hit>) {

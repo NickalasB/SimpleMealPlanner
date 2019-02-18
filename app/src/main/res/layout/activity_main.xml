@@ -63,10 +63,36 @@
       android:layout_marginBottom="@dimen/common_margin"
       android:layout_marginEnd="@dimen/common_margin"
       android:layout_marginStart="@dimen/common_margin"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/recipe_card_query_title"
+      />
+
+
+  <TextView
+      android:id="@+id/recipe_card_favorites_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/common_margin_double"
+      android:layout_marginTop="@dimen/common_margin_double"
+      android:textSize="@dimen/title_text_size"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/test_recipe_card_widget"
+      android:text="Favorites"
+      />
+
+  <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
+      android:id="@+id/favorites_recipe_card_widget"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginBottom="@dimen/common_margin"
+      android:layout_marginEnd="@dimen/common_margin"
+      android:layout_marginStart="@dimen/common_margin"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/recipe_card_favorites_title"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

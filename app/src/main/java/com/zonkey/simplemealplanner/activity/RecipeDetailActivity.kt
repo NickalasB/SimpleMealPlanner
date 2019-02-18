@@ -15,15 +15,24 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.R.drawable
+import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
+import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.Recipe
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
+import kotlinx.android.synthetic.main.activity_recipe_detail.detail_favorite_button
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
 import kotlinx.android.synthetic.main.activity_recipe_detail.detailed_recipe_card_view
 import java.io.Serializable
+import javax.inject.Inject
 
 
 class RecipeDetailActivity : AppCompatActivity(), Serializable {
+
+  @Inject
+  lateinit var firebaseRepo: FirebaseRecipeRepository
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -31,6 +40,7 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    AndroidInjection.inject(this)
     setContentView(R.layout.activity_recipe_detail)
 
     if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
@@ -41,9 +51,33 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     loadRecipeImage(recipe)
 
     detail_collapsing_toolbar.title = recipe.label
-    detail_collapsing_toolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.whiteText))
+    
+    detail_collapsing_toolbar.setCollapsedTitleTextColor(
+        ContextCompat.getColor(this, R.color.whiteText))
 
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
+
+    setupFavoriteButton(recipe)
+  }
+
+  private fun setupFavoriteButton(recipe: Recipe) {
+    val savedAlready = intent.getBooleanExtra(FROM_FAVORITE, false)
+
+    if (savedAlready) {
+      detail_favorite_button.background = ContextCompat.getDrawable(this,
+          drawable.ic_favorite_red_24dp)
+      detail_favorite_button.setOnClickListener {
+        firebaseRepo.deleteRecipeFromFirebase(recipe)
+        detail_favorite_button.background = ContextCompat.getDrawable(this,
+            drawable.ic_favorite_border_red_24dp)
+      }
+    } else {
+      detail_favorite_button.setOnClickListener {
+        firebaseRepo.saveRecipeToFirebase(recipe)
+        detail_favorite_button.background = ContextCompat.getDrawable(this,
+            drawable.ic_favorite_red_24dp)
+      }
+    }
   }
 
   private fun loadRecipeImage(recipe: Recipe) {

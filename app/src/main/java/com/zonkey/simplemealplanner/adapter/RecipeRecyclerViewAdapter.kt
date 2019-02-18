@@ -11,13 +11,15 @@ import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.activity.RecipeDetailActivity
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.utils.inflate
-import kotlinx.android.synthetic.main.recipe_preview_view_item.view.recipe_card
 import kotlinx.android.synthetic.main.recipe_preview_view.view.recipe_card_item_image
+import kotlinx.android.synthetic.main.recipe_preview_view_item.view.recipe_card
 
 
 internal const val FULL_RECIPE = "full_recipe"
+internal const val FROM_FAVORITE = "from_favorite"
 
 class RecipeRecyclerViewAdapter(
+    private val fromFavorite: Boolean? = false,
     private val clickListener: (Recipe) -> Unit
 ) : ListAdapter<Recipe, RecipeRecyclerViewAdapter.ViewHolder>(
     RecipeDiffCallBack()) {
@@ -25,18 +27,19 @@ class RecipeRecyclerViewAdapter(
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position),
-      clickListener)
+      clickListener, fromFavorite)
 
   class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
       parent.inflate(R.layout.recipe_preview_view_item, false)) {
 
-    fun bind(recipe: Recipe, listener: (Recipe) -> Unit) =
+    fun bind(recipe: Recipe, listener: (Recipe) -> Unit, fromFavorite: Boolean?) =
         with(itemView) {
           recipe_card.setRecipeCardItems(recipe)
           setOnClickListener {
             listener(recipe)
             val intent = RecipeDetailActivity.buildIntent(context)
             intent.putExtra(FULL_RECIPE, Gson().toJson(recipe))
+            intent.putExtra(FROM_FAVORITE, fromFavorite)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(itemView.context as Activity,
                 recipe_card_item_image, itemView.context.getString(R.string.recipe_image_transition))
             context.startActivity(intent, options.toBundle())

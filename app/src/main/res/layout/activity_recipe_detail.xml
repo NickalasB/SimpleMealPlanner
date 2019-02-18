@@ -39,6 +39,7 @@
           />
 
       <View
+          android:id="@+id/detail_recipe_title_scrim"
           android:layout_width="match_parent"
           android:layout_height="@dimen/detail_scrim_height"
           android:layout_alignBottom="@+id/detail_recipe_image"
@@ -70,13 +71,32 @@
         app:cardUseCompatPadding="true"
         >
 
-      <com.zonkey.simplemealplanner.widgets.RecipeDetailCardView
-          android:id="@+id/detailed_recipe_card_view"
+      <FrameLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:ingredients_label="@string/detail_ingredients_label"
-          app:title="@string/recipe_detail_card_title"
-          />
+          android:layout_height="match_parent"
+          >
+
+        <View
+            android:id="@+id/detail_favorite_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/common_margin"
+            android:background="@drawable/favorite_button"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_collapseMode="none"
+            />
+
+        <com.zonkey.simplemealplanner.widgets.RecipeDetailCardView
+            android:id="@+id/detailed_recipe_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ingredients_label="@string/detail_ingredients_label"
+            app:title="@string/recipe_detail_card_title"
+            />
+
+      </FrameLayout>
 
     </androidx.cardview.widget.CardView>
   </androidx.core.widget.NestedScrollView>

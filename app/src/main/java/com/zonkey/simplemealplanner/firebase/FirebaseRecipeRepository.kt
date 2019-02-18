@@ -1,13 +1,11 @@
 package com.zonkey.simplemealplanner.firebase
 
-import com.zonkey.simplemealplanner.model.Hit
+import com.zonkey.simplemealplanner.model.Recipe
 
 interface FirebaseRecipeRepository {
 
-  fun getRecipes(): List<Hit>
+  fun saveRecipeToFirebase(recipe: Recipe)
 
-  fun createRecipes(recipeHits: List<Hit>)
-
-  fun updateRecipes(query: String)
+  fun deleteRecipeFromFirebase(recipe: Recipe)
 
 }
