@@ -1,7 +1,7 @@
 package com.zonkey.simplemealplanner.activity
 
 import android.view.View
-import com.google.gson.Gson
+import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +12,7 @@ class MainActivityPresenter(
     private val view: MainView,
     private val recipeRepository: RecipeRepository) {
 
-  fun getTestRecipes(queryText: String, compositeDisposable: CompositeDisposable) {
+  fun getRecipeHits(queryText: String, compositeDisposable: CompositeDisposable) {
     compositeDisposable.add(
         recipeRepository.getEdamamHits(queryText = queryText)
             .subscribeOn(Schedulers.io())
@@ -46,5 +46,19 @@ class MainActivityPresenter(
     if (!compositeDisposable.isDisposed) {
       compositeDisposable.dispose()
     }
+  }
+
+  fun setFavoriteRecipes(dbRecipes: List<Recipe?>?) {
+    dbRecipes?.let {
+      if (it.isNullOrEmpty()) {
+        view.setFavoritesTitleVisibility(View.GONE)
+      } else {
+        view.setEmptySearchViewVisibility(View.GONE)
+        view.setFavoritesTitleVisibility(View.VISIBLE)
+        view.setIsSavedRecipeCard(true)
+        view.setFavoritedRecipes(dbRecipes)
+      }
+    }
+
   }
 }

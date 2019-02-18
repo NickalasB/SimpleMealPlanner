@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), MainView {
     if (Intent.ACTION_SEARCH == intent.action) {
       intent.getStringExtra(SearchManager.QUERY)?.also {
         if (it.isNotEmpty()) {
-          presenter.getTestRecipes(it, compositeDisposable)
+          presenter.getRecipeHits(it, compositeDisposable)
         }
       }
     } else {
@@ -83,16 +83,7 @@ class MainActivity : AppCompatActivity(), MainView {
       override fun onDataChange(snapshot: DataSnapshot) {
         val dbRecipes: List<Recipe?>? = snapshot.children.map { it.getValue(Recipe::class.java) }
 
-        dbRecipes?.let {
-          if (it.isNullOrEmpty()) {
-            recipe_card_favorites_title.visibility = View.GONE
-          } else {
-            recipe_empty_search_view.visibility = View.GONE
-            recipe_card_favorites_title.visibility = View.VISIBLE
-            favorites_recipe_card_widget.isFavorite = true
-            favorites_recipe_card_widget.setRecipes(dbRecipes)
-          }
-        }
+        presenter.setFavoriteRecipes(dbRecipes)
       }
     })
   }
@@ -112,6 +103,18 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun setHomePageProgressVisibility(visibility: Int) {
     home_page_progress.visibility = visibility
+  }
+
+  override fun setIsSavedRecipeCard(isSaved: Boolean) {
+    favorites_recipe_card_widget.isFavorite = isSaved
+  }
+
+  override fun setFavoritedRecipes(dbRecipes: List<Recipe?>) {
+    favorites_recipe_card_widget.setRecipes(dbRecipes)
+  }
+
+  override fun setFavoritesTitleVisibility(visibility: Int) {
+    recipe_card_favorites_title.visibility = visibility
   }
 
   override fun onDestroy() {
