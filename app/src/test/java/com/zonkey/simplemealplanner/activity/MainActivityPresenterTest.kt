@@ -45,7 +45,7 @@ class MainActivityPresenterTest {
     thenSetEmptySearchViewVisibility(never(), View.GONE)
     theSetFavoritesTitleVisibility(never(), View.VISIBLE)
     thenSetIsSavedRecipeCard(never(), true)
-    thenSetFavoritedRecipes(never(), dbRecipes)
+    thenSetFavoritedRecipes(Times(1), emptyList())
   }
 
   private fun givenEmptyDbRecipes() {
@@ -61,26 +61,6 @@ class MainActivityPresenterTest {
     thenSetIsSavedRecipeCard(Times(1), true)
     thenSetFavoritedRecipes(Times(1), dbRecipes)
     thenSetEmptySearchViewVisibility(never(), View.VISIBLE)
-  }
-
-  private fun thenSetEmptySearchViewVisibility(times: VerificationMode, visibility: Int) {
-    verify(view, times).setEmptySearchViewVisibility(visibility)
-  }
-
-  private fun theSetFavoritesTitleVisibility(times: VerificationMode, visibility: Int) {
-    verify(view, times).setFavoritesTitleVisibility(visibility)
-  }
-
-  private fun thenSetIsSavedRecipeCard(times: VerificationMode, saved: Boolean) {
-    verify(view, times).setIsSavedRecipeCard(saved)
-  }
-
-  private fun thenSetFavoritedRecipes(times: VerificationMode, dbRecipes: List<Recipe>) {
-    verify(view, times).setFavoritedRecipes(dbRecipes)
-  }
-
-  private fun whenSetFavoriteRecipesCalled(dbRecipes: List<Recipe>) {
-    presenter.setFavoriteRecipes(dbRecipes)
   }
 
   private fun givenDbRecipes() {
@@ -120,6 +100,26 @@ class MainActivityPresenterTest {
             key = "testKey2"
         )
     )
+  }
+
+  private fun whenSetFavoriteRecipesCalled(dbRecipes: List<Recipe>) {
+    presenter.setFavoriteRecipes(dbRecipes)
+  }
+
+  private fun thenSetEmptySearchViewVisibility(times: VerificationMode, visibility: Int) {
+    verify(view, times).setEmptySearchViewVisibility(visibility)
+  }
+
+  private fun theSetFavoritesTitleVisibility(times: VerificationMode, visibility: Int) {
+    verify(view, times).setFavoritesTitleVisibility(visibility)
+  }
+
+  private fun thenSetIsSavedRecipeCard(times: VerificationMode, saved: Boolean) {
+    verify(view, times).setIsSavedRecipeCard(saved)
+  }
+
+  private fun thenSetFavoritedRecipes(times: VerificationMode, dbRecipes: List<Recipe>) {
+    verify(view, times).setFavoritedRecipes(dbRecipes)
   }
 
 }

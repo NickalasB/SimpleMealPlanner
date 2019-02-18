@@ -52,6 +52,7 @@ class MainActivityPresenter(
     dbRecipes?.let {
       if (it.isNullOrEmpty()) {
         view.setFavoritesTitleVisibility(View.GONE)
+        view.setFavoritedRecipes(dbRecipes)
       } else {
         view.setEmptySearchViewVisibility(View.GONE)
         view.setFavoritesTitleVisibility(View.VISIBLE)

@@ -36,8 +36,6 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   private lateinit var presenter: RecipeDetailActivityPresenter
 
-  override var isSavedRecipe = false
-
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
   }
@@ -68,7 +66,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   }
 
   private fun setupFavoriteButton(recipe: Recipe) {
-    isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
+    val isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
     presenter.setSavedRecipeIcon(isSavedRecipe)
 
     detail_favorite_button.setOnClickListener {
