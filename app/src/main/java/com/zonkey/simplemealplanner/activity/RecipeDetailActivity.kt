@@ -13,6 +13,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.drawable
@@ -24,6 +25,7 @@ import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_favorite_button
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
+import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_parent_layout
 import kotlinx.android.synthetic.main.activity_recipe_detail.detailed_recipe_card_view
 import java.io.Serializable
 import javax.inject.Inject
@@ -51,7 +53,7 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
     loadRecipeImage(recipe)
 
     detail_collapsing_toolbar.title = recipe.label
-    
+
     detail_collapsing_toolbar.setCollapsedTitleTextColor(
         ContextCompat.getColor(this, R.color.whiteText))
 
@@ -61,22 +63,32 @@ class RecipeDetailActivity : AppCompatActivity(), Serializable {
   }
 
   private fun setupFavoriteButton(recipe: Recipe) {
-    val savedAlready = intent.getBooleanExtra(FROM_FAVORITE, false)
+    val savedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
 
-    if (savedAlready) {
+    setSavedRecipeIcon(savedRecipe)
+
+    detail_favorite_button.setOnClickListener {
+      if (savedRecipe) {
+        firebaseRepo.deleteRecipeFromFirebase(recipe)
+        setSavedRecipeIcon(savedRecipe = false)
+        Snackbar.make(detail_recipe_parent_layout, getString(R.string.snackbar_recipe_deleted),
+            Snackbar.LENGTH_SHORT).show()
+      } else {
+        firebaseRepo.saveRecipeToFirebase(recipe)
+        setSavedRecipeIcon(savedRecipe = true)
+        Snackbar.make(detail_recipe_parent_layout, getString(R.string.snackbar_recipe_saved),
+            Snackbar.LENGTH_SHORT).show()
+      }
+    }
+  }
+
+  private fun setSavedRecipeIcon(savedRecipe: Boolean) {
+    if (savedRecipe) {
       detail_favorite_button.background = ContextCompat.getDrawable(this,
           drawable.ic_favorite_red_24dp)
-      detail_favorite_button.setOnClickListener {
-        firebaseRepo.deleteRecipeFromFirebase(recipe)
-        detail_favorite_button.background = ContextCompat.getDrawable(this,
-            drawable.ic_favorite_border_red_24dp)
-      }
     } else {
-      detail_favorite_button.setOnClickListener {
-        firebaseRepo.saveRecipeToFirebase(recipe)
-        detail_favorite_button.background = ContextCompat.getDrawable(this,
-            drawable.ic_favorite_red_24dp)
-      }
+      detail_favorite_button.background = ContextCompat.getDrawable(this,
+          drawable.ic_favorite_border_red_24dp)
     }
   }
 
