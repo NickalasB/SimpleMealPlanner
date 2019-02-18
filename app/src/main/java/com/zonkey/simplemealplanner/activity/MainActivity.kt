@@ -21,6 +21,7 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.favorites_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.recipe_card_favorites_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
@@ -82,10 +83,15 @@ class MainActivity : AppCompatActivity(), MainView {
       override fun onDataChange(snapshot: DataSnapshot) {
         val dbRecipes: List<Recipe?>? = snapshot.children.map { it.getValue(Recipe::class.java) }
 
-        recipe_empty_search_view.visibility = View.GONE
         dbRecipes?.let {
-          favorites_recipe_card_widget.isFavorite = true
-          favorites_recipe_card_widget.setRecipes(dbRecipes)
+          if (it.isNullOrEmpty()) {
+            recipe_card_favorites_title.visibility = View.GONE
+          } else {
+            recipe_empty_search_view.visibility = View.GONE
+            recipe_card_favorites_title.visibility = View.VISIBLE
+            favorites_recipe_card_widget.isFavorite = true
+            favorites_recipe_card_widget.setRecipes(dbRecipes)
+          }
         }
       }
     })
