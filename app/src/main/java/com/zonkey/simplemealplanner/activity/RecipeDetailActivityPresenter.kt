@@ -12,10 +12,12 @@ class RecipeDetailActivityPresenter(
   fun onFavoriteButtonClicked(savedRecipe: Boolean, recipe: Recipe) {
     if (savedRecipe) {
       firebaseRepo.deleteRecipeFromFirebase(recipe)
+      view.isSavedRecipe = false
       setSavedRecipeIcon(false)
       view.showFavoriteSnackBar(R.string.snackbar_recipe_deleted)
     } else {
       firebaseRepo.saveRecipeToFirebase(recipe)
+      view.isSavedRecipe = true
       setSavedRecipeIcon(true)
       view.showFavoriteSnackBar(R.string.snackbar_recipe_saved)
     }

@@ -66,8 +66,13 @@ class RecipeDetailActivityPresenterTest {
     givenSavedRecipe(false)
     whenFavoriteButtonClicked(isSavedRecipe, recipeToSave)
     thenSaveRecipeToFirebase(recipeToSave)
+    thenIsSavedRecipe(true)
     thenSetFavoriteButtonIcon(R.drawable.ic_favorite_red_24dp)
     thenShowSnackBar(R.string.snackbar_recipe_saved)
+  }
+
+  private fun thenIsSavedRecipe(isSaved: Boolean) {
+    verify(view).isSavedRecipe = isSaved
   }
 
   private fun thenSaveRecipeToFirebase(recipeToSave: Recipe) {
