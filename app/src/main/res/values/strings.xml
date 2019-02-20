@@ -19,4 +19,6 @@
   <string name="common_ok">OK</string>
   <string name="common_back">BACK</string>
   <string name="detail_meal_plan_snackbar_text">Recipe saved for %s</string>
+  <string name="common_favorites">Favorites</string>
+  <string name="common_meal_plan">Meal Plan</string>
 </resources>

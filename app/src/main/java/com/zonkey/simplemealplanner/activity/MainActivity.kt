@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.firebase.FAVORITE_RECIPE_DB
+import com.zonkey.simplemealplanner.firebase.MEAL_PLAN_DB
 import com.zonkey.simplemealplanner.firebase.RECIPE_DB_INSTANCE
 import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.model.Recipe
@@ -21,7 +22,9 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.favorites_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.meal_plan_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.recipe_card_favorites_title
+import kotlinx.android.synthetic.main.activity_main.recipe_card_meal_plan_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
@@ -73,21 +76,49 @@ class MainActivity : AppCompatActivity(), MainView {
   override fun onResume() {
     super.onResume()
 
+    setUpFavoriteRecipes()
+
+    setUpMealPlanRecipes()
+  }
+
+  private fun setUpFavoriteRecipes() {
     firebaseDatabase
         .getReference(RECIPE_DB_INSTANCE)
         .child(FAVORITE_RECIPE_DB)
         .addValueEventListener(object : ValueEventListener {
-      override fun onCancelled(error: DatabaseError) {
-        Timber.e(error.toException(), "Problem retrieving recipes from database")
-        recipe_empty_search_view.visibility = View.VISIBLE
-      }
+          override fun onCancelled(error: DatabaseError) {
+            Timber.e(error.toException(), "Problem retrieving favorite recipes from database")
+            recipe_empty_search_view.visibility = View.VISIBLE
+          }
 
-      override fun onDataChange(snapshot: DataSnapshot) {
-        val dbRecipes: List<Recipe?>? = snapshot.children.map { it.getValue(Recipe::class.java) }
+          override fun onDataChange(snapshot: DataSnapshot) {
+            val dbRecipes: List<Recipe?>? = snapshot.children.map {
+              it.getValue(Recipe::class.java)
+            }
 
-        presenter.setFavoriteRecipes(dbRecipes)
-      }
-    })
+            presenter.setFavoriteRecipes(dbRecipes)
+          }
+        })
+  }
+
+  private fun setUpMealPlanRecipes() {
+    firebaseDatabase
+        .getReference(RECIPE_DB_INSTANCE)
+        .child(MEAL_PLAN_DB)
+        .addValueEventListener(object : ValueEventListener {
+          override fun onCancelled(error: DatabaseError) {
+            Timber.e(error.toException(), "Problem retrieving meal plan recipes from database")
+            recipe_empty_search_view.visibility = View.VISIBLE
+          }
+
+          override fun onDataChange(snapshot: DataSnapshot) {
+            val dbRecipes: List<Recipe?>? = snapshot.children.map {
+              it.getValue(Recipe::class.java)
+            }
+
+            presenter.setMealPlanRecipes(dbRecipes)
+          }
+        })
   }
 
   override fun setUpAdapter(recipeHits: List<Hit>) {
@@ -113,6 +144,14 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun setFavoritedRecipes(dbRecipes: List<Recipe?>) {
     favorites_recipe_card_widget.setRecipes(dbRecipes)
+  }
+
+  override fun setMealPlanTitleVisibility(visibility: Int) {
+    recipe_card_meal_plan_title.visibility = visibility
+  }
+
+  override fun setMealPlanRecipes(mealPlanRecipes: List<Recipe?>) {
+    meal_plan_recipe_card_widget.setRecipes(mealPlanRecipes)
   }
 
   override fun setFavoritesTitleVisibility(visibility: Int) {

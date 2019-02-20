@@ -60,6 +60,19 @@ class MainActivityPresenter(
         view.setFavoritedRecipes(dbRecipes)
       }
     }
+  }
 
+  fun setMealPlanRecipes(mealPlanRecipes: List<Recipe?>?) {
+    mealPlanRecipes?.let {
+      if (it.isNullOrEmpty()) {
+        view.setMealPlanTitleVisibility(View.GONE)
+        view.setMealPlanRecipes(mealPlanRecipes)
+      } else {
+        view.setEmptySearchViewVisibility(View.GONE)
+        view.setMealPlanTitleVisibility(View.VISIBLE)
+        view.setMealPlanRecipes(mealPlanRecipes)
+
+      }
+    }
   }
 }

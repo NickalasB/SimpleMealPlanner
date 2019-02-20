@@ -1,5 +1,7 @@
 package com.zonkey.simplemealplanner.model
 
+import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
+
 data class Recipe(
     val uri: String,
     val label: String,
@@ -15,7 +17,8 @@ data class Recipe(
     val totalWeight: Float,
     val totalNutrients: NutrientInfo,
     val totalDaily: NutrientInfo,
-    var key: String
+    var key: String,
+    var dayOfWeek: DayOfWeek
 ) {
 
   constructor() : this(
@@ -33,7 +36,8 @@ data class Recipe(
       totalWeight = 0f,
       totalNutrients = NutrientInfo(),
       totalDaily = NutrientInfo(),
-      key = ""
+      key = "",
+      dayOfWeek = MONDAY
   )
 
 }
