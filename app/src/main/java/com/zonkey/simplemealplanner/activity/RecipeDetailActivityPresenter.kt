@@ -2,6 +2,7 @@ package com.zonkey.simplemealplanner.activity
 
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
+import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 
 class RecipeDetailActivityPresenter(
@@ -11,12 +12,12 @@ class RecipeDetailActivityPresenter(
 
   fun onFavoriteButtonClicked(savedRecipe: Boolean, recipe: Recipe) {
     if (savedRecipe) {
-      firebaseRepo.deleteRecipeFromFirebase(recipe)
+      firebaseRepo.deleteRecipeFromFavoritesDb(recipe)
       view.isSavedRecipe = false
       setSavedRecipeIcon(false)
       view.showFavoriteSnackBar(R.string.snackbar_recipe_deleted)
     } else {
-      firebaseRepo.saveRecipeToFirebase(recipe)
+      firebaseRepo.saveRecipeToFavoritesDb(recipe)
       view.isSavedRecipe = true
       setSavedRecipeIcon(true)
       view.showFavoriteSnackBar(R.string.snackbar_recipe_saved)
@@ -28,6 +29,15 @@ class RecipeDetailActivityPresenter(
       view.setFavoritedButtonIcon(R.drawable.ic_favorite_red_24dp)
     } else {
       view.setFavoritedButtonIcon(R.drawable.ic_favorite_border_red_24dp)
+    }
+  }
+
+  fun onMealPlanDialogPositiveButtonClicked(recipe: Recipe, addedToMealPlan: Boolean, selectedDay: String, isSavedRecipe: Boolean) {
+    if (addedToMealPlan) {
+      firebaseRepo.updateMealPlanRecipeDay(recipe, DayOfWeek.valueOf(selectedDay))
+    } else {
+      firebaseRepo.saveRecipeToMealPlanDb(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
+      view.addedToMealPlan = true
     }
   }
 }

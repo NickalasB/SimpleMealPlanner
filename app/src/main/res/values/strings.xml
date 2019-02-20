@@ -14,4 +14,9 @@
   <string name="detail_recipe_source_label">Source:</string>
   <string name="snackbar_recipe_deleted">Recipe Deleted</string>
   <string name="snackbar_recipe_saved">Recipe Saved</string>
+  <string name="detail_meal_plan_button_text">Add to Meal Plan</string>
+  <string name="detail_meal_plan_dialog_title">Pick a day</string>
+  <string name="common_ok">OK</string>
+  <string name="common_back">BACK</string>
+  <string name="detail_meal_plan_snackbar_text">Recipe saved for %s</string>
 </resources>

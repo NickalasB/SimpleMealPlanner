@@ -7,8 +7,10 @@ interface RecipeDetailView {
 
   var isSavedRecipe: Boolean
 
+  var addedToMealPlan: Boolean
+
   fun setFavoritedButtonIcon(@DrawableRes icon: Int)
 
-  fun showFavoriteSnackBar(@StringRes snackBarString: Int)
+  fun showFavoriteSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "")
 
 }

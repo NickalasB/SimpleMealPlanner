@@ -9,7 +9,7 @@ interface FirebaseRecipeRepository {
 
   fun deleteRecipeFromFavoritesDb(recipe: Recipe)
 
-  fun saveRecipeToMealPlanDb(recipe: Recipe, dayOfWeek: DayOfWeek)
+  fun saveRecipeToMealPlanDb(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean)
 
   fun deleteRecipeFromMealPlanDb(recipe: Recipe)
 

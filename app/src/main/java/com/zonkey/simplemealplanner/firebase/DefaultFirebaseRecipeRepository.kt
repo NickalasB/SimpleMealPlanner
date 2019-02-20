@@ -40,11 +40,11 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
         })
   }
 
-  override fun saveRecipeToMealPlanDb(recipe: Recipe, dayOfWeek: DayOfWeek) {
+  override fun saveRecipeToMealPlanDb(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean) {
     val mealPlanDbRef = firebaseDbInstance.getReference(RECIPE_DB_INSTANCE)
         .child(MEAL_PLAN_DB)
 
-    if (mealPlanDbRef.child(recipe.key).key != recipe.key) {
+    if ((mealPlanDbRef.child(recipe.key).key != recipe.key) || isSavedRecipe) {
       val key = mealPlanDbRef.push().key ?: ""
       recipe.key = key
       mealPlanDbRef.child(recipe.key).setValue(recipe)
