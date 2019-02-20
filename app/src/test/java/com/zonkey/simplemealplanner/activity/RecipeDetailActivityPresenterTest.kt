@@ -76,7 +76,7 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun thenSaveRecipeToFirebase(recipeToSave: Recipe) {
-    verify(firebaseRecipeRepository).saveRecipeToFirebase(recipeToSave)
+    verify(firebaseRecipeRepository).saveRecipeToFavoritesDb(recipeToSave)
   }
 
   private fun whenFavoriteButtonClicked(savedRecipe: Boolean, recipeToSave: Recipe) {
@@ -84,7 +84,7 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun thenDeleteRecipeFromFirebase(recipeToDelete: Recipe) {
-    verify(firebaseRecipeRepository).deleteRecipeFromFirebase(recipeToDelete)
+    verify(firebaseRecipeRepository).deleteRecipeFromFavoritesDb(recipeToDelete)
   }
 
   private fun thenShowSnackBar(snackBarString: Int) {

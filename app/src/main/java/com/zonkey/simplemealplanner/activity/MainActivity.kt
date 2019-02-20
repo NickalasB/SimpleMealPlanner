@@ -12,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
-import com.zonkey.simplemealplanner.firebase.RECIPE_DB
+import com.zonkey.simplemealplanner.firebase.FAVORITE_RECIPE_DB
 import com.zonkey.simplemealplanner.firebase.RECIPE_DB_INSTANCE
 import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.model.Recipe
@@ -73,8 +73,10 @@ class MainActivity : AppCompatActivity(), MainView {
   override fun onResume() {
     super.onResume()
 
-    firebaseDatabase.getReference(RECIPE_DB_INSTANCE).child(
-        RECIPE_DB).addValueEventListener(object : ValueEventListener {
+    firebaseDatabase
+        .getReference(RECIPE_DB_INSTANCE)
+        .child(FAVORITE_RECIPE_DB)
+        .addValueEventListener(object : ValueEventListener {
       override fun onCancelled(error: DatabaseError) {
         Timber.e(error.toException(), "Problem retrieving recipes from database")
         recipe_empty_search_view.visibility = View.VISIBLE
