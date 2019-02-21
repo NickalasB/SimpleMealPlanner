@@ -56,7 +56,6 @@ class MainActivityPresenter(
       } else {
         view.setEmptySearchViewVisibility(View.GONE)
         view.setFavoritesTitleVisibility(View.VISIBLE)
-        view.setIsSavedRecipeCard(true)
         view.setFavoritedRecipes(dbRecipes)
       }
     }

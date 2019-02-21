@@ -137,10 +137,6 @@ class MainActivity : AppCompatActivity(), MainView {
     home_page_progress.visibility = visibility
   }
 
-  override fun setIsSavedRecipeCard(isSaved: Boolean) {
-    favorites_recipe_card_widget.isFavorite = isSaved
-  }
-
   override fun setFavoritedRecipes(dbRecipes: List<Recipe?>) {
     favorites_recipe_card_widget.setRecipes(dbRecipes)
   }

@@ -46,7 +46,6 @@ class MainActivityPresenterTest {
     theSetFavoritesTitleVisibility(Times(1), View.GONE)
     thenSetEmptySearchViewVisibility(never(), View.GONE)
     theSetFavoritesTitleVisibility(never(), View.VISIBLE)
-    thenSetIsSavedRecipeCard(never(), true)
     thenSetFavoritedRecipes(Times(1), emptyList())
   }
 
@@ -60,7 +59,6 @@ class MainActivityPresenterTest {
     whenSetFavoriteRecipesCalled(dbRecipes)
     thenSetEmptySearchViewVisibility(Times(1), View.GONE)
     theSetFavoritesTitleVisibility(Times(1), View.VISIBLE)
-    thenSetIsSavedRecipeCard(Times(1), true)
     thenSetFavoritedRecipes(Times(1), dbRecipes)
     thenSetEmptySearchViewVisibility(never(), View.VISIBLE)
   }
@@ -120,10 +118,6 @@ class MainActivityPresenterTest {
 
   private fun theSetFavoritesTitleVisibility(times: VerificationMode, visibility: Int) {
     verify(view, times).setFavoritesTitleVisibility(visibility)
-  }
-
-  private fun thenSetIsSavedRecipeCard(times: VerificationMode, saved: Boolean) {
-    verify(view, times).setIsSavedRecipeCard(saved)
   }
 
   private fun thenSetFavoritedRecipes(times: VerificationMode, dbRecipes: List<Recipe>) {

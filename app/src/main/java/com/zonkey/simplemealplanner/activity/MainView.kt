@@ -15,8 +15,6 @@ interface MainView {
 
   fun setFavoritesTitleVisibility(visibility: Int)
 
-  fun setIsSavedRecipeCard(isSaved: Boolean)
-
   fun setFavoritedRecipes(dbRecipes: List<Recipe?>)
 
   fun setMealPlanTitleVisibility(visibility: Int)

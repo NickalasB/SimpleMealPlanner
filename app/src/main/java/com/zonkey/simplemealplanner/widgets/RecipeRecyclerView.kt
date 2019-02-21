@@ -14,15 +14,13 @@ class RecipeRecyclerView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
 
-  var isFavorite: Boolean? = null
-
   init {
     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     adapter = RecipeRecyclerViewAdapter {}
   }
 
   fun setRecipes(recipes: List<Recipe?>) {
-    adapter = RecipeRecyclerViewAdapter(isFavorite) {}
+    adapter = RecipeRecyclerViewAdapter {}
     (adapter as RecipeRecyclerViewAdapter).submitList(recipes)
   }
 }

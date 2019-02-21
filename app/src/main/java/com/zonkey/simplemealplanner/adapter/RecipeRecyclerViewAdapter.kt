@@ -19,7 +19,6 @@ internal const val FULL_RECIPE = "full_recipe"
 internal const val FROM_FAVORITE = "from_favorite"
 
 class RecipeRecyclerViewAdapter(
-    private val fromFavorite: Boolean? = false,
     private val clickListener: (Recipe) -> Unit
 ) : ListAdapter<Recipe, RecipeRecyclerViewAdapter.ViewHolder>(
     RecipeDiffCallBack()) {
@@ -27,19 +26,19 @@ class RecipeRecyclerViewAdapter(
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent)
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position),
-      clickListener, fromFavorite)
+      clickListener)
 
   class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
       parent.inflate(R.layout.recipe_preview_view_item, false)) {
 
-    fun bind(recipe: Recipe, listener: (Recipe) -> Unit, fromFavorite: Boolean?) =
+    fun bind(recipe: Recipe, listener: (Recipe) -> Unit) =
         with(itemView) {
           recipe_card.setRecipeCardItems(recipe)
           setOnClickListener {
             listener(recipe)
             val intent = RecipeDetailActivity.buildIntent(context)
             intent.putExtra(FULL_RECIPE, Gson().toJson(recipe))
-            intent.putExtra(FROM_FAVORITE, fromFavorite)
+            intent.putExtra(FROM_FAVORITE, recipe.favorite)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(itemView.context as Activity,
                 recipe_card_item_image, itemView.context.getString(R.string.recipe_image_transition))
             context.startActivity(intent, options.toBundle())
