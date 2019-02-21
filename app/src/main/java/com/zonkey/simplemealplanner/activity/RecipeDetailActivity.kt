@@ -72,6 +72,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     setupFavoriteButton(recipe)
 
     setupMealPlanDialog(recipe)
+
+    if(recipe.mealPlan && recipe.day.name.isNotEmpty()) {
+      detail_save_to_meal_plan_button.text = recipe.day.name
+    }
   }
 
   private fun setupFavoriteButton(recipe: Recipe) {

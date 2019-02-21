@@ -3,6 +3,8 @@ package com.zonkey.simplemealplanner.activity
 import android.view.View
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.zonkey.simplemealplanner.model.DayOfWeek.FRIDAY
+import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
 import com.zonkey.simplemealplanner.model.Diet
 import com.zonkey.simplemealplanner.model.Ingredient
 import com.zonkey.simplemealplanner.model.NutrientInfo
@@ -80,7 +82,10 @@ class MainActivityPresenterTest {
             totalWeight = 0f,
             totalNutrients = NutrientInfo(),
             totalDaily = NutrientInfo(),
-            key = "testKey1"
+            key = "testKey1",
+            day = MONDAY,
+            favorite = true,
+            mealPlan = false
         ),
         Recipe(
             uri = "testUri2",
@@ -97,7 +102,10 @@ class MainActivityPresenterTest {
             totalWeight = 0f,
             totalNutrients = NutrientInfo(),
             totalDaily = NutrientInfo(),
-            key = "testKey2"
+            key = "testKey2",
+            day = FRIDAY,
+            favorite = false,
+            mealPlan = true
         )
     )
   }

@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
+import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
 import com.zonkey.simplemealplanner.model.Diet
 import com.zonkey.simplemealplanner.model.Ingredient
 import com.zonkey.simplemealplanner.model.NutrientInfo
@@ -117,7 +118,10 @@ class RecipeDetailActivityPresenterTest {
         totalWeight = 0f,
         totalNutrients = NutrientInfo(),
         totalDaily = NutrientInfo(),
-        key = "testKey1"
+        key = "testKey1",
+        day = MONDAY,
+        favorite = true,
+        mealPlan = false
     )
   }
 
@@ -149,7 +153,7 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun thenSaveRecipeToMealPlanDb() {
-    verify(firebaseRecipeRepository).saveRecipeToMealPlanDb(mockRecipe,
+    verify(firebaseRecipeRepository).saveRecipeToMealPlan(mockRecipe,
         DayOfWeek.valueOf(selectedDay), isSavedRecipe)
   }
 
@@ -163,11 +167,11 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun thenSaveRecipeToFirebase(recipeToSave: Recipe) {
-    verify(firebaseRecipeRepository).saveRecipeToFavoritesDb(recipeToSave)
+    verify(firebaseRecipeRepository).saveRecipeAsFavorite(recipeToSave)
   }
 
   private fun thenDeleteRecipeFromFirebase(recipeToDelete: Recipe) {
-    verify(firebaseRecipeRepository).deleteRecipeFromFavoritesDb(recipeToDelete)
+    verify(firebaseRecipeRepository).removeRecipeAsFavorite(recipeToDelete)
   }
 
   private fun thenShowSnackBar(snackBarString: Int) {

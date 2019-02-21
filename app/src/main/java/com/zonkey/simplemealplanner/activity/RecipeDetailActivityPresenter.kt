@@ -12,12 +12,12 @@ class RecipeDetailActivityPresenter(
 
   fun onFavoriteButtonClicked(savedRecipe: Boolean, recipe: Recipe) {
     if (savedRecipe) {
-      firebaseRepo.deleteRecipeFromFavoritesDb(recipe)
+      firebaseRepo.removeRecipeAsFavorite(recipe)
       view.isSavedRecipe = false
       setSavedRecipeIcon(false)
       view.showFavoriteSnackBar(R.string.snackbar_recipe_deleted)
     } else {
-      firebaseRepo.saveRecipeToFavoritesDb(recipe)
+      firebaseRepo.saveRecipeAsFavorite(recipe)
       view.isSavedRecipe = true
       setSavedRecipeIcon(true)
       view.showFavoriteSnackBar(R.string.snackbar_recipe_saved)
@@ -36,7 +36,7 @@ class RecipeDetailActivityPresenter(
     if (addedToMealPlan) {
       firebaseRepo.updateMealPlanRecipeDay(recipe, DayOfWeek.valueOf(selectedDay))
     } else {
-      firebaseRepo.saveRecipeToMealPlanDb(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
+      firebaseRepo.saveRecipeToMealPlan(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
       view.addedToMealPlan = true
     }
   }

@@ -18,7 +18,9 @@ data class Recipe(
     val totalNutrients: NutrientInfo,
     val totalDaily: NutrientInfo,
     var key: String,
-    var dayOfWeek: DayOfWeek
+    var day: DayOfWeek,
+    var favorite: Boolean,
+    var mealPlan: Boolean
 ) {
 
   constructor() : this(
@@ -37,7 +39,9 @@ data class Recipe(
       totalNutrients = NutrientInfo(),
       totalDaily = NutrientInfo(),
       key = "",
-      dayOfWeek = MONDAY
+      day = MONDAY,
+      favorite = false,
+      mealPlan = false
   )
 
 }

@@ -12,8 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
-import com.zonkey.simplemealplanner.firebase.FAVORITE_RECIPE_DB
-import com.zonkey.simplemealplanner.firebase.MEAL_PLAN_DB
+import com.zonkey.simplemealplanner.firebase.RECIPES_DB
 import com.zonkey.simplemealplanner.firebase.RECIPE_DB_INSTANCE
 import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.model.Recipe
@@ -84,7 +83,7 @@ class MainActivity : AppCompatActivity(), MainView {
   private fun setUpFavoriteRecipes() {
     firebaseDatabase
         .getReference(RECIPE_DB_INSTANCE)
-        .child(FAVORITE_RECIPE_DB)
+        .child(RECIPES_DB)
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem retrieving favorite recipes from database")
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity(), MainView {
               it.getValue(Recipe::class.java)
             }
 
-            presenter.setFavoriteRecipes(dbRecipes)
+            presenter.setFavoriteRecipes(dbRecipes?.filter { it?.favorite == true })
           }
         })
   }
@@ -104,7 +103,7 @@ class MainActivity : AppCompatActivity(), MainView {
   private fun setUpMealPlanRecipes() {
     firebaseDatabase
         .getReference(RECIPE_DB_INSTANCE)
-        .child(MEAL_PLAN_DB)
+        .child(RECIPES_DB)
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem retrieving meal plan recipes from database")
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity(), MainView {
               it.getValue(Recipe::class.java)
             }
 
-            presenter.setMealPlanRecipes(dbRecipes)
+            presenter.setMealPlanRecipes(dbRecipes?.filter { it?.mealPlan == true })
           }
         })
   }

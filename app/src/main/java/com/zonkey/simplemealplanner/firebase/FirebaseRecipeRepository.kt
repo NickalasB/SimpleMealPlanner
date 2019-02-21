@@ -5,13 +5,13 @@ import com.zonkey.simplemealplanner.model.Recipe
 
 interface FirebaseRecipeRepository {
 
-  fun saveRecipeToFavoritesDb(recipe: Recipe)
+  fun saveRecipeAsFavorite(recipe: Recipe)
 
-  fun deleteRecipeFromFavoritesDb(recipe: Recipe)
+  fun removeRecipeAsFavorite(recipe: Recipe)
 
-  fun saveRecipeToMealPlanDb(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean)
+  fun saveRecipeToMealPlan(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean)
 
-  fun deleteRecipeFromMealPlanDb(recipe: Recipe)
+  fun deleteRecipeFromDb(recipe: Recipe)
 
   fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek)
 }
