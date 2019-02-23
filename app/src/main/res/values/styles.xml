@@ -9,10 +9,17 @@
     <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
   </style>
 
-  <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
+  <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+  <item name="android:windowTranslucentStatus">true</item>
+  </style>>
 
   <style name="PrimaryColorButton" parent="TextAppearance.AppCompat.Button">
-    <item name="android:textColor">#FFFFFF</item>
+    <item name="android:textColor">@color/text_white</item>
     <item name="android:background">@drawable/primary_color_button_selectable</item>
+  </style>
+
+  <style name="AccentColorPill" parent="TextAppearance.AppCompat.Button">
+    <item name="android:textColor">@color/text_light</item>
+    <item name="android:background">@drawable/accent_color_pill_selectable</item>
   </style>
 </resources>
