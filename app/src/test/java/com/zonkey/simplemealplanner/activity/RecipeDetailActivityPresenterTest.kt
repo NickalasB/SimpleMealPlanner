@@ -110,6 +110,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan,
         selectedDay, isSavedRecipe)
     thenSetMealPlanButtonText(Times(1), selectedDay)
+    thenRemoveRecipeFromMealPlan(never(), mockRecipe)
     thenSetMealPlanButtonTextToDefault(never(), R.string.detail_meal_plan_button_text)
   }
 
@@ -120,6 +121,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan,
         selectedDay, isSavedRecipe)
     thenSetMealPlanButtonTextToDefault(Times(1), R.string.detail_meal_plan_button_text)
+    thenRemoveRecipeFromMealPlan(Times(1), mockRecipe)
     thenSetMealPlanButtonText(never(), selectedDay)
   }
 
@@ -209,5 +211,9 @@ class RecipeDetailActivityPresenterTest {
 
   private fun thenSetMealPlanButtonText(times: VerificationMode, selectedDay: String?) {
     verify(view, times).setMealPlanButtonText(selectedDayString = selectedDay)
+  }
+
+  private fun thenRemoveRecipeFromMealPlan(times: VerificationMode, recipe: Recipe) {
+    verify(firebaseRecipeRepository, times).removeRecipeFromMealPlan(recipe)
   }
 }

@@ -71,13 +71,12 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
     val recipeDbRef = firebaseDbInstance.getReference(RECIPE_DB_INSTANCE)
         .child(RECIPES_DB)
         .child(recipe.key)
-    recipeDbRef.child(DAY).setValue(DayOfWeek.REMOVE)
     recipeDbRef.child(MEAL_PLAN).setValue(false)
   }
 
   override fun purgeUnsavedRecipe(recipe: Recipe) {
     firebaseDbInstance.getReference(RECIPE_DB_INSTANCE).child(RECIPES_DB).child(recipe.key)
-        .addValueEventListener(object : ValueEventListener {
+        .addListenerForSingleValueEvent(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem deleting recipe ${recipe.label} from Firebase")
           }

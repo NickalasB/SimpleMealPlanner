@@ -21,7 +21,7 @@ class SingleRecipeCard @JvmOverloads constructor(
     set(value) {
       field = value
       recipe_card_item_title.text = value
-      recipe_card_item_title.background = ContextCompat.getDrawable(context, R.drawable.scrim_bottom)
+      recipe_card_item_title.background = ContextCompat.getDrawable(context, R.drawable.preview_image_scrim)
     }
 
   private var imageUrl: String? = null

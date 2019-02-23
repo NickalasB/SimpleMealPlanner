@@ -67,7 +67,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     detail_collapsing_toolbar.title = recipe.label
 
     detail_collapsing_toolbar.setCollapsedTitleTextColor(
-        ContextCompat.getColor(this, R.color.text_white))
+        ContextCompat.getColor(this, R.color.textWhite))
 
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
 
@@ -161,6 +161,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         .into(detail_recipe_image)
   }
 
+  //TODO this needs some work
   override fun onDestroy() {
     super.onDestroy()
     firebaseRepo.purgeUnsavedRecipe(recipe)

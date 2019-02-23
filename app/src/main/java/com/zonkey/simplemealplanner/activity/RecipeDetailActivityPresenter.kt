@@ -33,17 +33,22 @@ class RecipeDetailActivityPresenter(
     }
   }
 
-  fun onMealPlanDialogPositiveButtonClicked(recipe: Recipe, addedToMealPlan: Boolean, selectedDay: String, isSavedRecipe: Boolean) {
+  fun onMealPlanDialogPositiveButtonClicked(recipe: Recipe, addedToMealPlan: Boolean,
+      selectedDay: String, isSavedRecipe: Boolean) {
     when {
-      addedToMealPlan -> firebaseRepo.updateMealPlanRecipeDay(recipe, DayOfWeek.valueOf(selectedDay))
+      addedToMealPlan -> firebaseRepo.updateMealPlanRecipeDay(recipe,
+          DayOfWeek.valueOf(selectedDay))
       else -> {
         firebaseRepo.saveRecipeToMealPlan(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
         view.addedToMealPlan = true
       }
     }
     when (DayOfWeek.valueOf(selectedDay)) {
-      REMOVE -> view.setMealPlanButtonText(mealPlanButtonStringRes = R.string.detail_meal_plan_button_text)
-      else ->  view.setMealPlanButtonText(selectedDayString = selectedDay)
+      REMOVE -> {
+        view.setMealPlanButtonText(mealPlanButtonStringRes = R.string.detail_meal_plan_button_text)
+        firebaseRepo.removeRecipeFromMealPlan(recipe)
+      }
+      else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
     }
   }
 }
