@@ -67,7 +67,15 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
         .setValue(dayOfWeek)
   }
 
-  override fun deleteRecipeFromDb(recipe: Recipe) {
+  override fun removeRecipeFromMealPlan(recipe: Recipe) {
+    val recipeDbRef = firebaseDbInstance.getReference(RECIPE_DB_INSTANCE)
+        .child(RECIPES_DB)
+        .child(recipe.key)
+    recipeDbRef.child(DAY).setValue(DayOfWeek.REMOVE)
+    recipeDbRef.child(MEAL_PLAN).setValue(false)
+  }
+
+  override fun purgeUnsavedRecipe(recipe: Recipe) {
     firebaseDbInstance.getReference(RECIPE_DB_INSTANCE).child(RECIPES_DB).child(recipe.key)
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
@@ -75,7 +83,12 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
           }
 
           override fun onDataChange(snapshot: DataSnapshot) {
-            snapshot.ref.removeValue()
+            val dbRecipe = snapshot.getValue(Recipe::class.java)
+            dbRecipe?.let {
+              if (!it.favorite && !it.mealPlan) {
+                snapshot.ref.removeValue()
+              }
+            }
           }
         })
   }

@@ -11,7 +11,9 @@ interface FirebaseRecipeRepository {
 
   fun saveRecipeToMealPlan(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean)
 
-  fun deleteRecipeFromDb(recipe: Recipe)
+  fun purgeUnsavedRecipe(recipe: Recipe)
 
   fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek)
+
+  fun removeRecipeFromMealPlan(recipe: Recipe)
 }
