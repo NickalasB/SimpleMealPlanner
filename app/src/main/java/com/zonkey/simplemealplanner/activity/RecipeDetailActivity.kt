@@ -67,7 +67,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     detail_collapsing_toolbar.title = recipe.label
 
     detail_collapsing_toolbar.setCollapsedTitleTextColor(
-        ContextCompat.getColor(this, R.color.textWhite))
+        ContextCompat.getColor(this, R.color.lightBackground))
 
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
 

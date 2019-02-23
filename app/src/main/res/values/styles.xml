@@ -6,7 +6,7 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
-    <item name="android:windowBackground">@color/textWhite</item>
+    <item name="android:windowBackground">@color/lightBackground</item>
     <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
   </style>
 
@@ -15,12 +15,12 @@
   </style>>
 
   <style name="PrimaryColorButton" parent="TextAppearance.AppCompat.Button">
-    <item name="android:textColor">@color/textWhite</item>
+    <item name="android:textColor">@color/whiteText</item>
     <item name="android:background">@drawable/primary_color_button_selectable</item>
   </style>
 
   <style name="AccentColorPill" parent="TextAppearance.AppCompat.Button">
-    <item name="android:textColor">@color/textGray</item>
+    <item name="android:textColor">@color/whiteText</item>
     <item name="android:background">@drawable/accent_color_pill_selectable</item>
   </style>
 </resources>
