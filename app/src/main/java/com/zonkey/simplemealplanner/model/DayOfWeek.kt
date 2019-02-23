@@ -7,5 +7,6 @@ enum class DayOfWeek {
   THURSDAY,
   FRIDAY,
   SATURDAY,
-  SUNDAY
+  SUNDAY,
+  REMOVE
 }

@@ -1,6 +1,6 @@
 package com.zonkey.simplemealplanner.model
 
-import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
+import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 
 data class Recipe(
     val uri: String,
@@ -39,7 +39,7 @@ data class Recipe(
       totalNutrients = NutrientInfo(),
       totalDaily = NutrientInfo(),
       key = "",
-      day = MONDAY,
+      day = REMOVE,
       favorite = false,
       mealPlan = false
   )
