@@ -12,8 +12,8 @@
   <string name="recipe_image_transition">recipeImageTransition</string>
   <string name="detail_button_text">Full Recipe</string>
   <string name="detail_recipe_source_label">Source:</string>
-  <string name="snackbar_recipe_deleted">Recipe Deleted</string>
-  <string name="snackbar_recipe_saved">Recipe Saved</string>
+  <string name="snackbar_recipe_deleted">Recipe Removed From Favorites</string>
+  <string name="snackbar_recipe_saved">Recipe Saved To Favorites</string>
   <string name="detail_meal_plan_button_text">Add to Meal Plan</string>
   <string name="detail_meal_plan_dialog_title">Pick a day</string>
   <string name="common_ok">OK</string>

@@ -49,7 +49,11 @@ class SingleRecipeCard @JvmOverloads constructor(
   }
 
   fun setRecipeCardItems(recipe: Recipe) {
-    title = recipe.label
+    if (recipe.mealPlan) {
+      title = recipe.day.name
+    } else {
+      title = recipe.label
+    }
     imageUrl = recipe.image
   }
 }

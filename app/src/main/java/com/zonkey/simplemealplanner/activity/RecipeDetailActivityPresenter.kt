@@ -3,6 +3,7 @@ package com.zonkey.simplemealplanner.activity
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
+import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 import com.zonkey.simplemealplanner.model.Recipe
 
 class RecipeDetailActivityPresenter(
@@ -33,11 +34,16 @@ class RecipeDetailActivityPresenter(
   }
 
   fun onMealPlanDialogPositiveButtonClicked(recipe: Recipe, addedToMealPlan: Boolean, selectedDay: String, isSavedRecipe: Boolean) {
-    if (addedToMealPlan) {
-      firebaseRepo.updateMealPlanRecipeDay(recipe, DayOfWeek.valueOf(selectedDay))
-    } else {
-      firebaseRepo.saveRecipeToMealPlan(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
-      view.addedToMealPlan = true
+    when {
+      addedToMealPlan -> firebaseRepo.updateMealPlanRecipeDay(recipe, DayOfWeek.valueOf(selectedDay))
+      else -> {
+        firebaseRepo.saveRecipeToMealPlan(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
+        view.addedToMealPlan = true
+      }
+    }
+    when (DayOfWeek.valueOf(selectedDay)) {
+      REMOVE -> view.setMealPlanButtonText(mealPlanButtonStringRes = R.string.detail_meal_plan_button_text)
+      else ->  view.setMealPlanButtonText(selectedDayString = selectedDay)
     }
   }
 }

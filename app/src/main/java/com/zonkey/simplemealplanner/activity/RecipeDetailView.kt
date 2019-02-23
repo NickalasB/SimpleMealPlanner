@@ -13,4 +13,6 @@ interface RecipeDetailView {
 
   fun showFavoriteSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "")
 
+  fun setMealPlanButtonText(@StringRes mealPlanButtonStringRes: Int = 0, selectedDayString: String? = "")
+
 }

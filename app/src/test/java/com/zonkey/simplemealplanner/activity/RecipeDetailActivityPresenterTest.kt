@@ -1,11 +1,14 @@
 package com.zonkey.simplemealplanner.activity
 
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
+import com.zonkey.simplemealplanner.model.DayOfWeek.FRIDAY
 import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
+import com.zonkey.simplemealplanner.model.DayOfWeek.valueOf
 import com.zonkey.simplemealplanner.model.Diet
 import com.zonkey.simplemealplanner.model.Ingredient
 import com.zonkey.simplemealplanner.model.NutrientInfo
@@ -16,6 +19,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.mockito.internal.verification.Times
+import org.mockito.verification.VerificationMode
 
 @RunWith(JUnit4::class)
 class RecipeDetailActivityPresenterTest {
@@ -57,7 +62,7 @@ class RecipeDetailActivityPresenterTest {
 
   @Test
   fun shouldDeleteRecipeFromFirebaseAndSetSavedRecipeToFalseAndUpdateIconAndShowSnackBarWhenFavoriteButtonClickedIfRecipeSaved() {
-    givenRecipe()
+    givenRecipe(MONDAY)
     givenSavedRecipe(true)
     whenFavoriteButtonClicked(isSavedRecipe, mockRecipe)
     thenDeleteRecipeFromFirebase(mockRecipe)
@@ -67,7 +72,7 @@ class RecipeDetailActivityPresenterTest {
 
   @Test
   fun shouldSaveRecipeToFirebaseAndSetSavedRecipeToTrueAndUpdateIconAndShowSnackBarWhenFavoriteButtonClickedIfRecipeNotSaved() {
-    givenRecipe()
+    givenRecipe(MONDAY)
     givenSavedRecipe(false)
     whenFavoriteButtonClicked(isSavedRecipe, mockRecipe)
     thenSaveRecipeToFirebase(mockRecipe)
@@ -78,9 +83,9 @@ class RecipeDetailActivityPresenterTest {
 
   @Test
   fun shouldUpdateMealPlanRecipeDayIfAlreadyAddedToMealPlanDbWhenMealPlanDialogPositiveButtonClicked() {
-    givenRecipe()
-    givenAddedToMealPlanAlready(true)
     givenDay(DayOfWeek.MONDAY.name)
+    givenRecipe(valueOf(selectedDay))
+    givenAddedToMealPlanAlready(true)
     givenSavedRecipe(true)
     whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan, selectedDay,
         isSavedRecipe)
@@ -89,20 +94,40 @@ class RecipeDetailActivityPresenterTest {
 
   @Test
   fun shouldSaveRecipeToMealPlanDbAndSetAddedToMealPlanTrueIfNotAlreadyAddedToMealPlanDbWhenMealPlanDialogPositiveButtonClicked() {
-    givenRecipe()
-    givenAddedToMealPlanAlready(false)
     givenDay(DayOfWeek.FRIDAY.name)
+    givenRecipe(valueOf(selectedDay))
+    givenAddedToMealPlanAlready(false)
     givenSavedRecipe(true)
     whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan, selectedDay,
         isSavedRecipe)
     thenSaveRecipeToMealPlanDb()
   }
 
+  @Test
+  fun shouldSetMealPlanButtonTextToDayIfNotRemovedWhenOnMealPlanDialogPositiveButtonClicked() {
+    givenDay(FRIDAY.name)
+    givenRecipe(valueOf(selectedDay))
+    whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan,
+        selectedDay, isSavedRecipe)
+    thenSetMealPlanButtonText(Times(1), selectedDay)
+    thenSetMealPlanButtonTextToDefault(never(), R.string.detail_meal_plan_button_text)
+  }
+
+  @Test
+  fun shouldSetMealPlanButtonTextToDefaultIfRemovedWhenOnMealPlanDialogPositiveButtonClicked() {
+    givenDay(DayOfWeek.REMOVE.name)
+    givenRecipe(valueOf(selectedDay))
+    whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan,
+        selectedDay, isSavedRecipe)
+    thenSetMealPlanButtonTextToDefault(Times(1), R.string.detail_meal_plan_button_text)
+    thenSetMealPlanButtonText(never(), selectedDay)
+  }
+
   private fun givenSavedRecipe(isSaved: Boolean) {
     isSavedRecipe = isSaved
   }
 
-  private fun givenRecipe() {
+  private fun givenRecipe(day: DayOfWeek) {
     mockRecipe = Recipe(
         uri = "testUri1",
         label = "testLabel1",
@@ -119,7 +144,7 @@ class RecipeDetailActivityPresenterTest {
         totalNutrients = NutrientInfo(),
         totalDaily = NutrientInfo(),
         key = "testKey1",
-        day = MONDAY,
+        day = day,
         favorite = true,
         mealPlan = false
     )
@@ -176,5 +201,13 @@ class RecipeDetailActivityPresenterTest {
 
   private fun thenShowSnackBar(snackBarString: Int) {
     verify(view).showFavoriteSnackBar(snackBarString)
+  }
+
+  private fun thenSetMealPlanButtonTextToDefault(times: VerificationMode, defaultStringRes: Int) {
+    verify(view, times).setMealPlanButtonText(mealPlanButtonStringRes = defaultStringRes)
+  }
+
+  private fun thenSetMealPlanButtonText(times: VerificationMode, selectedDay: String?) {
+    verify(view, times).setMealPlanButtonText(selectedDayString = selectedDay)
   }
 }

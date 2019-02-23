@@ -44,6 +44,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   override var addedToMealPlan = false
 
+  private lateinit var recipe: Recipe
+
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
   }
@@ -51,7 +53,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     AndroidInjection.inject(this)
-    setContentView(com.zonkey.simplemealplanner.R.layout.activity_recipe_detail)
+    setContentView(R.layout.activity_recipe_detail)
 
     presenter = RecipeDetailActivityPresenter(this, firebaseRepo)
 
@@ -59,13 +61,13 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       postponeEnterTransition()
     }
 
-    val recipe = Gson().fromJson(intent.getStringExtra(FULL_RECIPE), Recipe::class.java)
+    recipe = Gson().fromJson(intent.getStringExtra(FULL_RECIPE), Recipe::class.java)
     loadRecipeImage(recipe)
 
     detail_collapsing_toolbar.title = recipe.label
 
     detail_collapsing_toolbar.setCollapsedTitleTextColor(
-        ContextCompat.getColor(this, com.zonkey.simplemealplanner.R.color.whiteText))
+        ContextCompat.getColor(this, R.color.text_white))
 
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
 
@@ -73,7 +75,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     setupMealPlanDialog(recipe)
 
-    if(recipe.mealPlan && recipe.day.name.isNotEmpty()) {
+    if (recipe.mealPlan && recipe.day.name.isNotEmpty()) {
       detail_save_to_meal_plan_button.text = recipe.day.name
     }
   }
@@ -103,8 +105,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             addedToMealPlan = addedToMealPlan,
             selectedDay = selectedDay,
             isSavedRecipe = isSavedRecipe)
-        detail_save_to_meal_plan_button.text = selectedDay
-        showFavoriteSnackBar(snackBarString = getString(string.detail_meal_plan_snackbar_text, selectedDay))
+
+        showFavoriteSnackBar(
+            snackBarString = getString(string.detail_meal_plan_snackbar_text, selectedDay))
         dialog.dismiss()
       }
       builder.setNegativeButton(getString(string.common_back)) { dialog, _ ->
@@ -112,6 +115,15 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       }
       builder.create().show()
     }
+  }
+
+  override fun setMealPlanButtonText(mealPlanButtonStringRes: Int, selectedDayString: String?) {
+    val favoriteButtonText = when {
+      mealPlanButtonStringRes != 0 -> getString(mealPlanButtonStringRes)
+      !selectedDayString.isNullOrBlank() -> selectedDayString
+      else -> ""
+    }
+    detail_save_to_meal_plan_button.text = favoriteButtonText
   }
 
   override fun showFavoriteSnackBar(snackBarStringRes: Int, snackBarString: String?) {
@@ -147,5 +159,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
         })
         .into(detail_recipe_image)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    firebaseRepo.purgeUnsavedRecipe(recipe)
   }
 }
