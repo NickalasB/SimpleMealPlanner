@@ -82,13 +82,16 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
           }
 
           override fun onDataChange(snapshot: DataSnapshot) {
-            val dbRecipe = snapshot.getValue(Recipe::class.java)
-            dbRecipe?.let {
-              if (!it.favorite && !it.mealPlan) {
-                snapshot.ref.removeValue()
+            if (!recipe.key.isEmpty()) {
+              val dbRecipe = snapshot.getValue(Recipe::class.java)
+              dbRecipe?.let {
+                if (!it.favorite && !it.mealPlan) {
+                  snapshot.ref.removeValue()
+                }
               }
             }
           }
+
         })
   }
 }
