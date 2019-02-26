@@ -15,17 +15,6 @@
       android:paddingBottom="@dimen/common_margin_double"
       >
 
-    <ProgressBar
-        android:id="@+id/home_page_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <SearchView
         android:id="@+id/recipe_search_view"
         android:layout_width="match_parent"
@@ -33,21 +22,6 @@
         android:layout_margin="@dimen/common_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/recipe_empty_search_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin_double"
-        android:gravity="center"
-        android:text="@string/recipe_empty_error_text"
-        android:textSize="@dimen/title_text_size"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_search_view"
         />
 
     <TextView
@@ -63,17 +37,42 @@
         tools:text="Corn"
         />
 
-    <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
-        android:id="@+id/test_recipe_card_widget"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/common_margin"
-        android:layout_marginEnd="@dimen/common_margin"
-        android:layout_marginStart="@dimen/common_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <FrameLayout
+        android:id="@+id/recipe_main_search_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipe_card_query_title"
-        />
+        >
+
+      <TextView
+          android:id="@+id/recipe_empty_search_view"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/common_margin_double"
+          android:gravity="center"
+          android:text="@string/recipe_empty_error_text"
+          android:textSize="@dimen/title_text_size"
+          android:visibility="gone"
+          />
+
+      <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
+          android:id="@+id/main_search_recipe_card_widget"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/common_margin"
+          android:layout_marginEnd="@dimen/common_margin"
+          android:layout_marginStart="@dimen/common_margin"
+          />
+
+      <ProgressBar
+          android:id="@+id/home_page_progress"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/common_margin"
+          android:visibility="gone"
+          />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/recipe_card_meal_plan_title"
@@ -85,7 +84,7 @@
         android:textSize="@dimen/title_text_size"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_recipe_card_widget"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_main_search_layout"
         />
 
     <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView

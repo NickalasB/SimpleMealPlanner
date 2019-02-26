@@ -21,13 +21,13 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.favorites_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
+import kotlinx.android.synthetic.main.activity_main.main_search_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.meal_plan_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.recipe_card_favorites_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_meal_plan_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
-import kotlinx.android.synthetic.main.activity_main.test_recipe_card_widget
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun setUpAdapter(recipeHits: List<Hit>) {
     val recipes = recipeHits.map { it.recipe }
-    test_recipe_card_widget.setRecipes(recipes)
+    main_search_recipe_card_widget.setRecipes(recipes)
   }
 
   override fun setEmptySearchViewVisibility(visibility: Int) {
