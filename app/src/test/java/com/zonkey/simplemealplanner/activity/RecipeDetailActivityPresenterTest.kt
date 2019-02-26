@@ -8,6 +8,7 @@ import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.FRIDAY
 import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
+import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 import com.zonkey.simplemealplanner.model.DayOfWeek.valueOf
 import com.zonkey.simplemealplanner.model.Diet
 import com.zonkey.simplemealplanner.model.Ingredient
@@ -125,6 +126,22 @@ class RecipeDetailActivityPresenterTest {
     thenSetMealPlanButtonText(never(), selectedDay)
   }
 
+  @Test
+  fun shouldShowRecipeRemovedTextWhenRemoveSelectedFromMealPlanWhenShowRecipeDetailSnackBarCalled() {
+    givenDay(REMOVE.name)
+    givenRecipe(valueOf(selectedDay))
+    whenShowRecipeDetailSnackBarCalled(selectedDay)
+    thenShowSnackBar(R.string.detail_snackbar_meal_plan_removed)
+  }
+
+  @Test
+  fun shouldShowRecipeSavedToDayOfWeekTextWhenRemoveNotSelectedFromMealPlanWhenShowRecipeDetailSnackBarCalled() {
+    givenDay(MONDAY.name)
+    givenRecipe(valueOf(selectedDay))
+    whenShowRecipeDetailSnackBarCalled(selectedDay)
+    thenShowSnackBar(R.string.detail_meal_plan_snackbar_text, selectedDay)
+  }
+
   private fun givenSavedRecipe(isSaved: Boolean) {
     isSavedRecipe = isSaved
   }
@@ -175,6 +192,10 @@ class RecipeDetailActivityPresenterTest {
         savedRecipe)
   }
 
+  private fun whenShowRecipeDetailSnackBarCalled(dayOfWeek: String) {
+    presenter.showRecipeDetailSnackBar(dayOfWeek)
+  }
+
   private fun thenSetFavoriteButtonIcon(icon: Int) {
     verify(view).setFavoritedButtonIcon(icon)
   }
@@ -201,8 +222,8 @@ class RecipeDetailActivityPresenterTest {
     verify(firebaseRecipeRepository).removeRecipeAsFavorite(recipeToDelete)
   }
 
-  private fun thenShowSnackBar(snackBarString: Int) {
-    verify(view).showFavoriteSnackBar(snackBarString)
+  private fun thenShowSnackBar(snackBarString: Int, dayOfWeek: String? = "") {
+    verify(view).showRecipeDetailSnackBar(snackBarStringRes = snackBarString, dayOfWeek = dayOfWeek)
   }
 
   private fun thenSetMealPlanButtonTextToDefault(times: VerificationMode, defaultStringRes: Int) {

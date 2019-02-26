@@ -11,7 +11,7 @@ interface RecipeDetailView {
 
   fun setFavoritedButtonIcon(@DrawableRes icon: Int)
 
-  fun showFavoriteSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "")
+  fun showRecipeDetailSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "", dayOfWeek: String? = "")
 
   fun setMealPlanButtonText(@StringRes mealPlanButtonStringRes: Int = 0, selectedDayString: String? = "")
 

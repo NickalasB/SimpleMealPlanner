@@ -106,8 +106,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             selectedDay = selectedDay,
             isSavedRecipe = isSavedRecipe)
 
-        showFavoriteSnackBar(
-            snackBarString = getString(string.detail_meal_plan_snackbar_text, selectedDay))
+        presenter.showRecipeDetailSnackBar(selectedDay)
         dialog.dismiss()
       }
       builder.setNegativeButton(getString(string.common_back)) { dialog, _ ->
@@ -126,9 +125,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     detail_save_to_meal_plan_button.text = favoriteButtonText
   }
 
-  override fun showFavoriteSnackBar(snackBarStringRes: Int, snackBarString: String?) {
+  override fun showRecipeDetailSnackBar(snackBarStringRes: Int, snackBarString: String?, dayOfWeek: String?) {
     val snackBarText = when {
-      snackBarStringRes != 0 -> getString(snackBarStringRes)
+      snackBarStringRes != 0 -> getString(snackBarStringRes, dayOfWeek)
       !snackBarString.isNullOrBlank() -> snackBarString
       else -> ""
     }

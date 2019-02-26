@@ -16,12 +16,12 @@ class RecipeDetailActivityPresenter(
       firebaseRepo.removeRecipeAsFavorite(recipe)
       view.isSavedRecipe = false
       setSavedRecipeIcon(false)
-      view.showFavoriteSnackBar(R.string.snackbar_recipe_deleted)
+      view.showRecipeDetailSnackBar(R.string.snackbar_recipe_deleted)
     } else {
       firebaseRepo.saveRecipeAsFavorite(recipe)
       view.isSavedRecipe = true
       setSavedRecipeIcon(true)
-      view.showFavoriteSnackBar(R.string.snackbar_recipe_saved)
+      view.showRecipeDetailSnackBar(R.string.snackbar_recipe_saved)
     }
   }
 
@@ -49,6 +49,13 @@ class RecipeDetailActivityPresenter(
         firebaseRepo.removeRecipeFromMealPlan(recipe)
       }
       else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
+    }
+  }
+
+  fun showRecipeDetailSnackBar(selectedDay: String) {
+    when (selectedDay) {
+      REMOVE.name -> view.showRecipeDetailSnackBar(snackBarStringRes = R.string.detail_snackbar_meal_plan_removed)
+      else -> view.showRecipeDetailSnackBar(snackBarStringRes = R.string.detail_meal_plan_snackbar_text, dayOfWeek = selectedDay)
     }
   }
 }
