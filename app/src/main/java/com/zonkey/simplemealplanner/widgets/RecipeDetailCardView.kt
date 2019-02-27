@@ -136,7 +136,7 @@ class RecipeDetailCardView @JvmOverloads constructor(
   private fun populateIngredients(recipe: Recipe) {
     recipe.ingredientLines.forEach {
 
-      val ingredientLine = View.inflate(context, layout.ingredent_line, null)
+      val ingredientLine = View.inflate(context, layout.ingredient_line, null)
 
       val ingredientText = ingredientLine.findViewById<TextView>(R.id.detail_ingredient_line)
 
