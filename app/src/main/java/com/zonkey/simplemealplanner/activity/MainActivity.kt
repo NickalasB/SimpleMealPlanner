@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity(), MainView {
     recipe_search_view.isSubmitButtonEnabled = true
 
     presenter = MainActivityPresenter(this, recipeRepository)
+
+    this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
     handleSearchQuery()
   }
