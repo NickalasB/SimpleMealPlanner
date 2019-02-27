@@ -14,4 +14,11 @@
     <attr name="link"/>
     <attr name="button_text"/>
   </declare-styleable>
+
+  <declare-styleable name="IndexCardTextView">
+    <attr name="text"/>
+    <attr name="textStyle"/>
+    <attr name="textSize" format="dimension"/>
+    <attr name="lineColor" format="color"/>
+  </declare-styleable>
 </resources>

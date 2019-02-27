@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<com.zonkey.simplemealplanner.widgets.IndexCardTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/detail_ingredient_linear_layout"
+    android:id="@+id/detail_ingredient_line"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    app:lineColor="@color/indexCardBlue"
+    tools:text="Test"
+    style="@style/IndexCardLine"
+    />
 
-  <TextView
-      android:id="@+id/detail_ingredient_line"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingEnd="@dimen/common_margin_double"
-      android:paddingStart="@dimen/common_margin_double"
-      style="@style/IndexCardLine"
-      tools:text="Test"
-      >
-  </TextView>
-
-  <include layout="@layout/index_card_blue_line"/>
-
-</LinearLayout>

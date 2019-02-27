@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,74 +9,62 @@
     tools:parentTag="android.widget.LinearLayout"
     >
 
-  <TextView
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
       android:id="@+id/detail_recipe_title"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/common_margin"
-      android:textSize="@dimen/title_text_size"
+      android:layout_marginTop="@dimen/common_margin_double"
+      app:lineColor="@color/indexCardRed"
+      app:textSize="@dimen/title_text_size"
+      app:textStyle="bold"
       tools:text="Details"
       />
 
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/indexCardRed"
-      android:layout_marginTop="@dimen/common_margin_half"
-      />
-
-  <TextView
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
       android:id="@+id/detail_recipe_servings"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/common_margin"
+      app:lineColor="@color/indexCardBlue"
       tools:text="Serves 4"
       style="@style/IndexCardLine"
       />
 
-  <include layout="@layout/index_card_blue_line"/>
-
-  <TextView
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
       android:id="@+id/detail_recipe_calories"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/common_margin"
       android:layout_marginTop="@dimen/common_margin_half"
+      app:lineColor="@color/indexCardBlue"
       tools:text="Calories per serving: 456"
       style="@style/IndexCardLine"
       />
 
-  <include layout="@layout/index_card_blue_line"/>
-
-  <TextView
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
       android:id="@+id/detail_ingredients_label"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/common_margin_half"
-      android:layout_marginStart="@dimen/common_margin"
       android:layout_marginTop="@dimen/common_margin_half"
-      android:textSize="@dimen/headline_text_size"
-      android:textStyle="bold"
+      app:lineColor="@color/indexCardBlue"
+      app:textSize="@dimen/headline_text_size"
+      app:textStyle="bold"
       tools:text="Ingredients"
       style="@style/IndexCardLine"
       />
 
-  <include layout="@layout/index_card_blue_line"/>
-
   <!-- Ingredients are added here dynamically from inflating ingredient_line layout-->
 
-  <TextView
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
       android:id="@+id/detail_recipe_source"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/common_margin_half"
       android:gravity="center"
-      android:textStyle="italic"
+      app:lineColor="@color/indexCardBlue"
+      app:textStyle="italic"
       tools:text="Source: ChowHound"
       style="@style/IndexCardLine"
       />
-
-  <include layout="@layout/index_card_blue_line"/>
 
   <Button
       android:id="@+id/detail_recipe_link"

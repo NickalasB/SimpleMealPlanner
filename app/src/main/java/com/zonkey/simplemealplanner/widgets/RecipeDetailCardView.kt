@@ -5,7 +5,6 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent.Builder
 import androidx.core.content.ContextCompat
 import com.zonkey.simplemealplanner.R
@@ -25,7 +24,7 @@ import kotlin.math.roundToInt
 
 class RecipeDetailCardView @JvmOverloads constructor(
     context: Context,
-    private val attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
@@ -138,17 +137,15 @@ class RecipeDetailCardView @JvmOverloads constructor(
 
       val ingredientLine = View.inflate(context, layout.ingredient_line, null)
 
-      val ingredientText = ingredientLine.findViewById<TextView>(R.id.detail_ingredient_line)
-
-      val ingredientLayout = ingredientLine.findViewById<LinearLayout>(
-          R.id.detail_ingredient_linear_layout)
+      val ingredientText = ingredientLine.findViewById<IndexCardTextView>(
+          R.id.detail_ingredient_line)
 
       val bullet = context.getString(string.bullet)
       val ingredientWithBullet = "$bullet $it"
       ingredientText.text = ingredientWithBullet
 
-      // Ingredients are added to the 8th position in the layout
-      this.addView(ingredientLayout, 8,
+      // Ingredients are added above the last two things in the layout (source and button)
+      addView(ingredientText, (childCount - 2),
           android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
               android.view.ViewGroup.LayoutParams.WRAP_CONTENT))
     }
