@@ -24,6 +24,7 @@ import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_recipe_detail.detail_buttons_layout
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_favorite_button
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
@@ -68,6 +69,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     detail_collapsing_toolbar.setCollapsedTitleTextColor(
         ContextCompat.getColor(this, R.color.lightBackground))
+
+    detail_buttons_layout.bringToFront()
 
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
 

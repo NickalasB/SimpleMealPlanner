@@ -17,4 +17,6 @@
   <dimen name="button_vertical_padding">4dp</dimen>
   <dimen name="button_horizontal_padding">8dp</dimen>
   <dimen name="pill_corner_radius">999dp</dimen>
+  <dimen name="index_card_min_height">32dp</dimen>
+  <dimen name="headline_text_size">18sp</dimen>
 </resources>

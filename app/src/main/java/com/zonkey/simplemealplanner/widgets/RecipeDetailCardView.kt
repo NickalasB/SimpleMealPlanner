@@ -25,7 +25,7 @@ import kotlin.math.roundToInt
 
 class RecipeDetailCardView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
+    private val attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
@@ -71,9 +71,9 @@ class RecipeDetailCardView @JvmOverloads constructor(
       detail_recipe_link.text = detailRecipeButtonText
     }
 
-
   init {
     View.inflate(context, R.layout.recipe_detail_view, this)
+    setBackgroundColor(ContextCompat.getColor(context, R.color.indexCardYellow))
     orientation = LinearLayout.VERTICAL
     setPadding(
         context.resources.getDimensionPixelSize(R.dimen.common_margin_double),
@@ -140,13 +140,16 @@ class RecipeDetailCardView @JvmOverloads constructor(
 
       val ingredientText = ingredientLine.findViewById<TextView>(R.id.detail_ingredient_line)
 
+      val ingredientLayout = ingredientLine.findViewById<LinearLayout>(
+          R.id.detail_ingredient_linear_layout)
+
       val bullet = context.getString(string.bullet)
       val ingredientWithBullet = "$bullet $it"
       ingredientText.text = ingredientWithBullet
 
-      // Ingredients are added to the 4th position in the layout
-      this.addView(ingredientText, 4,
-          android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+      // Ingredients are added to the 8th position in the layout
+      this.addView(ingredientLayout, 8,
+          android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
               android.view.ViewGroup.LayoutParams.WRAP_CONTENT))
     }
   }

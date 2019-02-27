@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/indexCardYellow"
+    android:orientation="vertical"
     tools:parentTag="android.widget.LinearLayout"
     >
 
@@ -13,6 +14,14 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/common_margin"
       android:textSize="@dimen/title_text_size"
+      tools:text="Details"
+      />
+
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="@color/indexCardRed"
+      android:layout_marginTop="@dimen/common_margin_half"
       />
 
   <TextView
@@ -21,7 +30,10 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/common_margin"
       tools:text="Serves 4"
+      style="@style/IndexCardLine"
       />
+
+  <include layout="@layout/index_card_blue_line"/>
 
   <TextView
       android:id="@+id/detail_recipe_calories"
@@ -30,7 +42,10 @@
       android:layout_marginStart="@dimen/common_margin"
       android:layout_marginTop="@dimen/common_margin_half"
       tools:text="Calories per serving: 456"
+      style="@style/IndexCardLine"
       />
+
+  <include layout="@layout/index_card_blue_line"/>
 
   <TextView
       android:id="@+id/detail_ingredients_label"
@@ -39,8 +54,13 @@
       android:layout_marginBottom="@dimen/common_margin_half"
       android:layout_marginStart="@dimen/common_margin"
       android:layout_marginTop="@dimen/common_margin_half"
+      android:textSize="@dimen/headline_text_size"
       android:textStyle="bold"
+      tools:text="Ingredients"
+      style="@style/IndexCardLine"
       />
+
+  <include layout="@layout/index_card_blue_line"/>
 
   <!-- Ingredients are added here dynamically from inflating ingredient_line layout-->
 
@@ -49,11 +69,13 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/common_margin_half"
-      android:layout_marginTop="@dimen/common_margin"
       android:gravity="center"
       android:textStyle="italic"
       tools:text="Source: ChowHound"
+      style="@style/IndexCardLine"
       />
+
+  <include layout="@layout/index_card_blue_line"/>
 
   <Button
       android:id="@+id/detail_recipe_link"

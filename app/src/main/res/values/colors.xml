@@ -10,4 +10,7 @@
   <color name="lightTranslucentGray">#1A000000</color>
   <color name="midTranslucentBlue">#C5EBFB</color>
   <color name="endTranslucentBlue">#D8F2FC</color>
+  <color name="indexCardYellow">#FFFF99</color>
+  <color name="indexCardRed">#F21307</color>
+  <color name="indexCardBlue">#49b3dd</color>
 </resources>
