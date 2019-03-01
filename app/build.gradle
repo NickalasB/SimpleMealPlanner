@@ -43,6 +43,7 @@ dependencies {
   //Firebase
   implementation "com.google.firebase:firebase-core:$firebase_core_version"
   implementation "com.google.firebase:firebase-database:$firebase_database_version"
+  implementation "com.firebaseui:firebase-ui-auth:$firebase_ui_auth_version"
 
   //Dagger2
   compileOnly 'javax.annotation:jsr250-api:1.0'

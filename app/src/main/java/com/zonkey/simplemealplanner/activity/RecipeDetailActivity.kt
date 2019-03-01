@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.activity
 
+import android.app.Activity
 import android.app.AlertDialog.Builder
 import android.content.Context
 import android.content.Intent
@@ -14,12 +15,14 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
+import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
@@ -31,13 +34,19 @@ import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_parent_layout
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_save_to_meal_plan_button
 import kotlinx.android.synthetic.main.activity_recipe_detail.detailed_recipe_card_view
+import timber.log.Timber
 import javax.inject.Inject
 
+
+private const val RC_SIGN_IN_DETAIL = 200
 
 class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   @Inject
   lateinit var firebaseRepo: FirebaseRecipeRepository
+
+  @Inject
+  lateinit var firebaseAuthRepository: DefaultFirebaseAuthRepository
 
   private lateinit var presenter: RecipeDetailActivityPresenter
 
@@ -46,6 +55,12 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override var addedToMealPlan = false
 
   private lateinit var recipe: Recipe
+
+  private var selectedDay: String = ""
+
+  private var favoriteClick = false
+
+  private var mealPlanClick = false
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -88,12 +103,15 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     presenter.setSavedRecipeIcon(isSavedRecipe)
 
     detail_favorite_button.setOnClickListener {
-      presenter.onFavoriteButtonClicked(isSavedRecipe, recipe)
+      favoriteClick = true
+      presenter.onFavoriteButtonClicked(
+          isSignedIn = firebaseAuthRepository.currentUser != null,
+          savedRecipe = isSavedRecipe,
+          recipe = recipe)
     }
   }
 
   private fun setupMealPlanDialog(recipe: Recipe) {
-    var selectedDay: String
     detail_save_to_meal_plan_button.setOnClickListener {
       val builder = Builder(this)
       builder.setTitle(getString(R.string.detail_meal_plan_dialog_title))
@@ -103,13 +121,14 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         selectedDay = days[which]
       }
       builder.setPositiveButton(getString(string.common_ok)) { dialog, _ ->
+        mealPlanClick = true
         presenter.onMealPlanDialogPositiveButtonClicked(
+            isSignedIn = firebaseAuthRepository.currentUser != null,
             recipe = recipe,
             addedToMealPlan = addedToMealPlan,
             selectedDay = selectedDay,
             isSavedRecipe = isSavedRecipe)
 
-        presenter.showRecipeDetailSnackBar(selectedDay)
         dialog.dismiss()
       }
       builder.setNegativeButton(getString(string.common_back)) { dialog, _ ->
@@ -128,7 +147,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     detail_save_to_meal_plan_button.text = favoriteButtonText
   }
 
-  override fun showRecipeDetailSnackBar(snackBarStringRes: Int, snackBarString: String?, dayOfWeek: String?) {
+  override fun showRecipeDetailSnackBar(snackBarStringRes: Int, snackBarString: String?,
+      dayOfWeek: String?) {
     val snackBarText = when {
       snackBarStringRes != 0 -> getString(snackBarStringRes, dayOfWeek)
       !snackBarString.isNullOrBlank() -> snackBarString
@@ -167,5 +187,35 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override fun onDestroy() {
     super.onDestroy()
     firebaseRepo.purgeUnsavedRecipe(recipe)
+  }
+
+  override fun launchUIAuthActivity() {
+    startActivityForResult(firebaseAuthRepository.authActivityIntent(), RC_SIGN_IN_DETAIL)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == RC_SIGN_IN_DETAIL) {
+      val response = IdpResponse.fromResultIntent(data)
+
+      if (resultCode == Activity.RESULT_OK) {
+
+        if (favoriteClick) {
+          presenter.onFavoriteButtonClicked(true, isSavedRecipe, recipe)
+        }
+        if (mealPlanClick) {
+          presenter.onMealPlanDialogPositiveButtonClicked(
+              isSignedIn = true,
+              recipe = recipe,
+              addedToMealPlan = addedToMealPlan,
+              selectedDay = selectedDay,
+              isSavedRecipe = isSavedRecipe)
+        }
+
+      } else {
+        Timber.e(response?.error, "Failed to log-in")
+      }
+    }
   }
 }

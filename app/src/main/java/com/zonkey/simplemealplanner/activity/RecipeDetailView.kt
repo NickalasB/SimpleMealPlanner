@@ -15,4 +15,5 @@ interface RecipeDetailView {
 
   fun setMealPlanButtonText(@StringRes mealPlanButtonStringRes: Int = 0, selectedDayString: String? = "")
 
+  fun launchUIAuthActivity()
 }
