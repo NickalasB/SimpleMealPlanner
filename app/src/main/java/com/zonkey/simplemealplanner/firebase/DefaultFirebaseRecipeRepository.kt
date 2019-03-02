@@ -11,7 +11,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 const val MEAL_PLANNER_DB_REF = "simple_meal_planner"
-const val USER = "users"
+const val USERS = "users"
 const val RECIPES_DB = "recipe_db"
 const val DAY = "day"
 const val MEAL_PLAN = "mealPlan"
@@ -24,7 +24,7 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
 
   override val userRecipeDatabase: DatabaseReference
     get() = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
-        .child(USER)
+        .child(USERS)
         .child(firebaseAuthRepository.currentUser?.uid.toString())
         .child(RECIPES_DB)
 
