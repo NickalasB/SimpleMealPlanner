@@ -63,6 +63,7 @@ class RecipeDetailActivityPresenter(
         else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
       }
       showRecipeDetailSnackBar(selectedDay)
+      firebaseRepo.saveUserEmail()
     }
   }
 

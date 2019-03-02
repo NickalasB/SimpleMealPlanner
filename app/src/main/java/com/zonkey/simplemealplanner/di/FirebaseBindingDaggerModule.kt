@@ -20,8 +20,8 @@ class FirebaseBindingDaggerModule {
 
   @Provides
   @Singleton
-  fun provideFirebaseRecipeRepository(firebaseInstance: FirebaseDatabase): FirebaseRecipeRepository =
-      DefaultFirebaseRecipeRepository(firebaseInstance)
+  fun provideFirebaseRecipeRepository(firebaseInstance: FirebaseDatabase, firebaseAuthRepo: FirebaseAuthRepository): FirebaseRecipeRepository =
+      DefaultFirebaseRecipeRepository(firebaseInstance, firebaseAuthRepo)
 
   @Provides
   @Singleton

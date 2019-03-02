@@ -16,13 +16,11 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.firebase.FirebaseAuthRepository
-import com.zonkey.simplemealplanner.firebase.RECIPES_DB
-import com.zonkey.simplemealplanner.firebase.RECIPE_DB_INSTANCE
+import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.network.RecipeRepository
@@ -52,7 +50,7 @@ class MainActivity : AppCompatActivity(), MainView {
   lateinit var recipeRepository: RecipeRepository
 
   @Inject
-  lateinit var firebaseDatabase: FirebaseDatabase
+  lateinit var firebaseRecipeRepository: FirebaseRecipeRepository
 
   @Inject
   lateinit var authUI: AuthUI
@@ -107,9 +105,7 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   private fun setUpFavoriteRecipes() {
-    firebaseDatabase
-        .getReference(RECIPE_DB_INSTANCE)
-        .child(RECIPES_DB)
+    firebaseRecipeRepository.userRecipeDatabase
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem retrieving favorite recipes from database")
@@ -127,9 +123,7 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   private fun setUpMealPlanRecipes() {
-    firebaseDatabase
-        .getReference(RECIPE_DB_INSTANCE)
-        .child(RECIPES_DB)
+    firebaseRecipeRepository.userRecipeDatabase
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem retrieving meal plan recipes from database")
@@ -200,6 +194,7 @@ class MainActivity : AppCompatActivity(), MainView {
       if (resultCode == Activity.RESULT_OK) {
         Snackbar.make(recipe_main_constraint_layout, getString(string.snackbar_sign_in_message),
             Snackbar.LENGTH_SHORT).show()
+        firebaseRecipeRepository.saveUserEmail()
 
       } else {
         Timber.e(response?.error, "Failed to log-in")

@@ -1,9 +1,14 @@
 package com.zonkey.simplemealplanner.firebase
 
+import com.google.firebase.database.DatabaseReference
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 
 interface FirebaseRecipeRepository {
+
+  val userRecipeDatabase: DatabaseReference
+
+  fun saveUserEmail()
 
   fun saveRecipeAsFavorite(recipe: Recipe)
 

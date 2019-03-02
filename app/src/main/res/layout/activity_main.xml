@@ -10,6 +10,7 @@
     >
 
   <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/recipe_main_constraint_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:paddingBottom="@dimen/common_margin_double"
