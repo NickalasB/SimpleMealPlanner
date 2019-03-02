@@ -80,7 +80,7 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
 
   override fun saveUserEmail() {
     firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
-        .child(USER)
+        .child(USERS)
         .child(firebaseAuthRepository.currentUser?.uid.toString())
         .child(EMAIL)
         .setValue(firebaseAuthRepository.currentUser?.email)
