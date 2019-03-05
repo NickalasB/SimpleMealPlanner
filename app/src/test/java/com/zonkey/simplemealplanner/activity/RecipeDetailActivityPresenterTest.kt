@@ -9,6 +9,7 @@ import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.FRIDAY
 import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
 import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
+import com.zonkey.simplemealplanner.model.DayOfWeek.TUESDAY
 import com.zonkey.simplemealplanner.model.DayOfWeek.valueOf
 import com.zonkey.simplemealplanner.model.Diet
 import com.zonkey.simplemealplanner.model.Ingredient
@@ -65,7 +66,7 @@ class RecipeDetailActivityPresenterTest {
   fun shouldDeleteRecipeFromFirebaseAndSetSavedRecipeToFalseAndUpdateIconAndShowSnackBarWhenFavoriteButtonClickedIfRecipeSaved() {
     givenRecipe(MONDAY)
     givenSavedRecipe(true)
-    whenFavoriteButtonClicked(isSavedRecipe, mockRecipe)
+    whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
     thenDeleteRecipeFromFirebase(mockRecipe)
     thenSetFavoriteButtonIcon(R.drawable.ic_favorite_border_red_24dp)
     thenShowSnackBar(R.string.snackbar_recipe_deleted)
@@ -75,7 +76,7 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSaveRecipeToFirebaseAndSetSavedRecipeToTrueAndUpdateIconAndShowSnackBarWhenFavoriteButtonClickedIfRecipeNotSaved() {
     givenRecipe(MONDAY)
     givenSavedRecipe(false)
-    whenFavoriteButtonClicked(isSavedRecipe, mockRecipe)
+    whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
     thenSaveRecipeToFirebase(mockRecipe)
     thenIsSavedRecipe(true)
     thenSetFavoriteButtonIcon(R.drawable.ic_favorite_red_24dp)
@@ -88,7 +89,8 @@ class RecipeDetailActivityPresenterTest {
     givenRecipe(valueOf(selectedDay))
     givenAddedToMealPlanAlready(true)
     givenSavedRecipe(true)
-    whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan, selectedDay,
+    whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
+        selectedDay,
         isSavedRecipe)
     thenUpdateMealPlanRecipeDayCalled()
   }
@@ -99,7 +101,8 @@ class RecipeDetailActivityPresenterTest {
     givenRecipe(valueOf(selectedDay))
     givenAddedToMealPlanAlready(false)
     givenSavedRecipe(true)
-    whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan, selectedDay,
+    whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
+        selectedDay,
         isSavedRecipe)
     thenSaveRecipeToMealPlanDb()
   }
@@ -108,7 +111,7 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSetMealPlanButtonTextToDayIfNotRemovedWhenOnMealPlanDialogPositiveButtonClicked() {
     givenDay(FRIDAY.name)
     givenRecipe(valueOf(selectedDay))
-    whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan,
+    whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay, isSavedRecipe)
     thenSetMealPlanButtonText(Times(1), selectedDay)
     thenRemoveRecipeFromMealPlan(never(), mockRecipe)
@@ -119,7 +122,7 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSetMealPlanButtonTextToDefaultIfRemovedWhenOnMealPlanDialogPositiveButtonClicked() {
     givenDay(DayOfWeek.REMOVE.name)
     givenRecipe(valueOf(selectedDay))
-    whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe, view.addedToMealPlan,
+    whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay, isSavedRecipe)
     thenSetMealPlanButtonTextToDefault(Times(1), R.string.detail_meal_plan_button_text)
     thenRemoveRecipeFromMealPlan(Times(1), mockRecipe)
@@ -142,11 +145,27 @@ class RecipeDetailActivityPresenterTest {
     thenShowSnackBar(R.string.detail_meal_plan_snackbar_text, selectedDay)
   }
 
+  @Test
+  fun shouldDisplayDayOfWeekOnMealPlanButtonWhenRecipeAddedToMealPlanAndDayOfWeekNotEmptyWhenSetUpMealPlanButtonTextCalled() {
+    givenDay(TUESDAY.name)
+    givenRecipe(valueOf(selectedDay), true)
+    whenSetUpMealPlanButtonTextCalled()
+    thenSetMealPlanButtonText(Times(1), selectedDay)
+  }
+
+  @Test
+  fun shouldNotDisplayDayOfWeekOnMealPlanButtonWhenRecipeNotAddedToMealPlanOrDayOfWeekEmptyWhenSetUpMealPlanButtonTextCalled() {
+    givenDay(TUESDAY.name)
+    givenRecipe(valueOf(selectedDay), false)
+    whenSetUpMealPlanButtonTextCalled()
+    thenSetMealPlanButtonText(never(), selectedDay)
+  }
+
   private fun givenSavedRecipe(isSaved: Boolean) {
     isSavedRecipe = isSaved
   }
 
-  private fun givenRecipe(day: DayOfWeek) {
+  private fun givenRecipe(day: DayOfWeek, mealPlan: Boolean = false) {
     mockRecipe = Recipe(
         uri = "testUri1",
         label = "testLabel1",
@@ -165,7 +184,7 @@ class RecipeDetailActivityPresenterTest {
         key = "testKey1",
         day = day,
         favorite = true,
-        mealPlan = false
+        mealPlan = mealPlan
     )
   }
 
@@ -177,23 +196,30 @@ class RecipeDetailActivityPresenterTest {
     selectedDay = dayOfWeek
   }
 
-  private fun whenFavoriteButtonClicked(savedRecipe: Boolean, recipeToSave: Recipe) {
-    presenter.onFavoriteButtonClicked(savedRecipe, recipeToSave)
+  private fun whenFavoriteButtonClicked(isSignedIn: Boolean, savedRecipe: Boolean,
+      recipeToSave: Recipe) {
+    presenter.onFavoriteButtonClicked(isSignedIn, savedRecipe, recipeToSave)
   }
 
   private fun whenSetSavedRecipeIconCalled(savedRecipe: Boolean) {
     presenter.setSavedRecipeIcon(savedRecipe)
   }
 
-  private fun whenOnMealPlanDialogPositiveButtonClickedCalled(mockRecipe: Recipe,
+  private fun whenOnMealPlanDialogPositiveButtonClickedCalled(isSignedIn: Boolean,
+      mockRecipe: Recipe,
       addedToMealPlan: Boolean, selectedDay: String,
       savedRecipe: Boolean) {
-    presenter.onMealPlanDialogPositiveButtonClicked(mockRecipe, addedToMealPlan, selectedDay,
+    presenter.onMealPlanDialogPositiveButtonClicked(isSignedIn, mockRecipe, addedToMealPlan,
+        selectedDay,
         savedRecipe)
   }
 
   private fun whenShowRecipeDetailSnackBarCalled(dayOfWeek: String) {
     presenter.showRecipeDetailSnackBar(dayOfWeek)
+  }
+
+  private fun whenSetUpMealPlanButtonTextCalled() {
+    presenter.setUpMealPlanButtonText(mockRecipe)
   }
 
   private fun thenSetFavoriteButtonIcon(icon: Int) {

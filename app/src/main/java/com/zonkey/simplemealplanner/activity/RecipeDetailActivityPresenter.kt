@@ -75,4 +75,10 @@ class RecipeDetailActivityPresenter(
           snackBarStringRes = R.string.detail_meal_plan_snackbar_text, dayOfWeek = selectedDay)
     }
   }
+
+  fun setUpMealPlanButtonText(recipe: Recipe) {
+    if (recipe.mealPlan && recipe.day.name.isNotEmpty()) {
+      view.setMealPlanButtonText(selectedDayString = recipe.day.name)
+    }
+  }
 }
