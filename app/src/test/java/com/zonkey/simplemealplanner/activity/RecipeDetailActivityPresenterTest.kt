@@ -52,14 +52,30 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSetFavoriteIconToOutlinedHeartWhenRecipeNotSaved() {
     givenSavedRecipe(false)
     whenSetSavedRecipeIconCalled(savedRecipe = isSavedRecipe)
-    thenSetFavoriteButtonIcon(R.drawable.ic_favorite_border_red_24dp)
+    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_border_red_24dp)
   }
 
   @Test
   fun shouldSetFavoriteIconToFilledInHeartWhenRecipeIsSaved() {
     givenSavedRecipe(true)
     whenSetSavedRecipeIconCalled(savedRecipe = isSavedRecipe)
-    thenSetFavoriteButtonIcon(R.drawable.ic_favorite_red_24dp)
+    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_red_24dp)
+  }
+
+  @Test
+  fun shouldLaunchUIAuthActivityWhenNotLoggedInWhenFavoriteButtonClicked() {
+    givenRecipe(MONDAY)
+    givenSavedRecipe(true)
+    whenFavoriteButtonClicked(false, isSavedRecipe, mockRecipe)
+    theLaunchUiAuthActivity(Times(1))
+    thenDeleteRecipeFromFirebase(never(), mockRecipe)
+    thenSetFavoriteButtonIcon(never(), R.drawable.ic_favorite_border_red_24dp)
+    thenShowSnackBar(never(), R.string.snackbar_recipe_deleted)
+
+  }
+
+  private fun theLaunchUiAuthActivity(times: Times) {
+    verify(view, times).launchUIAuthActivity()
   }
 
   @Test
@@ -67,9 +83,9 @@ class RecipeDetailActivityPresenterTest {
     givenRecipe(MONDAY)
     givenSavedRecipe(true)
     whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
-    thenDeleteRecipeFromFirebase(mockRecipe)
-    thenSetFavoriteButtonIcon(R.drawable.ic_favorite_border_red_24dp)
-    thenShowSnackBar(R.string.snackbar_recipe_deleted)
+    thenDeleteRecipeFromFirebase(Times(1), mockRecipe)
+    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_border_red_24dp)
+    thenShowSnackBar(Times(1), R.string.snackbar_recipe_deleted)
   }
 
   @Test
@@ -79,8 +95,23 @@ class RecipeDetailActivityPresenterTest {
     whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
     thenSaveRecipeToFirebase(mockRecipe)
     thenIsSavedRecipe(true)
-    thenSetFavoriteButtonIcon(R.drawable.ic_favorite_red_24dp)
-    thenShowSnackBar(R.string.snackbar_recipe_saved)
+    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_red_24dp)
+    thenShowSnackBar(Times(1), R.string.snackbar_recipe_saved)
+  }
+
+  @Test
+  fun shouldLaunchUIAuthActivityWhenLoggedOutWhenMealPlanDialogPositiveButtonClicked() {
+    givenDay(DayOfWeek.MONDAY.name)
+    givenRecipe(valueOf(selectedDay))
+    givenAddedToMealPlanAlready(true)
+    givenSavedRecipe(true)
+    whenOnMealPlanDialogPositiveButtonClickedCalled(false, mockRecipe, view.addedToMealPlan,
+        selectedDay,
+        isSavedRecipe)
+    theLaunchUiAuthActivity(Times(1))
+    thenUpdateMealPlanRecipeDayCalled(never())
+    thenSaveRecipeToMealPlanDb(never())
+    thenSetMealPlanButtonText(never(), selectedDay)
   }
 
   @Test
@@ -92,7 +123,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
-    thenUpdateMealPlanRecipeDayCalled()
+    thenUpdateMealPlanRecipeDayCalled(Times(1))
   }
 
   @Test
@@ -104,7 +135,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
-    thenSaveRecipeToMealPlanDb()
+    thenSaveRecipeToMealPlanDb(Times(1))
   }
 
   @Test
@@ -134,7 +165,7 @@ class RecipeDetailActivityPresenterTest {
     givenDay(REMOVE.name)
     givenRecipe(valueOf(selectedDay))
     whenShowRecipeDetailSnackBarCalled(selectedDay)
-    thenShowSnackBar(R.string.detail_snackbar_meal_plan_removed)
+    thenShowSnackBar(Times(1), R.string.detail_snackbar_meal_plan_removed)
   }
 
   @Test
@@ -142,7 +173,7 @@ class RecipeDetailActivityPresenterTest {
     givenDay(MONDAY.name)
     givenRecipe(valueOf(selectedDay))
     whenShowRecipeDetailSnackBarCalled(selectedDay)
-    thenShowSnackBar(R.string.detail_meal_plan_snackbar_text, selectedDay)
+    thenShowSnackBar(Times(1), R.string.detail_meal_plan_snackbar_text, selectedDay)
   }
 
   @Test
@@ -222,17 +253,17 @@ class RecipeDetailActivityPresenterTest {
     presenter.setUpMealPlanButtonText(mockRecipe)
   }
 
-  private fun thenSetFavoriteButtonIcon(icon: Int) {
-    verify(view).setFavoritedButtonIcon(icon)
+  private fun thenSetFavoriteButtonIcon(times: VerificationMode, icon: Int) {
+    verify(view, times).setFavoritedButtonIcon(icon)
   }
 
-  private fun thenSaveRecipeToMealPlanDb() {
-    verify(firebaseRecipeRepository).saveRecipeToMealPlan(mockRecipe,
+  private fun thenSaveRecipeToMealPlanDb(times: VerificationMode) {
+    verify(firebaseRecipeRepository, times).saveRecipeToMealPlan(mockRecipe,
         DayOfWeek.valueOf(selectedDay), isSavedRecipe)
   }
 
-  private fun thenUpdateMealPlanRecipeDayCalled() {
-    verify(firebaseRecipeRepository).updateMealPlanRecipeDay(mockRecipe,
+  private fun thenUpdateMealPlanRecipeDayCalled(times: VerificationMode) {
+    verify(firebaseRecipeRepository, times).updateMealPlanRecipeDay(mockRecipe,
         DayOfWeek.valueOf(selectedDay))
   }
 
@@ -244,12 +275,14 @@ class RecipeDetailActivityPresenterTest {
     verify(firebaseRecipeRepository).saveRecipeAsFavorite(recipeToSave)
   }
 
-  private fun thenDeleteRecipeFromFirebase(recipeToDelete: Recipe) {
-    verify(firebaseRecipeRepository).removeRecipeAsFavorite(recipeToDelete)
+  private fun thenDeleteRecipeFromFirebase(times: VerificationMode, recipeToDelete: Recipe) {
+    verify(firebaseRecipeRepository, times).removeRecipeAsFavorite(recipeToDelete)
   }
 
-  private fun thenShowSnackBar(snackBarString: Int, dayOfWeek: String? = "") {
-    verify(view).showRecipeDetailSnackBar(snackBarStringRes = snackBarString, dayOfWeek = dayOfWeek)
+  private fun thenShowSnackBar(times: VerificationMode, snackBarString: Int,
+      dayOfWeek: String? = "") {
+    verify(view, times).showRecipeDetailSnackBar(snackBarStringRes = snackBarString,
+        dayOfWeek = dayOfWeek)
   }
 
   private fun thenSetMealPlanButtonTextToDefault(times: VerificationMode, defaultStringRes: Int) {
