@@ -8,6 +8,8 @@ interface FirebaseRecipeRepository {
 
   val userRecipeDatabase: DatabaseReference
 
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek)
+
   fun saveUserEmail()
 
   fun saveRecipeAsFavorite(recipe: Recipe)

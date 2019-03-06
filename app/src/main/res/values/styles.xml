@@ -24,6 +24,10 @@
     <item name="android:background">@drawable/accent_color_pill_selectable</item>
   </style>
 
+  <style name="ShareButton">
+    <item name="android:foreground">?attr/selectableItemBackground</item>
+  </style>
+
   <style name="IndexCardLine">
     <item name="android:minHeight">@dimen/index_card_min_height</item>
     <item name="android:gravity">bottom</item>

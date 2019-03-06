@@ -20,4 +20,5 @@
   <dimen name="pill_corner_radius">999dp</dimen>
   <dimen name="index_card_min_height">32dp</dimen>
   <dimen name="headline_text_size">18sp</dimen>
+  <dimen name="meal_plan_button_min_width">140dp</dimen>
 </resources>

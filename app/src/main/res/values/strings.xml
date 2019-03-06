@@ -26,4 +26,5 @@
   <string name="snack_bar_sign_out_message">Successfully signed out!</string>
   <string name="menu_sign_in">Sign In</string>
   <string name="snackbar_sign_in_message">Successfully Signed In!</string>
+  <string name="share_snackbar_error_text">Oops, that didn\'t work. Please try again</string>
 </resources>

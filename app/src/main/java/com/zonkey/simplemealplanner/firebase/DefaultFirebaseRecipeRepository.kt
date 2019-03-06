@@ -65,6 +65,20 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
     }
   }
 
+  override
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek) {
+    val favoriteRecipeDbRef =
+        firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
+            .child(USERS)
+            .child(userId)
+            .child(RECIPES)
+    val key = favoriteRecipeDbRef.push().key ?: ""
+    recipe.key = key
+    favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
+    favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
+    favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+  }
+
   override fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek) {
     userRecipeDatabase
         .child(recipe.key)

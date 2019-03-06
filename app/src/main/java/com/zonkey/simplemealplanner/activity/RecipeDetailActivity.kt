@@ -17,6 +17,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.R.string
@@ -24,15 +28,19 @@ import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
+import com.zonkey.simplemealplanner.firebase.MEAL_PLANNER_DB_REF
+import com.zonkey.simplemealplanner.firebase.USERS
 import com.zonkey.simplemealplanner.model.DayOfWeek
+import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
 import com.zonkey.simplemealplanner.model.Recipe
+import com.zonkey.simplemealplanner.model.User
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_recipe_detail.detail_buttons_layout
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_favorite_button
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_image
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_recipe_parent_layout
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_save_to_meal_plan_button
+import kotlinx.android.synthetic.main.activity_recipe_detail.detail_share_button
 import kotlinx.android.synthetic.main.activity_recipe_detail.detailed_recipe_card_view
 import timber.log.Timber
 import javax.inject.Inject
@@ -85,8 +93,6 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     detail_collapsing_toolbar.setCollapsedTitleTextColor(
         ContextCompat.getColor(this, R.color.lightBackground))
 
-    detail_buttons_layout.bringToFront()
-
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
 
     setupFavoriteButton(recipe)
@@ -94,6 +100,38 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     setupMealPlanDialog(recipe)
 
     presenter.setUpMealPlanButtonText(recipe)
+
+    detail_share_button.setOnClickListener {
+      val email = "zonkeymaster@gmail.com"
+
+      FirebaseDatabase.getInstance().getReference(MEAL_PLANNER_DB_REF)
+          .child(USERS)
+          .addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+              snapshot.children.forEach {
+                it.getValue(User::class.java)?.let { goodUser ->
+                  if (goodUser.email == email) {
+                    it.key?.let { userId ->
+                      firebaseRepo.saveRecipeToSharedDB(userId, recipe, MONDAY)
+                    }
+                    return
+                  }
+                }
+              }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+              Timber.e(error.toException(), "Failed to share recipe")
+              Snackbar.make(detail_recipe_parent_layout,
+                  getString(R.string.share_snackbar_error_text), Snackbar.LENGTH_LONG).show()
+            }
+          })
+    }
+
+    if (recipe.mealPlan && recipe.day.name.isNotEmpty()) {
+      detail_save_to_meal_plan_button.text = recipe.day.name
+    }
   }
 
   private fun setupFavoriteButton(recipe: Recipe) {
