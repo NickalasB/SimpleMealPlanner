@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 const val MEAL_PLANNER_DB_REF = "simple_meal_planner"
 const val USERS = "users"
-const val RECIPES_DB = "recipe_db"
+const val RECIPES = "recipes"
 const val DAY = "day"
 const val MEAL_PLAN = "mealPlan"
 const val FAVORITE = "favorite"
@@ -26,7 +26,7 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
     get() = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
         .child(USERS)
         .child(firebaseAuthRepository.currentUser?.uid.toString())
-        .child(RECIPES_DB)
+        .child(RECIPES)
 
   override fun saveRecipeAsFavorite(recipe: Recipe) {
 

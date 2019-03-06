@@ -71,7 +71,6 @@ class RecipeDetailActivityPresenterTest {
     thenDeleteRecipeFromFirebase(never(), mockRecipe)
     thenSetFavoriteButtonIcon(never(), R.drawable.ic_favorite_border_red_24dp)
     thenShowSnackBar(never(), R.string.snackbar_recipe_deleted)
-
   }
 
   private fun theLaunchUiAuthActivity(times: Times) {
