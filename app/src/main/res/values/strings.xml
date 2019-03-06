@@ -27,4 +27,7 @@
   <string name="menu_sign_in">Sign In</string>
   <string name="snackbar_sign_in_message">Successfully Signed In!</string>
   <string name="share_snackbar_error_text">Oops, that didn\'t work. Please try again</string>
+  <string name="detail_permission_dialog_title">Grant contact permission to share</string>
+  <string name="detail_permission_dialog_message">In order to share this delicious recipe, we need access to your contacts so we know who to share it with.</string>
+  <string name="share_snackbar_success_text">Recipe Shared</string>
 </resources>

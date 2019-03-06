@@ -1,14 +1,19 @@
 package com.zonkey.simplemealplanner.activity
 
+import android.Manifest
+import android.Manifest.permission
 import android.app.Activity
 import android.app.AlertDialog.Builder
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -23,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
@@ -47,6 +51,7 @@ import javax.inject.Inject
 
 
 private const val RC_SIGN_IN_DETAIL = 200
+private const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000
 
 class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
@@ -101,36 +106,98 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     presenter.setUpMealPlanButtonText(recipe)
 
+    val contactPermissionGranted = ContextCompat.checkSelfPermission(this,
+        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+
+    setUpShareButton(contactPermissionGranted)
+
+  }
+
+  private fun setUpShareButton(permissionGranted: Boolean) {
+
+    //ToDo handle disabling of button from the start if needed
+
     detail_share_button.setOnClickListener {
-      val email = "zonkeymaster@gmail.com"
 
-      FirebaseDatabase.getInstance().getReference(MEAL_PLANNER_DB_REF)
-          .child(USERS)
-          .addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+      if (!permissionGranted) {
+        handlePermissionRequest()
+      } else {
+        writeRecipeToSharedUserDb()
+      }
+    }
+  }
 
-              snapshot.children.forEach {
-                it.getValue(User::class.java)?.let { goodUser ->
-                  if (goodUser.email == email) {
-                    it.key?.let { userId ->
-                      firebaseRepo.saveRecipeToSharedDB(userId, recipe, MONDAY)
-                    }
-                    return
+  private fun handlePermissionRequest() {
+    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            permission.READ_CONTACTS)) {
+
+      val builder = Builder(this)
+      builder.setTitle(getString(R.string.detail_permission_dialog_title))
+      builder.setMessage(getString(R.string.detail_permission_dialog_message))
+      builder.setPositiveButton(getString(R.string.common_ok)) { dialog, _ ->
+        requestContactPermission()
+        dialog.dismiss()
+      }
+      builder.setNegativeButton(getString(R.string.common_back)) { dialog, _ ->
+        dialog.dismiss()
+      }
+      builder.create().show()
+
+    } else {
+      requestContactPermission()
+    }
+  }
+
+  private fun requestContactPermission() {
+    ActivityCompat.requestPermissions(this, arrayOf(permission.READ_CONTACTS),
+        MY_PERMISSIONS_REQUEST_READ_CONTACTS)
+  }
+
+  private fun writeRecipeToSharedUserDb() {
+
+    val email = "zonkeymaster@gmail.com"
+
+    FirebaseDatabase.getInstance().getReference(MEAL_PLANNER_DB_REF)
+        .child(USERS)
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+          override fun onDataChange(snapshot: DataSnapshot) {
+
+            snapshot.children.forEach {
+              it.getValue(User::class.java)?.let { goodUser ->
+                if (goodUser.email == email) {
+                  it.key?.let { userId ->
+                    firebaseRepo.saveRecipeToSharedDB(userId, recipe, MONDAY)
+                    Snackbar.make(detail_recipe_parent_layout,
+                        getString(R.string.share_snackbar_success_text),
+                        Snackbar.LENGTH_SHORT).show()
                   }
+                  return
                 }
               }
             }
+          }
 
-            override fun onCancelled(error: DatabaseError) {
-              Timber.e(error.toException(), "Failed to share recipe")
-              Snackbar.make(detail_recipe_parent_layout,
-                  getString(R.string.share_snackbar_error_text), Snackbar.LENGTH_LONG).show()
-            }
-          })
-    }
+          override fun onCancelled(error: DatabaseError) {
+            Timber.e(error.toException(), "Failed to share recipe")
+            Snackbar.make(detail_recipe_parent_layout,
+                getString(R.string.share_snackbar_error_text), Snackbar.LENGTH_LONG).show()
+          }
+        })
+  }
 
-    if (recipe.mealPlan && recipe.day.name.isNotEmpty()) {
-      detail_save_to_meal_plan_button.text = recipe.day.name
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+      grantResults: IntArray) {
+    when (requestCode) {
+      MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
+        if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+          writeRecipeToSharedUserDb()
+
+        } else {
+          detail_share_button.background = ContextCompat.getDrawable(this,
+              R.drawable.ic_share_disabled_24dp)
+        }
+        return
+      }
     }
   }
 
@@ -156,7 +223,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       builder.setSingleChoiceItems(days, 0) { _, which ->
         selectedDay = days[which]
       }
-      builder.setPositiveButton(getString(string.common_ok)) { dialog, _ ->
+      builder.setPositiveButton(getString(R.string.common_ok)) { dialog, _ ->
         mealPlanClick = true
         presenter.onMealPlanDialogPositiveButtonClicked(
             isSignedIn = firebaseAuthRepository.currentUser != null,
@@ -167,7 +234,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
         dialog.dismiss()
       }
-      builder.setNegativeButton(getString(string.common_back)) { dialog, _ ->
+      builder.setNegativeButton(getString(R.string.common_back)) { dialog, _ ->
         dialog.dismiss()
       }
       builder.create().show()
