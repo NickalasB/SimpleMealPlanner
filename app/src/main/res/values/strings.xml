@@ -29,5 +29,6 @@
   <string name="share_snackbar_error_text">Oops, that didn\'t work. Please try again</string>
   <string name="detail_permission_dialog_title">Grant contact permission to share</string>
   <string name="detail_permission_dialog_message">In order to share this delicious recipe, we need access to your contacts so we know who to share it with.</string>
-  <string name="share_snackbar_success_text">Recipe Shared</string>
+  <string name="share_snackbar_success_text">Recipe shared with %s!</string>
+  <string name="share_recipe_snackbar_user_not_registered">%s is not a registered user yet!</string>
 </resources>

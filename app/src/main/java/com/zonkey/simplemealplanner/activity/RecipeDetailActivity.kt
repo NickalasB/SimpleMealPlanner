@@ -3,15 +3,16 @@ package com.zonkey.simplemealplanner.activity
 import android.Manifest
 import android.Manifest.permission
 import android.app.Activity
-import android.app.AlertDialog.Builder
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.ContactsContract
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,7 +25,6 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
@@ -32,8 +32,6 @@ import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
-import com.zonkey.simplemealplanner.firebase.MEAL_PLANNER_DB_REF
-import com.zonkey.simplemealplanner.firebase.USERS
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
 import com.zonkey.simplemealplanner.model.Recipe
@@ -51,6 +49,7 @@ import javax.inject.Inject
 
 
 private const val RC_SIGN_IN_DETAIL = 200
+private const val RC_CONTACT_PICKER = 300
 private const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000
 
 class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
@@ -74,6 +73,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   private var favoriteClick = false
 
   private var mealPlanClick = false
+
+  private var destinationUserEmail = ""
+
+  private var destinationUserDisplayName = ""
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -113,92 +116,25 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   }
 
-  private fun setUpShareButton(permissionGranted: Boolean) {
+  private fun loadRecipeImage(recipe: Recipe) {
+    Glide.with(this)
+        .load(recipe.image)
+        .listener(object : RequestListener<Drawable> {
+          override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?,
+              isFirstResource: Boolean): Boolean {
+            return false
+          }
 
-    //ToDo handle disabling of button from the start if needed
-
-    detail_share_button.setOnClickListener {
-
-      if (!permissionGranted) {
-        handlePermissionRequest()
-      } else {
-        writeRecipeToSharedUserDb()
-      }
-    }
-  }
-
-  private fun handlePermissionRequest() {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-            permission.READ_CONTACTS)) {
-
-      val builder = Builder(this)
-      builder.setTitle(getString(R.string.detail_permission_dialog_title))
-      builder.setMessage(getString(R.string.detail_permission_dialog_message))
-      builder.setPositiveButton(getString(R.string.common_ok)) { dialog, _ ->
-        requestContactPermission()
-        dialog.dismiss()
-      }
-      builder.setNegativeButton(getString(R.string.common_back)) { dialog, _ ->
-        dialog.dismiss()
-      }
-      builder.create().show()
-
-    } else {
-      requestContactPermission()
-    }
-  }
-
-  private fun requestContactPermission() {
-    ActivityCompat.requestPermissions(this, arrayOf(permission.READ_CONTACTS),
-        MY_PERMISSIONS_REQUEST_READ_CONTACTS)
-  }
-
-  private fun writeRecipeToSharedUserDb() {
-
-    val email = "zonkeymaster@gmail.com"
-
-    FirebaseDatabase.getInstance().getReference(MEAL_PLANNER_DB_REF)
-        .child(USERS)
-        .addListenerForSingleValueEvent(object : ValueEventListener {
-          override fun onDataChange(snapshot: DataSnapshot) {
-
-            snapshot.children.forEach {
-              it.getValue(User::class.java)?.let { goodUser ->
-                if (goodUser.email == email) {
-                  it.key?.let { userId ->
-                    firebaseRepo.saveRecipeToSharedDB(userId, recipe, MONDAY)
-                    Snackbar.make(detail_recipe_parent_layout,
-                        getString(R.string.share_snackbar_success_text),
-                        Snackbar.LENGTH_SHORT).show()
-                  }
-                  return
-                }
-              }
+          override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
+              dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+              startPostponedEnterTransition()
             }
+            return false
           }
 
-          override fun onCancelled(error: DatabaseError) {
-            Timber.e(error.toException(), "Failed to share recipe")
-            Snackbar.make(detail_recipe_parent_layout,
-                getString(R.string.share_snackbar_error_text), Snackbar.LENGTH_LONG).show()
-          }
         })
-  }
-
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-      grantResults: IntArray) {
-    when (requestCode) {
-      MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
-        if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
-          writeRecipeToSharedUserDb()
-
-        } else {
-          detail_share_button.background = ContextCompat.getDrawable(this,
-              R.drawable.ic_share_disabled_24dp)
-        }
-        return
-      }
-    }
+        .into(detail_recipe_image)
   }
 
   private fun setupFavoriteButton(recipe: Recipe) {
@@ -216,7 +152,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   private fun setupMealPlanDialog(recipe: Recipe) {
     detail_save_to_meal_plan_button.setOnClickListener {
-      val builder = Builder(this)
+      val builder = AlertDialog.Builder(this)
       builder.setTitle(getString(R.string.detail_meal_plan_dialog_title))
       val days: Array<String> = DayOfWeek.values().map { it.name }.toTypedArray()
       selectedDay = days[0]
@@ -241,6 +177,66 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     }
   }
 
+  private fun setUpShareButton(permissionGranted: Boolean) {
+
+    //ToDo handle disabling of button from the start if needed
+
+    detail_share_button.setOnClickListener {
+      if (!permissionGranted) {
+        handlePermissionRequest()
+      } else {
+        launchContactPicker()
+      }
+    }
+  }
+
+  private fun handlePermissionRequest() {
+    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            permission.READ_CONTACTS)) {
+
+      val builder = AlertDialog.Builder(this)
+      builder.setTitle(getString(R.string.detail_permission_dialog_title))
+      builder.setMessage(getString(R.string.detail_permission_dialog_message))
+      builder.setPositiveButton(getString(R.string.common_ok)) { dialog, _ ->
+        requestContactPermission()
+        dialog.dismiss()
+      }
+      builder.setNegativeButton(getString(R.string.common_back)) { dialog, _ ->
+        dialog.dismiss()
+      }
+      builder.create().show()
+
+    } else {
+      requestContactPermission()
+    }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+      grantResults: IntArray) {
+    when (requestCode) {
+      MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
+        if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+          launchContactPicker()
+        } else {
+          detail_share_button.background = ContextCompat.getDrawable(this,
+              R.drawable.ic_share_disabled_24dp)
+        }
+        return
+      }
+    }
+  }
+
+  private fun launchContactPicker() {
+    val contactPickerIntent = Intent(Intent.ACTION_PICK,
+        ContactsContract.CommonDataKinds.Email.CONTENT_URI)
+    startActivityForResult(contactPickerIntent, RC_CONTACT_PICKER)
+  }
+
+  private fun requestContactPermission() {
+    ActivityCompat.requestPermissions(this, arrayOf(permission.READ_CONTACTS),
+        MY_PERMISSIONS_REQUEST_READ_CONTACTS)
+  }
+
   override fun setMealPlanButtonText(mealPlanButtonStringRes: Int, selectedDayString: String?) {
     val favoriteButtonText = when {
       mealPlanButtonStringRes != 0 -> getString(mealPlanButtonStringRes)
@@ -257,33 +253,11 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       !snackBarString.isNullOrBlank() -> snackBarString
       else -> ""
     }
-    Snackbar.make(detail_recipe_parent_layout, snackBarText,
-        Snackbar.LENGTH_SHORT).show()
+    showSnackbar(snackBarText)
   }
 
   override fun setFavoritedButtonIcon(icon: Int) {
     detail_favorite_button.background = ContextCompat.getDrawable(this, icon)
-  }
-
-  private fun loadRecipeImage(recipe: Recipe) {
-    Glide.with(this)
-        .load(recipe.image)
-        .listener(object : RequestListener<Drawable> {
-          override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?,
-              isFirstResource: Boolean): Boolean {
-            return false
-          }
-
-          override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
-              dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-            if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-              startPostponedEnterTransition()
-            }
-            return false
-          }
-
-        })
-        .into(detail_recipe_image)
   }
 
   //TODO this needs some work
@@ -299,26 +273,89 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-    if (requestCode == RC_SIGN_IN_DETAIL) {
-      val response = IdpResponse.fromResultIntent(data)
+    when (requestCode) {
+      RC_SIGN_IN_DETAIL -> {
+        val response = IdpResponse.fromResultIntent(data)
 
-      if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+          if (favoriteClick) {
+            presenter.onFavoriteButtonClicked(true, isSavedRecipe, recipe)
+          }
+          if (mealPlanClick) {
+            presenter.onMealPlanDialogPositiveButtonClicked(
+                isSignedIn = true,
+                recipe = recipe,
+                addedToMealPlan = addedToMealPlan,
+                selectedDay = selectedDay,
+                isSavedRecipe = isSavedRecipe)
+          }
 
-        if (favoriteClick) {
-          presenter.onFavoriteButtonClicked(true, isSavedRecipe, recipe)
+        } else {
+          Timber.e(response?.error, "Failed to log-in")
         }
-        if (mealPlanClick) {
-          presenter.onMealPlanDialogPositiveButtonClicked(
-              isSignedIn = true,
-              recipe = recipe,
-              addedToMealPlan = addedToMealPlan,
-              selectedDay = selectedDay,
-              isSavedRecipe = isSavedRecipe)
+      }
+      RC_CONTACT_PICKER -> {
+        if (resultCode == Activity.RESULT_OK) {
+          data?.let {
+            val contactData = it.data
+            val cursor = contentResolver.query(
+                contactData ?: Uri.EMPTY,
+                null,
+                null,
+                null,
+                null)
+            cursor?.run {
+              if (cursor.moveToFirst()) {
+                destinationUserEmail = cursor.getString(
+                    cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
+                destinationUserDisplayName = cursor.getString(
+                    cursor.getColumnIndex(
+                        ContactsContract.CommonDataKinds.Email.DISPLAY_NAME_PRIMARY))
+                writeRecipeToSharedUserDb(destinationUserEmail, destinationUserDisplayName)
+                cursor.close()
+              }
+            }
+          }
         }
-
-      } else {
-        Timber.e(response?.error, "Failed to log-in")
       }
     }
+  }
+
+  private fun writeRecipeToSharedUserDb(destinationEmail: String, destinationUserName: String?) {
+    firebaseRepo.usersReference
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+          override fun onDataChange(snapshot: DataSnapshot) {
+
+            snapshot.children.forEach {
+              it.getValue(User::class.java)?.let { registeredUser ->
+                if (registeredUser.email == destinationEmail) {
+                  it.key?.let { userId ->
+                    firebaseRepo.saveRecipeToSharedDB(userId, recipe, MONDAY).last()
+                        .addOnSuccessListener {
+                          showSnackbar(getString(
+                              R.string.share_snackbar_success_text,
+                              destinationUserName ?: destinationEmail))
+                        }
+                  }
+                  return
+                } else {
+                  showSnackbar(getString(
+                      R.string.share_recipe_snackbar_user_not_registered,
+                      destinationUserName ?: destinationEmail))
+                  return
+                }
+              }
+            }
+          }
+
+          override fun onCancelled(error: DatabaseError) {
+            Timber.e(error.toException(), "Failed to share recipe")
+            showSnackbar(getString(R.string.share_snackbar_error_text))
+          }
+        })
+  }
+
+  fun showSnackbar(message: String) {
+    Snackbar.make(detail_recipe_parent_layout, message, Snackbar.LENGTH_LONG).show()
   }
 }

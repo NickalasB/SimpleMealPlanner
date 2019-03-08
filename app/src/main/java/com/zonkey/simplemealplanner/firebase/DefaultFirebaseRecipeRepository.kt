@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.firebase
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -21,6 +22,11 @@ const val EMAIL = "email"
 class DefaultFirebaseRecipeRepository @Inject constructor(
     private val firebaseDbInstance: FirebaseDatabase,
     private val firebaseAuthRepository: FirebaseAuthRepository) : FirebaseRecipeRepository {
+
+
+  override val usersReference: DatabaseReference
+    get() = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
+        .child(USERS)
 
   override val userRecipeDatabase: DatabaseReference
     get() = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
@@ -66,7 +72,7 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
   }
 
   override
-  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek) {
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): List<Task<Void>> {
     val favoriteRecipeDbRef =
         firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
             .child(USERS)
@@ -74,9 +80,11 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
             .child(RECIPES)
     val key = favoriteRecipeDbRef.push().key ?: ""
     recipe.key = key
-    favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
-    favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
+    return listOf(
+    favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
+    favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
     favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+    )
   }
 
   override fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek) {

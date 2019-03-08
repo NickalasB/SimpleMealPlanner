@@ -1,14 +1,17 @@
 package com.zonkey.simplemealplanner.firebase
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 
 interface FirebaseRecipeRepository {
 
+  val usersReference: DatabaseReference
+
   val userRecipeDatabase: DatabaseReference
 
-  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek)
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): List<Task<Void>>
 
   fun saveUserEmail()
 
