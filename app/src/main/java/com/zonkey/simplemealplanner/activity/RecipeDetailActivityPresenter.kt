@@ -21,6 +21,7 @@ class RecipeDetailActivityPresenter(
         setSavedRecipeIcon(false)
         view.showRecipeDetailSnackBar(R.string.snackbar_recipe_deleted)
       } else {
+        firebaseRepo.saveUserEmail()
         firebaseRepo.saveRecipeAsFavorite(recipe)
         view.isSavedRecipe = true
         setSavedRecipeIcon(true)
