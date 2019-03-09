@@ -33,7 +33,6 @@ import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
-import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
 import dagger.android.AndroidInjection
@@ -325,24 +324,25 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     firebaseRepo.usersReference
         .addListenerForSingleValueEvent(object : ValueEventListener {
           override fun onDataChange(snapshot: DataSnapshot) {
-
             snapshot.children.forEach {
               it.getValue(User::class.java)?.let { registeredUser ->
-                if (registeredUser.email == destinationEmail) {
-                  it.key?.let { userId ->
-                    firebaseRepo.saveRecipeToSharedDB(userId, recipe, MONDAY).last()
-                        .addOnSuccessListener {
-                          showSnackbar(getString(
-                              R.string.share_snackbar_success_text,
-                              destinationUserName ?: destinationEmail))
-                        }
+                when (registeredUser.email) {
+                  destinationEmail -> {
+                    it.key?.let { userId ->
+                      firebaseRepo.saveRecipeToSharedDB(userId, recipe, recipe.day).last()
+                          .addOnSuccessListener {
+                            showSnackbar(getString(
+                                R.string.share_snackbar_success_text,
+                                destinationUserName ?: destinationEmail))
+                          }
+                    }
+                    return
                   }
-                  return
-                } else {
-                  showSnackbar(getString(
-                      R.string.share_recipe_snackbar_user_not_registered,
-                      destinationUserName ?: destinationEmail))
-                  return
+                  else ->  {
+                    showSnackbar(getString(R.string.share_recipe_snackbar_user_not_registered,
+                        destinationUserName ?: destinationEmail))
+                    return
+                  }
                 }
               }
             }
