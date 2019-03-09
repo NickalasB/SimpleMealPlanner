@@ -16,4 +16,6 @@ interface RecipeDetailView {
   fun setMealPlanButtonText(@StringRes mealPlanButtonStringRes: Int = 0, selectedDayString: String? = "")
 
   fun launchUIAuthActivity()
+
+  fun showSnackbar(@StringRes snackbarStringRes: Int = 0, snackbarString: String = "", snackbarstringParameter: String = "")
 }

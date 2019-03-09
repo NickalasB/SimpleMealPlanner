@@ -1,10 +1,12 @@
 package com.zonkey.simplemealplanner.activity
 
+import com.google.android.gms.tasks.Task
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 import com.zonkey.simplemealplanner.model.Recipe
+import com.zonkey.simplemealplanner.model.User
 
 class RecipeDetailActivityPresenter(
     private val view: RecipeDetailView,
@@ -80,6 +82,26 @@ class RecipeDetailActivityPresenter(
   fun setUpMealPlanButtonText(recipe: Recipe) {
     if (recipe.mealPlan && recipe.day.name.isNotEmpty()) {
       view.setMealPlanButtonText(selectedDayString = recipe.day.name)
+    }
+  }
+
+  fun saveRecipeToSharedDB(userToShareWith: User?, recipe: Recipe, destinationUserName: String?,
+      destinationEmail: String) {
+
+    if (userToShareWith != null) {
+      val action: List<Task<Void>> = firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day)
+
+          action.last()
+          .addOnSuccessListener {
+            view.showSnackbar(
+                snackbarStringRes = R.string.share_snackbar_success_text,
+                snackbarstringParameter = destinationUserName ?: destinationEmail)
+          }
+      return
+    } else {
+      view.showSnackbar(
+          snackbarStringRes = R.string.share_recipe_snackbar_user_not_registered,
+          snackbarstringParameter = destinationUserName ?: destinationEmail)
     }
   }
 }

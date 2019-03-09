@@ -252,7 +252,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       !snackBarString.isNullOrBlank() -> snackBarString
       else -> ""
     }
-    showSnackbar(snackBarText)
+    showSnackbar(snackbarString = snackBarText)
   }
 
   override fun setFavoritedButtonIcon(icon: Int) {
@@ -327,29 +327,29 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
             val userToShareWith = snapshot.children.map { it.getValue(User::class.java) }
                 .firstOrNull { registeredUser ->
-                  registeredUser?.email.equals(destinationEmail, ignoreCase = true) }
+                  registeredUser?.email.equals(destinationEmail, ignoreCase = true)
+                }
 
-            if (userToShareWith != null) {
-              firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day).last()
-                  .addOnSuccessListener {
-                    showSnackbar(getString(R.string.share_snackbar_success_text,
-                        destinationUserName ?: destinationEmail))
-                  }
-              return
-            } else {
-              showSnackbar(getString(R.string.share_recipe_snackbar_user_not_registered,
-                  destinationUserName ?: destinationEmail))
-            }
+            presenter.saveRecipeToSharedDB(
+                userToShareWith = userToShareWith,
+                recipe = recipe,
+                destinationUserName = destinationUserName,
+                destinationEmail = destinationEmail)
           }
 
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Failed to share recipe")
-            showSnackbar(getString(R.string.share_snackbar_error_text))
+            showSnackbar(snackbarStringRes = R.string.share_snackbar_error_text)
           }
         })
   }
 
-  fun showSnackbar(message: String) {
-    Snackbar.make(detail_recipe_parent_layout, message, Snackbar.LENGTH_LONG).show()
+  override fun showSnackbar(snackbarStringRes: Int, snackbarString: String,
+      snackbarstringParameter: String) {
+    val snackBarText = when {
+      snackbarStringRes != 0 -> getString(snackbarStringRes, snackbarstringParameter)
+      else -> snackbarString
+    }
+    Snackbar.make(detail_recipe_parent_layout, snackBarText, Snackbar.LENGTH_LONG).show()
   }
 }
