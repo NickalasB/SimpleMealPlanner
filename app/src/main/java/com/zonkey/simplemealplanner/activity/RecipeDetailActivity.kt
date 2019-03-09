@@ -111,7 +111,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     val contactPermissionGranted = ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
 
-    setUpShareButton(recipe.mealPlan, contactPermissionGranted)
+    setUpShareButton(contactPermissionGranted)
 
   }
 
@@ -326,9 +326,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
           override fun onDataChange(snapshot: DataSnapshot) {
 
             val userToShareWith = snapshot.children.map { it.getValue(User::class.java) }
-                .firstOrNull { registeredUser ->
-                  registeredUser?.email == destinationEmail
-                }
+                .firstOrNull { registeredUser -> registeredUser?.email == destinationEmail }
 
             if (userToShareWith != null) {
               firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day).last()
