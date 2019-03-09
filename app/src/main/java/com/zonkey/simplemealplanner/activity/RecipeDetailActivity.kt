@@ -111,7 +111,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     val contactPermissionGranted = ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
 
-    setUpShareButton(contactPermissionGranted)
+    setUpShareButton(recipe.mealPlan, contactPermissionGranted)
 
   }
 
@@ -324,27 +324,22 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     firebaseRepo.usersReference
         .addListenerForSingleValueEvent(object : ValueEventListener {
           override fun onDataChange(snapshot: DataSnapshot) {
-            snapshot.children.forEach {
-              it.getValue(User::class.java)?.let { registeredUser ->
-                when (registeredUser.email) {
-                  destinationEmail -> {
-                    it.key?.let { userId ->
-                      firebaseRepo.saveRecipeToSharedDB(userId, recipe, recipe.day).last()
-                          .addOnSuccessListener {
-                            showSnackbar(getString(
-                                R.string.share_snackbar_success_text,
-                                destinationUserName ?: destinationEmail))
-                          }
-                    }
-                    return
-                  }
-                  else ->  {
-                    showSnackbar(getString(R.string.share_recipe_snackbar_user_not_registered,
-                        destinationUserName ?: destinationEmail))
-                    return
-                  }
+
+            val userToShareWith = snapshot.children.map { it.getValue(User::class.java) }
+                .firstOrNull { registeredUser ->
+                  registeredUser?.email == destinationEmail
                 }
-              }
+
+            if (userToShareWith != null) {
+              firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day).last()
+                  .addOnSuccessListener {
+                    showSnackbar(getString(R.string.share_snackbar_success_text,
+                        destinationUserName ?: destinationEmail))
+                  }
+              return
+            } else {
+              showSnackbar(getString(R.string.share_recipe_snackbar_user_not_registered,
+                  destinationUserName ?: destinationEmail))
             }
           }
 

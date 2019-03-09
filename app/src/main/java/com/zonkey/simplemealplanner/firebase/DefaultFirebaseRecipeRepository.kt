@@ -13,11 +13,12 @@ import javax.inject.Inject
 
 const val MEAL_PLANNER_DB_REF = "simple_meal_planner"
 const val USERS = "users"
+const val EMAIL = "email"
+const val USER_ID = "userId"
 const val RECIPES = "recipes"
 const val DAY = "day"
 const val MEAL_PLAN = "mealPlan"
 const val FAVORITE = "favorite"
-const val EMAIL = "email"
 
 class DefaultFirebaseRecipeRepository @Inject constructor(
     private val firebaseDbInstance: FirebaseDatabase,
@@ -100,10 +101,17 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
     recipeDbRef.child(MEAL_PLAN).setValue(false)
   }
 
-  override fun saveUserEmail() {
-    firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
+  override fun saveUserIdAndUserEmail() {
+    val userId = firebaseAuthRepository.currentUser?.uid.toString()
+    val singleUserReference = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
         .child(USERS)
-        .child(firebaseAuthRepository.currentUser?.uid.toString())
+        .child(userId)
+
+    singleUserReference
+        .child(USER_ID)
+        .setValue(userId)
+
+    singleUserReference
         .child(EMAIL)
         .setValue(firebaseAuthRepository.currentUser?.email)
   }

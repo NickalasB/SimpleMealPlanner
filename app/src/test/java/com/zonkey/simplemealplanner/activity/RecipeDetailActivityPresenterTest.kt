@@ -92,7 +92,7 @@ class RecipeDetailActivityPresenterTest {
     givenRecipe(MONDAY)
     givenSavedRecipe(false)
     whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
-    thenSaveUserEmail(Times(1))
+    thenSaveUserIdAndEmail(Times(1))
     thenSaveRecipeToFirebase(mockRecipe)
     thenIsSavedRecipe(true)
     thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_red_24dp)
@@ -123,7 +123,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
-    thenSaveUserEmail(Times(1))
+    thenSaveUserIdAndEmail(Times(1))
     thenUpdateMealPlanRecipeDayCalled(Times(1))
   }
 
@@ -136,7 +136,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
-    thenSaveUserEmail(Times(1))
+    thenSaveUserIdAndEmail(Times(1))
     thenSaveRecipeToMealPlanDb(Times(1))
   }
 
@@ -299,7 +299,7 @@ class RecipeDetailActivityPresenterTest {
     verify(firebaseRecipeRepository, times).removeRecipeFromMealPlan(recipe)
   }
 
-  private fun thenSaveUserEmail(times: VerificationMode) {
-    verify(firebaseRecipeRepository, times).saveUserEmail()
+  private fun thenSaveUserIdAndEmail(times: VerificationMode) {
+    verify(firebaseRecipeRepository, times).saveUserIdAndUserEmail()
   }
 }

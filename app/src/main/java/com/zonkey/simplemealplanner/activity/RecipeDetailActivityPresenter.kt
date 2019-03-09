@@ -21,7 +21,7 @@ class RecipeDetailActivityPresenter(
         setSavedRecipeIcon(false)
         view.showRecipeDetailSnackBar(R.string.snackbar_recipe_deleted)
       } else {
-        firebaseRepo.saveUserEmail()
+        firebaseRepo.saveUserIdAndUserEmail()
         firebaseRepo.saveRecipeAsFavorite(recipe)
         view.isSavedRecipe = true
         setSavedRecipeIcon(true)
@@ -64,7 +64,7 @@ class RecipeDetailActivityPresenter(
         else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
       }
       showRecipeDetailSnackBar(selectedDay)
-      firebaseRepo.saveUserEmail()
+      firebaseRepo.saveUserIdAndUserEmail()
     }
   }
 

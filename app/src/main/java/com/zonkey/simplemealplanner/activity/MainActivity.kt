@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity(), MainView {
       if (resultCode == Activity.RESULT_OK) {
         Snackbar.make(recipe_main_constraint_layout, getString(string.snackbar_sign_in_message),
             Snackbar.LENGTH_SHORT).show()
-        firebaseRecipeRepository.saveUserEmail()
+        firebaseRecipeRepository.saveUserIdAndUserEmail()
 
       } else {
         Timber.e(response?.error, "Failed to log-in")
