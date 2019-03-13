@@ -12,6 +12,7 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -295,26 +296,42 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       }
       RC_CONTACT_PICKER -> {
         if (resultCode == Activity.RESULT_OK) {
-          data?.let {
-            val contactData = it.data
-            val cursor = contentResolver.query(
-                contactData ?: Uri.EMPTY,
-                null,
-                null,
-                null,
-                null)
-            cursor?.run {
-              if (cursor.moveToFirst()) {
-                destinationUserEmail = cursor.getString(
-                    cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
-                destinationUserDisplayName = cursor.getString(
-                    cursor.getColumnIndex(
-                        ContactsContract.CommonDataKinds.Email.DISPLAY_NAME_PRIMARY))
-                writeRecipeToSharedUserDb(destinationUserEmail, destinationUserDisplayName)
-                cursor.close()
-              }
-            }
-          }
+          showSharingDialog(data)
+        }
+      }
+    }
+  }
+
+  private fun showSharingDialog(data: Intent?) {
+    setDestinationUserInfoFromContacts(data)
+    val builder = AlertDialog.Builder(this)
+    builder.setTitle(getString(R.string.share_dialog_title))
+    builder.setMessage(getString(R.string.share_dialog_message, destinationUserEmail))
+    builder.setPositiveButton(getString(R.string.common_ok)) { dialog, _ ->
+      writeRecipeToSharedUserDb(destinationUserEmail, destinationUserDisplayName)
+      dialog.dismiss()
+    }
+    builder.setNegativeButton(getString(R.string.common_back)) { dialog, _ ->
+      dialog.dismiss()
+    }
+    builder.create().show()
+  }
+
+  private fun setDestinationUserInfoFromContacts(data: Intent?) {
+    data?.let {
+      val contactData = it.data
+      val cursor = contentResolver.query(
+          contactData ?: Uri.EMPTY,
+          null,
+          null,
+          null,
+          null)
+      cursor?.run {
+        if (cursor.moveToFirst()) {
+          destinationUserEmail = cursor.getString(cursor.getColumnIndex(Email.DATA))
+          destinationUserDisplayName = cursor.getString(
+              cursor.getColumnIndex(Email.DISPLAY_NAME_PRIMARY))
+          cursor.close()
         }
       }
     }
