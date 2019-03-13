@@ -76,6 +76,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
     presenter = MainActivityPresenter(this, recipeRepository)
 
+    signedIn = firebaseAuthRepository.currentUser != null
+
     this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
     handleSearchQuery()
@@ -96,8 +98,6 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun onResume() {
     super.onResume()
-
-    signedIn = firebaseAuthRepository.currentUser != null
 
     setUpFavoriteRecipes()
 
@@ -223,6 +223,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun setFavoritedRecipes(dbRecipes: List<Recipe?>) {
     favorites_recipe_card_widget.setRecipes(dbRecipes)
+//    favorites_recipe_card_widget.smoothScrollToNewestRecipe(dbRecipes)
   }
 
   override fun setMealPlanTitleVisibility(visibility: Int) {
@@ -231,6 +232,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun setMealPlanRecipes(mealPlanRecipes: List<Recipe?>) {
     meal_plan_recipe_card_widget.setRecipes(mealPlanRecipes)
+//    meal_plan_recipe_card_widget.smoothScrollToNewestRecipe(mealPlanRecipes)
   }
 
   override fun setFavoritesTitleVisibility(visibility: Int) {
