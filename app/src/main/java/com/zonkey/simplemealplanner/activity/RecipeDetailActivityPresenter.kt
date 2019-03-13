@@ -1,12 +1,12 @@
 package com.zonkey.simplemealplanner.activity
 
-import com.google.android.gms.tasks.Task
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
+import timber.log.Timber
 
 class RecipeDetailActivityPresenter(
     private val view: RecipeDetailView,
@@ -19,17 +19,27 @@ class RecipeDetailActivityPresenter(
     } else {
       if (savedRecipe) {
         firebaseRepo.removeRecipeAsFavorite(recipe)
-        view.isSavedRecipe = false
-        setSavedRecipeIcon(false)
-        view.showRecipeDetailSnackBar(R.string.snackbar_recipe_deleted)
+            .addOnSuccessListener {
+              view.isSavedRecipe = false
+              setSavedRecipeIcon(false)
+              view.showRecipeDetailSnackBar(R.string.snackbar_recipe_deleted)
+            }
       } else {
-        firebaseRepo.saveUserIdAndUserEmail()
-        firebaseRepo.saveRecipeAsFavorite(recipe)
-        view.isSavedRecipe = true
-        setSavedRecipeIcon(true)
-        view.showRecipeDetailSnackBar(R.string.snackbar_recipe_saved)
+        saveFirsTimeUserRecipe(recipe)
       }
     }
+  }
+
+  private fun saveFirsTimeUserRecipe(recipe: Recipe) {
+    firebaseRepo.saveUserIdAndUserEmail()
+        .continueWith {
+          firebaseRepo.saveRecipeAsFavorite(recipe)
+        }.addOnSuccessListener {
+          view.isSavedRecipe = true
+          setSavedRecipeIcon(true)
+          view.showRecipeDetailSnackBar(R.string.snackbar_recipe_saved)
+          Timber.d("User logged in from saveFirsTimeUserRecipe()")
+        }
   }
 
   fun setSavedRecipeIcon(savedRecipe: Boolean) {
@@ -54,7 +64,9 @@ class RecipeDetailActivityPresenter(
             DayOfWeek.valueOf(selectedDay))
         else -> {
           firebaseRepo.saveRecipeToMealPlan(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
-          view.addedToMealPlan = true
+              .addOnSuccessListener {
+                view.addedToMealPlan = true
+              }
         }
       }
       when (DayOfWeek.valueOf(selectedDay)) {
@@ -67,6 +79,9 @@ class RecipeDetailActivityPresenter(
       }
       showRecipeDetailSnackBar(selectedDay)
       firebaseRepo.saveUserIdAndUserEmail()
+          .addOnSuccessListener {
+            Timber.d("User logged in from saveFirsTimeUserRecipe()")
+          }
     }
   }
 
@@ -87,15 +102,17 @@ class RecipeDetailActivityPresenter(
 
   fun saveRecipeToSharedDB(userToShareWith: User?, recipe: Recipe, destinationUserName: String?,
       destinationEmail: String) {
-
     if (userToShareWith != null) {
-      val action: List<Task<Void>> = firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day)
-
-          action.last()
+      firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day)
           .addOnSuccessListener {
             view.showSnackbar(
                 snackbarStringRes = R.string.share_snackbar_success_text,
                 snackbarstringParameter = destinationUserName ?: destinationEmail)
+          }
+          .addOnFailureListener {
+            Timber.e(
+                "Failed to share recipe from ${this@RecipeDetailActivityPresenter::class.java.simpleName}")
+            view.showSnackbar(snackbarStringRes = R.string.share_snackbar_error_text)
           }
       return
     } else {

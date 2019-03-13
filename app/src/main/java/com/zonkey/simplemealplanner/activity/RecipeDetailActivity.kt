@@ -59,6 +59,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   @Inject
   lateinit var firebaseAuthRepository: DefaultFirebaseAuthRepository
 
+  private val TAG = this::class.java.simpleName
+
   private lateinit var presenter: RecipeDetailActivityPresenter
 
   override var isSavedRecipe = false
@@ -338,7 +340,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
           }
 
           override fun onCancelled(error: DatabaseError) {
-            Timber.e(error.toException(), "Failed to share recipe")
+            Timber.e(error.toException(), "Failed to share recipe from $TAG")
             showSnackbar(snackbarStringRes = R.string.share_snackbar_error_text)
           }
         })

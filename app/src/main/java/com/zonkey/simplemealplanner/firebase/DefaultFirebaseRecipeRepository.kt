@@ -35,45 +35,54 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
         .child(firebaseAuthRepository.currentUser?.uid.toString())
         .child(RECIPES)
 
-  override fun saveRecipeAsFavorite(recipe: Recipe) {
-
+  override fun saveRecipeAsFavorite(recipe: Recipe): Task<Task<Void>> {
     if ((userRecipeDatabase.child(recipe.key).key != recipe.key)) {
       val key = userRecipeDatabase.push().key ?: ""
       recipe.key = key
-      userRecipeDatabase.child(recipe.key).setValue(recipe)
-      userRecipeDatabase.child(recipe.key).child(FAVORITE).setValue(true)
+      return userRecipeDatabase.child(recipe.key).setValue(recipe)
+          .continueWith {
+            userRecipeDatabase.child(recipe.key).child(FAVORITE).setValue(true)
+          }
     } else {
-      userRecipeDatabase
+      return userRecipeDatabase
           .child(recipe.key)
           .child(FAVORITE)
-          .setValue(true)
+          .setValue(true).continueWith {
+            null
+          }
     }
   }
 
-  override fun removeRecipeAsFavorite(recipe: Recipe) {
-    userRecipeDatabase
+  override fun removeRecipeAsFavorite(recipe: Recipe): Task<Void> {
+    return userRecipeDatabase
         .child(recipe.key)
         .child(FAVORITE)
         .setValue(false)
   }
 
   override fun saveRecipeToMealPlan(recipe: Recipe, dayOfWeek: DayOfWeek,
-      isSavedRecipe: Boolean) {
+      isSavedRecipe: Boolean): Task<Task<Void>> {
     val favoriteRecipeDbRef = userRecipeDatabase
     if ((favoriteRecipeDbRef.child(recipe.key).key != recipe.key)) {
       val key = favoriteRecipeDbRef.push().key ?: ""
       recipe.key = key
-      favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
-      favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
-      favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+      return favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
+          .continueWith {
+            favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
+          }
+          .continueWith {
+            favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+          }
     } else {
-      favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
-      favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+      return favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
+          .continueWith {
+            favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+          }
     }
   }
 
   override
-  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): List<Task<Void>> {
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): Task<Task<Void>> {
     val favoriteRecipeDbRef =
         firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
             .child(USERS)
@@ -81,39 +90,41 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
             .child(RECIPES)
     val key = favoriteRecipeDbRef.push().key ?: ""
     recipe.key = key
-    return listOf(
-    favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
-    favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
-    favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
-    )
+    return favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
+        .continueWith {
+          favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
+        }.continueWith {
+          favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+        }
   }
 
-  override fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek) {
-    userRecipeDatabase
+  override fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek): Task<Void> {
+    return userRecipeDatabase
         .child(recipe.key)
         .child(DAY)
         .setValue(dayOfWeek)
   }
 
-  override fun removeRecipeFromMealPlan(recipe: Recipe) {
+  override fun removeRecipeFromMealPlan(recipe: Recipe): Task<Void> {
     val recipeDbRef = userRecipeDatabase
         .child(recipe.key)
-    recipeDbRef.child(MEAL_PLAN).setValue(false)
+    return recipeDbRef.child(MEAL_PLAN).setValue(false)
   }
 
-  override fun saveUserIdAndUserEmail() {
+  override fun saveUserIdAndUserEmail(): Task<Task<Void>> {
     val userId = firebaseAuthRepository.currentUser?.uid.toString()
     val singleUserReference = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
         .child(USERS)
         .child(userId)
 
-    singleUserReference
+    return singleUserReference
         .child(USER_ID)
         .setValue(userId)
-
-    singleUserReference
-        .child(EMAIL)
-        .setValue(firebaseAuthRepository.currentUser?.email)
+        .continueWith {
+          singleUserReference
+              .child(EMAIL)
+              .setValue(firebaseAuthRepository.currentUser?.email)
+        }
   }
 
   override fun purgeUnsavedRecipe(recipe: Recipe) {
