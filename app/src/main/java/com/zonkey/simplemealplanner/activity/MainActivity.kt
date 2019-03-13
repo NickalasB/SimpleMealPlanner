@@ -102,6 +102,8 @@ class MainActivity : AppCompatActivity(), MainView {
     setUpFavoriteRecipes()
 
     setUpMealPlanRecipes()
+
+    recipe_search_view.clearFocus()
   }
 
   private fun setUpFavoriteRecipes() {
@@ -172,7 +174,6 @@ class MainActivity : AppCompatActivity(), MainView {
         authUI.signOut(this).addOnCompleteListener {
           Snackbar.make(recipe_main_constraint_layout,
               getString(string.snack_bar_sign_out_message), Snackbar.LENGTH_SHORT).show()
-          recipe_search_view.clearFocus()
           signedIn = false
         }
         true
