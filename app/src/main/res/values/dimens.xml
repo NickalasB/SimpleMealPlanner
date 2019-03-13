@@ -21,4 +21,5 @@
   <dimen name="index_card_min_height">32dp</dimen>
   <dimen name="headline_text_size">18sp</dimen>
   <dimen name="meal_plan_button_min_width">140dp</dimen>
+  <dimen name="rounded_bottom_corner_radius">4dp</dimen>
 </resources>

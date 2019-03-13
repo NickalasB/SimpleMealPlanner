@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.model.Recipe
@@ -21,7 +20,6 @@ class SingleRecipeCard @JvmOverloads constructor(
     set(value) {
       field = value
       recipe_card_item_title.text = value
-      recipe_card_item_title.background = ContextCompat.getDrawable(context, R.drawable.preview_image_scrim)
     }
 
   private var imageUrl: String? = null

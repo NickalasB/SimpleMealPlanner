@@ -26,6 +26,8 @@
       android:paddingStart="@dimen/common_margin_half"
       android:textSize="@dimen/label_text_size"
       android:textStyle="bold"
+      android:background="@drawable/index_blue_rounded_bottom_selectable"
       tools:text="Cheeseburger"
+      android:textColor="@color/whiteText"
       />
 </merge>
