@@ -43,14 +43,10 @@ class MainActivityPresenterTest {
   fun shouldHideFavoritesTitleIfDbRecipesAreEmpty() {
     givenEmptyDbRecipes()
     whenSetFavoriteRecipesCalled(dbRecipes)
-    theSetFavoritesTitleVisibility(Times(1), View.GONE)
+    thenSetFavoritesTitleVisibility(Times(1), View.GONE)
     thenSetEmptySearchViewVisibility(never(), View.GONE)
-    theSetFavoritesTitleVisibility(never(), View.VISIBLE)
+    thenSetFavoritesTitleVisibility(never(), View.VISIBLE)
     thenSetFavoritedRecipes(Times(1), emptyList())
-  }
-
-  private fun givenEmptyDbRecipes() {
-    dbRecipes = emptyList()
   }
 
   @Test
@@ -58,11 +54,29 @@ class MainActivityPresenterTest {
     givenDbRecipes()
     whenSetFavoriteRecipesCalled(dbRecipes)
     thenSetEmptySearchViewVisibility(Times(1), View.GONE)
-    theSetFavoritesTitleVisibility(Times(1), View.VISIBLE)
+    thenSetFavoritesTitleVisibility(Times(1), View.VISIBLE)
     thenSetFavoritedRecipes(Times(1), dbRecipes)
     thenSetEmptySearchViewVisibility(never(), View.VISIBLE)
   }
 
+  @Test
+  fun shouldHideMealPlanTitleIfDbRecipesAreEmpty() {
+    givenEmptyDbRecipes()
+    whenSetMealPlanRecipesCalled(dbRecipes)
+    thenSetMealPlanTitleVisibility(Times(1), View.GONE)
+    thenSetMealPlanRecipes(Times(1), dbRecipes)
+    thenSetEmptySearchViewVisibility(never(), View.VISIBLE)
+  }
+
+  @Test
+  fun shouldHideEmptySearchViewAndShowMealPlanTitleWhenSetMealPlanRecipesCalled() {
+    givenDbRecipes()
+    whenSetMealPlanRecipesCalled(dbRecipes)
+    thenSetEmptySearchViewVisibility(Times(1), View.GONE)
+    thenSetMealPlanTitleVisibility(Times(1), View.VISIBLE)
+    thenSetMealPlanRecipes(Times(1), dbRecipes)
+  }
+  
   private fun givenDbRecipes() {
     dbRecipes = listOf(
         Recipe(
@@ -108,20 +122,37 @@ class MainActivityPresenterTest {
     )
   }
 
+  private fun givenEmptyDbRecipes() {
+    dbRecipes = emptyList()
+  }
+
+
   private fun whenSetFavoriteRecipesCalled(dbRecipes: List<Recipe>) {
     presenter.setFavoriteRecipes(dbRecipes)
+  }
+
+  private fun whenSetMealPlanRecipesCalled(dbRecipes: List<Recipe>) {
+    presenter.setMealPlanRecipes(dbRecipes)
   }
 
   private fun thenSetEmptySearchViewVisibility(times: VerificationMode, visibility: Int) {
     verify(view, times).setEmptySearchViewVisibility(visibility)
   }
 
-  private fun theSetFavoritesTitleVisibility(times: VerificationMode, visibility: Int) {
+  private fun thenSetFavoritesTitleVisibility(times: VerificationMode, visibility: Int) {
     verify(view, times).setFavoritesTitleVisibility(visibility)
   }
 
   private fun thenSetFavoritedRecipes(times: VerificationMode, dbRecipes: List<Recipe>) {
     verify(view, times).setFavoritedRecipes(dbRecipes)
+  }
+
+  private fun thenSetMealPlanRecipes(times: VerificationMode, dbRecipes: List<Recipe>) {
+    verify(view, times).setMealPlanRecipes(dbRecipes)
+  }
+
+  private fun thenSetMealPlanTitleVisibility(times: VerificationMode, visibility: Int) {
+    verify(view, times).setMealPlanTitleVisibility(visibility)
   }
 
 }
