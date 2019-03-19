@@ -74,4 +74,16 @@ class MainActivityPresenter(
       }
     }
   }
+
+  fun scrollToNewMealPlanMealIfAdded(currentMealPlanCount: Int, savedMealPlanCount: Int) {
+    if (currentMealPlanCount > savedMealPlanCount) {
+      view.smoothScrollToNewestMealPlanRecipe(currentMealPlanCount)
+    }
+  }
+
+  fun scrollToNewFavoriteMealIfAdded(currentFavoritesCount: Int, savedFavoritesCount: Int) {
+    if (currentFavoritesCount > savedFavoritesCount) {
+      view.smoothScrollToNewestFavoritesRecipe(currentFavoritesCount)
+    }
+  }
 }

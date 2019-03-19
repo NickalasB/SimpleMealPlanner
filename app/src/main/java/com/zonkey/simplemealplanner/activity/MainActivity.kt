@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
   companion object {
     private const val RC_SIGN_IN_MAIN = 200
+    private const val MEAL_PLAN_PREF_KEY = "meals"
+    private const val FAVORITES_PREF_KEY = "favorites"
   }
 
   @Inject
@@ -64,10 +67,18 @@ class MainActivity : AppCompatActivity(), MainView {
 
   private var signedIn = false
 
+  private var savedFavoritesCount = 0
+
+  private var savedMealPlanCount = 0
+
+  private lateinit var sharedPreferences: SharedPreferences
+
+
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
 
     val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
     recipe_search_view.setSearchableInfo(searchManager.getSearchableInfo(componentName))
@@ -80,7 +91,13 @@ class MainActivity : AppCompatActivity(), MainView {
 
     this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
+    setUpFavoriteRecipes()
+
+    setUpMealPlanRecipes()
+
     handleSearchQuery()
+
+    sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
   }
 
   private fun handleSearchQuery() {
@@ -99,9 +116,15 @@ class MainActivity : AppCompatActivity(), MainView {
   override fun onResume() {
     super.onResume()
 
-    setUpFavoriteRecipes()
+    savedMealPlanCount = sharedPreferences.getInt(MEAL_PLAN_PREF_KEY, 0)
+    val currentMealPlanCount = meal_plan_recipe_card_widget.adapter?.itemCount ?: 0
 
-    setUpMealPlanRecipes()
+    savedFavoritesCount = sharedPreferences.getInt(FAVORITES_PREF_KEY, 0)
+    val currentFavoritesCount = favorites_recipe_card_widget.adapter?.itemCount ?: 0
+
+    presenter.scrollToNewMealPlanMealIfAdded(currentMealPlanCount, savedMealPlanCount)
+
+    presenter.scrollToNewFavoriteMealIfAdded(currentFavoritesCount, savedFavoritesCount)
 
     recipe_search_view.clearFocus()
   }
@@ -204,6 +227,17 @@ class MainActivity : AppCompatActivity(), MainView {
     }
   }
 
+  override fun onPause() {
+    super.onPause()
+    sharedPreferences.edit().putInt(
+        FAVORITES_PREF_KEY,
+        favorites_recipe_card_widget.adapter?.itemCount ?: 0).apply()
+
+    sharedPreferences.edit().putInt(
+        MEAL_PLAN_PREF_KEY,
+        meal_plan_recipe_card_widget.adapter?.itemCount ?: 0).apply()
+  }
+
   override fun setUpAdapter(recipeHits: List<Hit>) {
     val recipes = recipeHits.map { it.recipe }
     main_search_recipe_card_widget.setRecipes(recipes)
@@ -222,8 +256,8 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   override fun setFavoritedRecipes(dbRecipes: List<Recipe?>) {
+    favorites_recipe_card_widget.reverseLayout()
     favorites_recipe_card_widget.setRecipes(dbRecipes)
-//    favorites_recipe_card_widget.smoothScrollToNewestRecipe(dbRecipes)
   }
 
   override fun setMealPlanTitleVisibility(visibility: Int) {
@@ -231,12 +265,20 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   override fun setMealPlanRecipes(mealPlanRecipes: List<Recipe?>) {
+    meal_plan_recipe_card_widget.reverseLayout()
     meal_plan_recipe_card_widget.setRecipes(mealPlanRecipes)
-//    meal_plan_recipe_card_widget.smoothScrollToNewestRecipe(mealPlanRecipes)
   }
 
   override fun setFavoritesTitleVisibility(visibility: Int) {
     recipe_card_favorites_title.visibility = visibility
+  }
+
+  override fun smoothScrollToNewestMealPlanRecipe(mealPlanCount: Int) {
+    meal_plan_recipe_card_widget.smoothScrollToNewestRecipe(mealPlanCount)
+  }
+
+  override fun smoothScrollToNewestFavoritesRecipe(favoriteCount: Int) {
+    favorites_recipe_card_widget.smoothScrollToNewestRecipe(favoriteCount)
   }
 
   override fun onDestroy() {

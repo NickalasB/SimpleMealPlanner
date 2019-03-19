@@ -26,10 +26,13 @@ class RecipeRecyclerView @JvmOverloads constructor(
     (adapter as RecipeRecyclerViewAdapter).submitList(recipes)
   }
 
-  fun smoothScrollToNewestRecipe(recipes: List<Recipe?>) {
-    smoothScroller.targetPosition = recipes.size;
-    layoutManager?.startSmoothScroll(smoothScroller)
+  fun reverseLayout() {
     (layoutManager as LinearLayoutManager).reverseLayout = true
+  }
+
+  fun smoothScrollToNewestRecipe(position: Int) {
+    smoothScroller.targetPosition = position;
+    layoutManager?.startSmoothScroll(smoothScroller)
   }
 
   private var smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(context) {

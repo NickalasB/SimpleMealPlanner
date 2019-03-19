@@ -21,4 +21,7 @@ interface MainView {
 
   fun setMealPlanRecipes(mealPlanRecipes: List<Recipe?>)
 
+  fun smoothScrollToNewestMealPlanRecipe(mealPlanCount: Int)
+
+  fun smoothScrollToNewestFavoritesRecipe(favoriteCount: Int)
 }
