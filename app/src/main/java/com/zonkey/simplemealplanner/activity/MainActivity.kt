@@ -73,6 +73,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
   private lateinit var sharedPreferences: SharedPreferences
 
+  private lateinit var activityMenu: Menu
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
@@ -91,9 +93,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-    setUpFavoriteRecipes()
-
-    setUpMealPlanRecipes()
+    refreshSavedRecipeViews()
 
     handleSearchQuery()
 
@@ -173,20 +173,38 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
     super.onPrepareOptionsMenu(menu)
+    activityMenu = menu
     return when (signedIn) {
       true -> {
-        menu.removeItem(R.id.sign_in)
-        if (menu.findItem(R.id.sign_out) == null) {
-          menu.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+        activityMenu.removeItem(R.id.sign_in)
+        if (activityMenu.findItem(R.id.sign_out) == null) {
+          activityMenu.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
         }
         true
       }
       false -> {
-        menu.removeItem(R.id.sign_out)
-        if (menu.findItem(R.id.sign_in) == null) {
-          menu.add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
+        activityMenu.removeItem(R.id.sign_out)
+        if (activityMenu.findItem(R.id.sign_in) == null) {
+          activityMenu.add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
         }
         true
+      }
+    }
+  }
+
+  fun updateMenuItems(signedIn: Boolean) {
+    when (signedIn) {
+      true -> {
+        activityMenu.removeItem(R.id.sign_in)
+        if (activityMenu.findItem(R.id.sign_out) == null) {
+          activityMenu.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+        }
+      }
+      false -> {
+        activityMenu.removeItem(R.id.sign_out)
+        if (activityMenu.findItem(R.id.sign_in) == null) {
+          activityMenu.add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
+        }
       }
     }
   }
@@ -195,6 +213,7 @@ class MainActivity : AppCompatActivity(), MainView {
     return when (item.itemId) {
       R.id.sign_out -> {
         authUI.signOut(this).addOnCompleteListener {
+          refreshSavedRecipeViews()
           Snackbar.make(recipe_main_constraint_layout,
               getString(string.snack_bar_sign_out_message), Snackbar.LENGTH_SHORT).show()
           signedIn = false
@@ -216,15 +235,21 @@ class MainActivity : AppCompatActivity(), MainView {
       val response = IdpResponse.fromResultIntent(data)
 
       if (resultCode == Activity.RESULT_OK) {
+        signedIn = firebaseAuthRepository.currentUser != null
         Snackbar.make(recipe_main_constraint_layout, getString(string.snackbar_sign_in_message),
             Snackbar.LENGTH_SHORT).show()
         firebaseRecipeRepository.saveUserIdAndUserEmail()
-
+        updateMenuItems(signedIn)
+        refreshSavedRecipeViews()
       } else {
         Timber.e(response?.error, "Failed to log-in")
       }
-
     }
+  }
+
+  private fun refreshSavedRecipeViews() {
+    setUpFavoriteRecipes()
+    setUpMealPlanRecipes()
   }
 
   override fun onPause() {
