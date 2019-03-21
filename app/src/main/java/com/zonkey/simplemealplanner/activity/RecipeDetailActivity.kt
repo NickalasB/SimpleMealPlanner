@@ -2,6 +2,7 @@ package com.zonkey.simplemealplanner.activity
 
 import android.Manifest
 import android.Manifest.permission
+import android.animation.Animator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -139,7 +140,33 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   private fun setupFavoriteButton(recipe: Recipe) {
     isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
-    presenter.setSavedRecipeIcon(isSavedRecipe)
+
+    if (!isSavedRecipe) {
+      detail_favorite_button.playAnimation()
+      detail_favorite_button.repeatCount = 1
+
+      detail_favorite_button.addAnimatorListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+          //noOp
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+          detail_favorite_button.frame = 0
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+          //noOp
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+          //noOp
+        }
+
+      })
+    } else {
+      presenter.setSavedRecipeIcon(isSavedRecipe)
+    }
+
 
     detail_favorite_button.setOnClickListener {
       favoriteClick = true
@@ -178,6 +205,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   }
 
   private fun setUpShareButton(permissionGranted: Boolean) {
+
+    detail_share_button.playAnimation()
+    detail_share_button.repeatCount = 1
+    detail_share_button.speed = 2f
 
     //ToDo handle disabling of button from the start if needed
 
@@ -256,8 +287,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     showSnackbar(snackbarString = snackBarText)
   }
 
-  override fun setFavoritedButtonIcon(icon: Int) {
-    detail_favorite_button.background = ContextCompat.getDrawable(this, icon)
+  override fun setFavoritedButtonFrame(frame: Int) {
+    detail_favorite_button.frame = frame
   }
 
   //TODO this needs some work

@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity(), MainView {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-
     val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
     recipe_search_view.setSearchableInfo(searchManager.getSearchableInfo(componentName))
     recipe_search_view.setIconifiedByDefault(false)

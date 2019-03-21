@@ -74,6 +74,9 @@ dependencies {
   //Timber
   implementation "com.jakewharton.timber:timber:$timber_version"
 
+  //Lottie
+  implementation "com.airbnb.android:lottie:$lottieVersion"
+
   //Testing
   testImplementation "junit:junit:$junit_version"
   androidTestImplementation "androidx.test:runner:$test_runner_version"

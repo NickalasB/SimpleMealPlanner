@@ -8,6 +8,9 @@ import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
 
+private const val FAVORITE_BUTTON_SELECTED_FRAME = 60
+private const val FAVORITE_BUTTON_UNSELECTED_FRAME = 0
+
 class RecipeDetailActivityPresenter(
     private val view: RecipeDetailView,
     private val firebaseRepo: FirebaseRecipeRepository
@@ -34,9 +37,9 @@ class RecipeDetailActivityPresenter(
 
   fun setSavedRecipeIcon(savedRecipe: Boolean) {
     if (savedRecipe) {
-      view.setFavoritedButtonIcon(R.drawable.ic_favorite_red_24dp)
+      view.setFavoritedButtonFrame(FAVORITE_BUTTON_SELECTED_FRAME)
     } else {
-      view.setFavoritedButtonIcon(R.drawable.ic_favorite_border_red_24dp)
+      view.setFavoritedButtonFrame(FAVORITE_BUTTON_UNSELECTED_FRAME)
     }
   }
 

@@ -1,6 +1,5 @@
 package com.zonkey.simplemealplanner.activity
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
 interface RecipeDetailView {
@@ -9,7 +8,7 @@ interface RecipeDetailView {
 
   var addedToMealPlan: Boolean
 
-  fun setFavoritedButtonIcon(@DrawableRes icon: Int)
+  fun setFavoritedButtonFrame(frame: Int)
 
   fun showRecipeDetailSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "", dayOfWeek: String? = "")
 

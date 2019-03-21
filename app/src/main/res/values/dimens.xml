@@ -22,4 +22,8 @@
   <dimen name="headline_text_size">18sp</dimen>
   <dimen name="meal_plan_button_min_width">140dp</dimen>
   <dimen name="rounded_bottom_corner_radius">4dp</dimen>
+  <dimen name="detail_favorite_button_width">56dp</dimen>
+  <dimen name="detail_favorite_button_height">56dp</dimen>
+  <dimen name="detail_share_button_width">36dp</dimen>
+  <dimen name="detail_share_button_height">36dp</dimen>
 </resources>

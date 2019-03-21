@@ -92,28 +92,29 @@
             style="@style/AccentColorPill"
             />
 
-        <View
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/detail_favorite_button"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/detail_favorite_button_width"
+            android:layout_height="@dimen/detail_favorite_button_height"
             android:layout_margin="@dimen/common_margin"
-            android:background="@drawable/favorite_button"
             android:clickable="true"
             android:focusable="true"
             app:layout_collapseMode="none"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_save_to_meal_plan_button"
             app:layout_constraintEnd_toStartOf="@+id/detail_share_button"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/detail_save_to_meal_plan_button"
+            app:lottie_rawRes="@raw/heart_animation"
             />
 
-        <View
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/detail_share_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/detail_share_button_width"
+            android:layout_height="@dimen/detail_share_button_height"
             android:layout_marginEnd="@dimen/common_margin"
-            android:background="@drawable/ic_share_index_blue_24dp"
-            app:layout_constraintBottom_toTopOf="@+id/detailed_recipe_card_view"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_save_to_meal_plan_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/detail_save_to_meal_plan_button"
+            app:lottie_rawRes="@raw/share_button_animation_index_blue"
             style="@style/ShareButton"
             />
 

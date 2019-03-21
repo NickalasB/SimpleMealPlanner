@@ -256,7 +256,7 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun thenSetFavoriteButtonIcon(times: VerificationMode, icon: Int) {
-    verify(view, times).setFavoritedButtonIcon(icon)
+    verify(view, times).setFavoritedButtonFrame(icon)
   }
 
   private fun thenSaveRecipeToMealPlanDb(times: VerificationMode) {
