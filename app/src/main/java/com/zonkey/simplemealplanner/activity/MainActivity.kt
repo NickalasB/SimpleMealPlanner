@@ -65,16 +65,13 @@ class MainActivity : AppCompatActivity(), MainView {
 
   private lateinit var presenter: MainActivityPresenter
 
-  private var signedIn = false
-
   private var savedFavoritesCount = 0
 
   private var savedMealPlanCount = 0
 
   private lateinit var sharedPreferences: SharedPreferences
 
-  private lateinit var activityMenu: Menu
-
+  private var activityMenu: Menu? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
@@ -88,8 +85,6 @@ class MainActivity : AppCompatActivity(), MainView {
     recipe_search_view.isSubmitButtonEnabled = true
 
     presenter = MainActivityPresenter(this, recipeRepository)
-
-    signedIn = firebaseAuthRepository.currentUser != null
 
     this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
@@ -115,6 +110,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun onResume() {
     super.onResume()
+
+    updateMenuItems(firebaseAuthRepository.currentUser != null)
 
     savedMealPlanCount = sharedPreferences.getInt(MEAL_PLAN_PREF_KEY, 0)
     val currentMealPlanCount = meal_plan_recipe_card_widget.adapter?.itemCount ?: 0
@@ -174,36 +171,38 @@ class MainActivity : AppCompatActivity(), MainView {
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
     super.onPrepareOptionsMenu(menu)
     activityMenu = menu
-    return when (signedIn) {
+    return when (firebaseAuthRepository.currentUser != null) {
       true -> {
-        activityMenu.removeItem(R.id.sign_in)
-        if (activityMenu.findItem(R.id.sign_out) == null) {
-          activityMenu.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+        activityMenu?.removeItem(R.id.sign_in)
+        if (activityMenu?.findItem(R.id.sign_out) == null) {
+          activityMenu?.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
         }
         true
       }
       false -> {
-        activityMenu.removeItem(R.id.sign_out)
-        if (activityMenu.findItem(R.id.sign_in) == null) {
-          activityMenu.add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
+        activityMenu?.removeItem(R.id.sign_out)
+        if (activityMenu?.findItem(R.id.sign_in) == null) {
+          activityMenu?.add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
         }
         true
       }
     }
   }
 
-  fun updateMenuItems(signedIn: Boolean) {
-    when (signedIn) {
-      true -> {
-        activityMenu.removeItem(R.id.sign_in)
-        if (activityMenu.findItem(R.id.sign_out) == null) {
-          activityMenu.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+  private fun updateMenuItems(signedIn: Boolean) {
+    activityMenu?.apply {
+      when (signedIn) {
+        true -> {
+          removeItem(R.id.sign_in)
+          if (findItem(R.id.sign_out) == null) {
+            add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+          }
         }
-      }
-      false -> {
-        activityMenu.removeItem(R.id.sign_out)
-        if (activityMenu.findItem(R.id.sign_in) == null) {
-          activityMenu.add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
+        false -> {
+          removeItem(R.id.sign_out)
+          if (findItem(R.id.sign_in) == null) {
+            add(Menu.NONE, R.id.sign_in, Menu.NONE, R.string.menu_sign_in)
+          }
         }
       }
     }
@@ -216,7 +215,6 @@ class MainActivity : AppCompatActivity(), MainView {
           refreshSavedRecipeViews()
           Snackbar.make(recipe_main_constraint_layout,
               getString(string.snack_bar_sign_out_message), Snackbar.LENGTH_SHORT).show()
-          signedIn = false
         }
         true
       }
@@ -235,11 +233,10 @@ class MainActivity : AppCompatActivity(), MainView {
       val response = IdpResponse.fromResultIntent(data)
 
       if (resultCode == Activity.RESULT_OK) {
-        signedIn = firebaseAuthRepository.currentUser != null
         Snackbar.make(recipe_main_constraint_layout, getString(string.snackbar_sign_in_message),
             Snackbar.LENGTH_SHORT).show()
         firebaseRecipeRepository.saveUserIdAndUserEmail()
-        updateMenuItems(signedIn)
+        updateMenuItems(firebaseAuthRepository.currentUser != null)
         refreshSavedRecipeViews()
       } else {
         Timber.e(response?.error, "Failed to log-in")
