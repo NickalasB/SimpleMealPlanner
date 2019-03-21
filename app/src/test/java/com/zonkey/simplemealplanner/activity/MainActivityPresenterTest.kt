@@ -76,7 +76,31 @@ class MainActivityPresenterTest {
     thenSetMealPlanTitleVisibility(Times(1), View.VISIBLE)
     thenSetMealPlanRecipes(Times(1), dbRecipes)
   }
-  
+
+  @Test
+  fun shouldSmoothScrollToNewestMealPlanRecipeIfCurrentMealPlanCountIsGreaterThanSavedCount() {
+    whenScrollToNewMealPlanMealIfAddedCalled(currentMealPlanCount = 10, savedMealPlanCount = 9)
+    thenSmoothScrollToMealPlanRecipeAtPosition(Times(1), 10)
+  }
+
+  @Test
+  fun shouldNeverSmoothScrollIfCurrentMealPlanCountIsNotGreaterThanSavedCount() {
+    whenScrollToNewMealPlanMealIfAddedCalled(currentMealPlanCount = 10, savedMealPlanCount = 10)
+    thenSmoothScrollToMealPlanRecipeAtPosition(never(), 10)
+  }
+
+  @Test
+  fun shouldSmoothScrollToNewestFavoriteRecipeIfCurrentFavoriteCountIsGreaterThanSavedCount() {
+    whenScrollToNewFavoriteMealIfAddedCalled(currentFavoritesCount = 10, savedFavoritesCount = 9)
+    thenSmoothScrollToFavoriteRecipeAtPosition(Times(1), 10)
+  }
+
+  @Test
+  fun shouldNeverSmoothScrollIfCurrentFavoriteCountIsNotGreaterThanSavedCount() {
+    whenScrollToNewFavoriteMealIfAddedCalled(currentFavoritesCount = 10, savedFavoritesCount = 10)
+    thenSmoothScrollToFavoriteRecipeAtPosition(never(), 10)
+  }
+
   private fun givenDbRecipes() {
     dbRecipes = listOf(
         Recipe(
@@ -135,6 +159,16 @@ class MainActivityPresenterTest {
     presenter.setMealPlanRecipes(dbRecipes)
   }
 
+  private fun whenScrollToNewFavoriteMealIfAddedCalled(currentFavoritesCount: Int,
+      savedFavoritesCount: Int) {
+    presenter.scrollToNewFavoriteMealIfAdded(currentFavoritesCount, savedFavoritesCount)
+  }
+
+  private fun whenScrollToNewMealPlanMealIfAddedCalled(currentMealPlanCount: Int,
+      savedMealPlanCount: Int) {
+    presenter.scrollToNewMealPlanMealIfAdded(currentMealPlanCount, savedMealPlanCount)
+  }
+
   private fun thenSetEmptySearchViewVisibility(times: VerificationMode, visibility: Int) {
     verify(view, times).setEmptySearchViewVisibility(visibility)
   }
@@ -153,6 +187,16 @@ class MainActivityPresenterTest {
 
   private fun thenSetMealPlanTitleVisibility(times: VerificationMode, visibility: Int) {
     verify(view, times).setMealPlanTitleVisibility(visibility)
+  }
+
+  private fun thenSmoothScrollToFavoriteRecipeAtPosition(times: VerificationMode,
+      recipePosition: Int) {
+    verify(view, times).smoothScrollToNewestFavoritesRecipe(recipePosition)
+  }
+
+  private fun thenSmoothScrollToMealPlanRecipeAtPosition(times: VerificationMode,
+      recipePosition: Int) {
+    verify(view, times).smoothScrollToNewestMealPlanRecipe(recipePosition)
   }
 
 }
