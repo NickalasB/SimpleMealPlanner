@@ -33,4 +33,6 @@
   <string name="share_recipe_snackbar_user_not_registered">%s is not a registered user yet!</string>
   <string name="share_dialog_title">Share This Recipe!</string>
   <string name="share_dialog_message">Would You like to share this recipe with %s?</string>
+  <string name="favorite_button_tutorial_title">Easily save your favorite recipes!</string>
+  <string name="favorite_button_tutorial_message">Click on the heart to save a recipe. Click it again to remove it.</string>
 </resources>

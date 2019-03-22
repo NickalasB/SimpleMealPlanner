@@ -8,7 +8,7 @@ interface RecipeDetailView {
 
   var addedToMealPlan: Boolean
 
-  fun setFavoritedButtonFrame(frame: Int)
+  fun setFavoritedButtonAnimationDirection(speed: Float)
 
   fun showRecipeDetailSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "", dayOfWeek: String? = "")
 
@@ -17,4 +17,8 @@ interface RecipeDetailView {
   fun launchUIAuthActivity()
 
   fun showSnackbar(@StringRes snackbarStringRes: Int = 0, snackbarString: String = "", snackbarstringParameter: String = "")
+
+  fun showFavoriteButtonTutorialCircle()
+
+  fun setIsFirstTimeInActivity(isFirstTime: Boolean)
 }

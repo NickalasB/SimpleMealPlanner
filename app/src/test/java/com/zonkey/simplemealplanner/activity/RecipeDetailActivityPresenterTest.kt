@@ -41,6 +41,9 @@ class RecipeDetailActivityPresenterTest {
 
   private var selectedDay = ""
 
+  private val selectedAnimation = 1f
+  private val unselectedAnimation = -1f
+
   @Before
   fun setUp() {
     MockitoAnnotations.initMocks(this)
@@ -52,14 +55,14 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSetFavoriteIconToOutlinedHeartWhenRecipeNotSaved() {
     givenSavedRecipe(false)
     whenSetSavedRecipeIconCalled(savedRecipe = isSavedRecipe)
-    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_border_red_24dp)
+    thenSetFavoriteButtonIcon(Times(1), unselectedAnimation)
   }
 
   @Test
   fun shouldSetFavoriteIconToFilledInHeartWhenRecipeIsSaved() {
     givenSavedRecipe(true)
     whenSetSavedRecipeIconCalled(savedRecipe = isSavedRecipe)
-    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_red_24dp)
+    thenSetFavoriteButtonIcon(Times(1), selectedAnimation)
   }
 
   @Test
@@ -69,7 +72,7 @@ class RecipeDetailActivityPresenterTest {
     whenFavoriteButtonClicked(false, isSavedRecipe, mockRecipe)
     theLaunchUiAuthActivity(Times(1))
     thenDeleteRecipeFromFirebase(never(), mockRecipe)
-    thenSetFavoriteButtonIcon(never(), R.drawable.ic_favorite_border_red_24dp)
+    thenSetFavoriteButtonIcon(never(), unselectedAnimation)
     thenShowSnackBar(never(), R.string.snackbar_recipe_deleted)
   }
 
@@ -83,7 +86,7 @@ class RecipeDetailActivityPresenterTest {
     givenSavedRecipe(true)
     whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
     thenDeleteRecipeFromFirebase(Times(1), mockRecipe)
-    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_border_red_24dp)
+    thenSetFavoriteButtonIcon(Times(1), unselectedAnimation)
     thenShowSnackBar(Times(1), R.string.snackbar_recipe_deleted)
   }
 
@@ -95,7 +98,7 @@ class RecipeDetailActivityPresenterTest {
     thenSaveUserIdAndEmail(Times(1))
     thenSaveRecipeToFirebase(mockRecipe)
     thenIsSavedRecipe(true)
-    thenSetFavoriteButtonIcon(Times(1), R.drawable.ic_favorite_red_24dp)
+    thenSetFavoriteButtonIcon(Times(1), selectedAnimation)
     thenShowSnackBar(Times(1), R.string.snackbar_recipe_saved)
   }
 
@@ -194,6 +197,30 @@ class RecipeDetailActivityPresenterTest {
     thenSetMealPlanButtonText(never(), selectedDay)
   }
 
+  @Test
+  fun shouldAnimateSavedRecipeIconToSelectedIfRecipeIsSavedWhenSetUpFavoriteButtonCalled() {
+    givenSavedRecipe(true)
+    whenSetUpFavoriteButtonCalled(firstTimeInActivity = false)
+    thenSetFavoriteButtonIcon(Times(1), selectedAnimation)
+    thenShowFavoriteButtonTutorialCircle(never())
+    thenSetIsFirstTimeInActivity(never(), false)
+  }
+
+  @Test
+  fun shouldNotAnimateFavoriteButtonIfRecipeIsNotAlreadySavedWhenSetUpFavoriteButtonCalled() {
+    givenSavedRecipe(false)
+    whenSetUpFavoriteButtonCalled(firstTimeInActivity = false)
+    thenSetFavoriteButtonIcon(never(), unselectedAnimation)
+  }
+
+  @Test
+  fun shouldShowFavoriteButtonTutorialAndSetIsFirstTimeInActivityToFalseWhenRecipeNotSavedWhenSetUpFavoriteButtonCalled() {
+    givenSavedRecipe(false)
+    whenSetUpFavoriteButtonCalled(firstTimeInActivity = true)
+    thenShowFavoriteButtonTutorialCircle(Times(1))
+    thenSetIsFirstTimeInActivity(Times(1), false)
+  }
+
   private fun givenSavedRecipe(isSaved: Boolean) {
     isSavedRecipe = isSaved
   }
@@ -255,8 +282,12 @@ class RecipeDetailActivityPresenterTest {
     presenter.setUpMealPlanButtonText(mockRecipe)
   }
 
-  private fun thenSetFavoriteButtonIcon(times: VerificationMode, icon: Int) {
-    verify(view, times).setFavoritedButtonFrame(icon)
+  private fun whenSetUpFavoriteButtonCalled(firstTimeInActivity: Boolean) {
+    presenter.setUpFavoriteButton(isSavedRecipe, firstTimeInActivity)
+  }
+
+  private fun thenSetFavoriteButtonIcon(times: VerificationMode, speed: Float) {
+    verify(view, times).setFavoritedButtonAnimationDirection(speed)
   }
 
   private fun thenSaveRecipeToMealPlanDb(times: VerificationMode) {
@@ -301,5 +332,13 @@ class RecipeDetailActivityPresenterTest {
 
   private fun thenSaveUserIdAndEmail(times: VerificationMode) {
     verify(firebaseRecipeRepository, times).saveUserIdAndUserEmail()
+  }
+
+  private fun thenShowFavoriteButtonTutorialCircle(times: VerificationMode) {
+    verify(view, times).showFavoriteButtonTutorialCircle()
+  }
+
+  private fun thenSetIsFirstTimeInActivity(times: VerificationMode, firstTime: Boolean) {
+    verify(view, times).setIsFirstTimeInActivity(firstTime)
   }
 }

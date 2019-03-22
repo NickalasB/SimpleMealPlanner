@@ -77,6 +77,9 @@ dependencies {
   //Lottie
   implementation "com.airbnb.android:lottie:$lottieVersion"
 
+  //TapTargetView
+  implementation "com.getkeepsafe.taptargetview:taptargetview:$tapTargetViewVersion"
+
   //Testing
   testImplementation "junit:junit:$junit_version"
   androidTestImplementation "androidx.test:runner:$test_runner_version"

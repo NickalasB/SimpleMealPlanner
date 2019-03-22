@@ -2,10 +2,10 @@ package com.zonkey.simplemealplanner.activity
 
 import android.Manifest
 import android.Manifest.permission
-import android.animation.Animator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -18,12 +18,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.firebase.ui.auth.IdpResponse
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -52,6 +55,7 @@ import javax.inject.Inject
 private const val RC_SIGN_IN_DETAIL = 200
 private const val RC_CONTACT_PICKER = 300
 private const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000
+internal const val PREFS_FIRST_TIME_KEY = "firstTime"
 
 class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
@@ -62,22 +66,16 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   lateinit var firebaseAuthRepository: DefaultFirebaseAuthRepository
 
   private lateinit var presenter: RecipeDetailActivityPresenter
-
-  override var isSavedRecipe = false
-
-  override var addedToMealPlan = false
-
+  private lateinit var sharedPreferences: SharedPreferences
   private lateinit var recipe: Recipe
-
+  override var isSavedRecipe = false
+  override var addedToMealPlan = false
   private var selectedDay: String = ""
-
-  private var favoriteClick = false
-
-  private var mealPlanClick = false
-
+  private var fromFavoriteClick = false
+  private var fromMealPlanClick = false
   private var destinationUserEmail = ""
-
   private var destinationUserDisplayName = ""
+  private var firstTimeInActivity = true
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -87,6 +85,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     super.onCreate(savedInstanceState)
     AndroidInjection.inject(this)
     setContentView(R.layout.activity_recipe_detail)
+
+    sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
+    firstTimeInActivity = sharedPreferences.getBoolean(PREFS_FIRST_TIME_KEY, true)
 
     presenter = RecipeDetailActivityPresenter(this, firebaseRepo)
 
@@ -140,41 +141,48 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   private fun setupFavoriteButton(recipe: Recipe) {
     isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
-
-    if (!isSavedRecipe) {
-      detail_favorite_button.playAnimation()
-      detail_favorite_button.repeatCount = 1
-
-      detail_favorite_button.addAnimatorListener(object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(animation: Animator?) {
-          //noOp
-        }
-
-        override fun onAnimationEnd(animation: Animator?) {
-          detail_favorite_button.frame = 0
-        }
-
-        override fun onAnimationCancel(animation: Animator?) {
-          //noOp
-        }
-
-        override fun onAnimationStart(animation: Animator?) {
-          //noOp
-        }
-
-      })
-    } else {
-      presenter.setSavedRecipeIcon(isSavedRecipe)
-    }
-
-
+    presenter.setUpFavoriteButton(isSavedRecipe, firstTimeInActivity)
     detail_favorite_button.setOnClickListener {
-      favoriteClick = true
-      presenter.onFavoriteButtonClicked(
-          isSignedIn = firebaseAuthRepository.currentUser != null,
-          savedRecipe = isSavedRecipe,
-          recipe = recipe)
+      handleFavoriteButtonClick(recipe)
     }
+  }
+
+  override fun showFavoriteButtonTutorialCircle() {
+    TapTargetView.showFor(this,
+        TapTarget.forView(
+            findViewById<LottieAnimationView>(R.id.detail_favorite_button),
+            getString(R.string.favorite_button_tutorial_title),
+            getString(R.string.favorite_button_tutorial_message))
+            .outerCircleColor(R.color.colorAccent)
+            .outerCircleAlpha(0.96f)
+            .transparentTarget(true)
+            .titleTextSize(36)
+            .titleTextColor(R.color.whiteText)
+            .descriptionTextColor(R.color.whiteText)
+            .descriptionTextAlpha(1f)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .targetRadius(40),
+        object : TapTargetView.Listener() {
+          override fun onTargetClick(view: TapTargetView?) {
+            super.onTargetClick(view)
+            handleFavoriteButtonClick(recipe)
+          }
+        }
+    )
+  }
+
+  override fun setIsFirstTimeInActivity(isFirstTime: Boolean) {
+    sharedPreferences.edit().putBoolean(PREFS_FIRST_TIME_KEY, isFirstTime).apply()
+  }
+
+  private fun handleFavoriteButtonClick(recipe: Recipe) {
+    fromFavoriteClick = true
+    presenter.onFavoriteButtonClicked(
+        isSignedIn = firebaseAuthRepository.currentUser != null,
+        savedRecipe = isSavedRecipe,
+        recipe = recipe)
   }
 
   private fun setupMealPlanDialog(recipe: Recipe) {
@@ -187,7 +195,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         selectedDay = days[which]
       }
       builder.setPositiveButton(getString(R.string.common_ok)) { dialog, _ ->
-        mealPlanClick = true
+        fromMealPlanClick = true
         presenter.onMealPlanDialogPositiveButtonClicked(
             isSignedIn = firebaseAuthRepository.currentUser != null,
             recipe = recipe,
@@ -287,8 +295,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     showSnackbar(snackbarString = snackBarText)
   }
 
-  override fun setFavoritedButtonFrame(frame: Int) {
-    detail_favorite_button.frame = frame
+  override fun setFavoritedButtonAnimationDirection(speed: Float) {
+    detail_favorite_button.speed = speed
+    detail_favorite_button.playAnimation()
   }
 
   //TODO this needs some work
@@ -309,10 +318,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         val response = IdpResponse.fromResultIntent(data)
 
         if (resultCode == Activity.RESULT_OK) {
-          if (favoriteClick) {
+          if (fromFavoriteClick) {
             presenter.onFavoriteButtonClicked(true, isSavedRecipe, recipe)
           }
-          if (mealPlanClick) {
+          if (fromMealPlanClick) {
             presenter.onMealPlanDialogPositiveButtonClicked(
                 isSignedIn = true,
                 recipe = recipe,

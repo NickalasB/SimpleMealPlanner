@@ -8,8 +8,8 @@ import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
 
-private const val FAVORITE_BUTTON_SELECTED_FRAME = 60
-private const val FAVORITE_BUTTON_UNSELECTED_FRAME = 0
+private const val FAVORITE_BUTTON_FORWARD_SPEED = 1f
+private const val FAVORITE_BUTTON_BACKWARDS_SPEED = -1f //setting speed to -1 reverses animation
 
 class RecipeDetailActivityPresenter(
     private val view: RecipeDetailView,
@@ -37,9 +37,9 @@ class RecipeDetailActivityPresenter(
 
   fun setSavedRecipeIcon(savedRecipe: Boolean) {
     if (savedRecipe) {
-      view.setFavoritedButtonFrame(FAVORITE_BUTTON_SELECTED_FRAME)
+      view.setFavoritedButtonAnimationDirection(FAVORITE_BUTTON_FORWARD_SPEED)
     } else {
-      view.setFavoritedButtonFrame(FAVORITE_BUTTON_UNSELECTED_FRAME)
+      view.setFavoritedButtonAnimationDirection(FAVORITE_BUTTON_BACKWARDS_SPEED)
     }
   }
 
@@ -106,5 +106,17 @@ class RecipeDetailActivityPresenter(
           snackbarStringRes = R.string.share_recipe_snackbar_user_not_registered,
           snackbarstringParameter = destinationUserName ?: destinationEmail)
     }
+  }
+
+  fun setUpFavoriteButton(isSavedRecipe: Boolean, firstTimeInActivity: Boolean) {
+    if (isSavedRecipe) {
+      setSavedRecipeIcon(isSavedRecipe)
+    } else {
+      if (firstTimeInActivity) {
+        view.showFavoriteButtonTutorialCircle()
+        view.setIsFirstTimeInActivity(false)
+      }
+    }
+
   }
 }
