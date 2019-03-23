@@ -24,4 +24,8 @@ interface MainView {
   fun smoothScrollToNewestMealPlanRecipe(mealPlanCount: Int)
 
   fun smoothScrollToNewestFavoritesRecipe(favoriteCount: Int)
+
+  fun refreshSavedRecipeViews()
+
+  fun saveHasRefreshedToSharedPrefs()
 }

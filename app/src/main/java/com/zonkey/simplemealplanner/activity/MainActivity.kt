@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), MainView {
     private const val RC_SIGN_IN_MAIN = 200
     private const val MEAL_PLAN_PREF_KEY = "meals"
     private const val FAVORITES_PREF_KEY = "favorites"
+    private const val HAS_REFRESHED_PREF_KEY = "hasRefreshed"
   }
 
   @Inject
@@ -87,11 +88,12 @@ class MainActivity : AppCompatActivity(), MainView {
 
     this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
+    sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
+
     refreshSavedRecipeViews()
 
     handleSearchQuery()
 
-    sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
   }
 
   private fun handleSearchQuery() {
@@ -110,7 +112,12 @@ class MainActivity : AppCompatActivity(), MainView {
   override fun onResume() {
     super.onResume()
 
-    updateMenuItems(firebaseAuthRepository.currentUser != null)
+    val isLoggedIn = firebaseAuthRepository.currentUser != null
+    val hasRefreshedSavedRecipes = sharedPreferences.getBoolean(HAS_REFRESHED_PREF_KEY, false)
+
+    presenter.refreshSavedRecipes(isLoggedIn, hasRefreshedSavedRecipes)
+
+    updateMenuItems(isLoggedIn)
 
     savedMealPlanCount = sharedPreferences.getInt(MEAL_PLAN_PREF_KEY, 0)
     val currentMealPlanCount = meal_plan_recipe_card_widget.adapter?.itemCount ?: 0
@@ -243,7 +250,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
   }
 
-  private fun refreshSavedRecipeViews() {
+  override fun refreshSavedRecipeViews() {
     setUpFavoriteRecipes()
     setUpMealPlanRecipes()
   }
@@ -300,6 +307,10 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun smoothScrollToNewestFavoritesRecipe(favoriteCount: Int) {
     favorites_recipe_card_widget.smoothScrollToNewestRecipe(favoriteCount)
+  }
+
+  override fun saveHasRefreshedToSharedPrefs() {
+    sharedPreferences.edit().putBoolean(MainActivity.HAS_REFRESHED_PREF_KEY, true).apply()
   }
 
   override fun onDestroy() {

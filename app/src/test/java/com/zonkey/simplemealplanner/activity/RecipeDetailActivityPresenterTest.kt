@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.activity
 
+import android.view.View
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -184,7 +185,7 @@ class RecipeDetailActivityPresenterTest {
   @Test
   fun shouldDisplayDayOfWeekOnMealPlanButtonWhenRecipeAddedToMealPlanAndDayOfWeekNotEmptyWhenSetUpMealPlanButtonTextCalled() {
     givenDay(TUESDAY.name)
-    givenRecipe(valueOf(selectedDay), true)
+    givenRecipe(valueOf(selectedDay), mealPlan = true)
     whenSetUpMealPlanButtonTextCalled()
     thenSetMealPlanButtonText(Times(1), selectedDay)
   }
@@ -192,7 +193,7 @@ class RecipeDetailActivityPresenterTest {
   @Test
   fun shouldNotDisplayDayOfWeekOnMealPlanButtonWhenRecipeNotAddedToMealPlanOrDayOfWeekEmptyWhenSetUpMealPlanButtonTextCalled() {
     givenDay(TUESDAY.name)
-    givenRecipe(valueOf(selectedDay), false)
+    givenRecipe(valueOf(selectedDay), mealPlan = false)
     whenSetUpMealPlanButtonTextCalled()
     thenSetMealPlanButtonText(never(), selectedDay)
   }
@@ -221,11 +222,70 @@ class RecipeDetailActivityPresenterTest {
     thenSetIsFirstTimeInActivity(Times(1), false)
   }
 
-  private fun givenSavedRecipe(isSaved: Boolean) {
-    isSavedRecipe = isSaved
+  @Test
+  fun shouldShowShareButtonTutorialIfSavedRecipeAndHasNotSeenTutorialWhenShowShareButtonTutorialCalled() {
+    givenRecipe(MONDAY, favorite = true)
+    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = false)
+    thenShowShareButtonTutorialCircle(Times(1))
   }
 
-  private fun givenRecipe(day: DayOfWeek, mealPlan: Boolean = false) {
+  @Test
+  fun shouldNotShowShareButtonTutorialIfNotSavedRecipeAndHasNotSeenTutorialWhenShowShareButtonTutorialCalled() {
+    givenRecipe(MONDAY, favorite = false)
+    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = false)
+    thenShowShareButtonTutorialCircle(never())
+  }
+
+  @Test
+  fun shouldNotShowShareButtonTutorialIfSavedRecipeAndHasSeenTutorialWhenShowShareButtonTutorialCalled() {
+    givenRecipe(MONDAY, favorite = true)
+    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = true)
+    thenShowShareButtonTutorialCircle(never())
+  }
+
+  @Test
+  fun shouldNotShowShareButtonTutorialIfNotSavedRecipeAndHasSeenTutorialWhenShowShareButtonTutorialCalled() {
+    givenRecipe(MONDAY, favorite = false)
+    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = true)
+    thenShowShareButtonTutorialCircle(never())
+  }
+
+  @Test
+  fun shouldShowShareButtonIfFavoriteRecipeWhenSetupShareButtonCalled() {
+    givenRecipe(TUESDAY, favorite = true, mealPlan = false)
+    whenSetupShareButtonCalled(mockRecipe)
+    thenSetShareButtonVisibility(Times(1), View.VISIBLE)
+  }
+
+  @Test
+  fun shouldShowShareButtonIfMealPlanRecipeWhenSetupShareButtonCalled() {
+    givenRecipe(TUESDAY, favorite = false, mealPlan = true)
+    whenSetupShareButtonCalled(mockRecipe)
+    thenSetShareButtonVisibility(Times(1), View.VISIBLE)
+  }
+
+  @Test
+  fun shouldNotShowShareButtonIfNotMealPlanRecipeOrFavoriteRecipeWhenSetupShareButtonCalled() {
+    givenRecipe(TUESDAY, favorite = false, mealPlan = false)
+    whenSetupShareButtonCalled(mockRecipe)
+    thenSetShareButtonVisibility(Times(1), View.GONE)
+  }
+
+  @Test
+  fun shouldHandlePermissionRequestIfPermissionNotGrantedWhenOnShareButtonClickedCalled() {
+    whenOnShareButtonClickedCalled(permissionGranted = false)
+    thenHandlePermissionRequest(Times(1))
+    thenLaunchContactPicker(never())
+  }
+
+  @Test
+  fun shouldLaunchContactPickerIfPermissionGrantedWhenOnShareButtonClickedCalled() {
+    whenOnShareButtonClickedCalled(permissionGranted = true)
+    thenLaunchContactPicker(Times(1))
+    thenHandlePermissionRequest(never())
+  }
+
+  private fun givenRecipe(day: DayOfWeek, mealPlan: Boolean = false, favorite: Boolean = false) {
     mockRecipe = Recipe(
         uri = "testUri1",
         label = "testLabel1",
@@ -243,7 +303,7 @@ class RecipeDetailActivityPresenterTest {
         totalDaily = NutrientInfo(),
         key = "testKey1",
         day = day,
-        favorite = true,
+        favorite = favorite,
         mealPlan = mealPlan
     )
   }
@@ -254,6 +314,10 @@ class RecipeDetailActivityPresenterTest {
 
   private fun givenDay(dayOfWeek: String) {
     selectedDay = dayOfWeek
+  }
+
+  private fun givenSavedRecipe(isSaved: Boolean) {
+    isSavedRecipe = isSaved
   }
 
   private fun whenFavoriteButtonClicked(isSignedIn: Boolean, savedRecipe: Boolean,
@@ -279,11 +343,23 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun whenSetUpMealPlanButtonTextCalled() {
-    presenter.setUpMealPlanButtonText(mockRecipe)
+    presenter.setupMealPlanButtonText(mockRecipe)
   }
 
   private fun whenSetUpFavoriteButtonCalled(firstTimeInActivity: Boolean) {
     presenter.setUpFavoriteButton(isSavedRecipe, firstTimeInActivity)
+  }
+
+  private fun whenShowShareButtonTutorialCalled(recipe: Recipe, hasSeenTutorial: Boolean) {
+    presenter.showShareButtonTutorial(recipe.favorite, hasSeenTutorial)
+  }
+
+  private fun whenSetupShareButtonCalled(recipe: Recipe) {
+    presenter.setupShareButton(recipe)
+  }
+
+  private fun whenOnShareButtonClickedCalled(permissionGranted: Boolean) {
+    presenter.onShareButtonClicked(permissionGranted)
   }
 
   private fun thenSetFavoriteButtonIcon(times: VerificationMode, speed: Float) {
@@ -340,5 +416,21 @@ class RecipeDetailActivityPresenterTest {
 
   private fun thenSetIsFirstTimeInActivity(times: VerificationMode, firstTime: Boolean) {
     verify(view, times).setIsFirstTimeInActivity(firstTime)
+  }
+
+  private fun thenShowShareButtonTutorialCircle(times: VerificationMode) {
+    verify(view, times).showShareButtonTutorialCircle()
+  }
+
+  private fun thenSetShareButtonVisibility(times: VerificationMode, visibility: Int) {
+    verify(view, times).setShareButtonVisibility(visibility)
+  }
+
+  private fun thenHandlePermissionRequest(times: VerificationMode) {
+    verify(view, times).handlePermissionRequest()
+  }
+
+  private fun thenLaunchContactPicker(times: VerificationMode) {
+    verify(view, times).launchContactPicker()
   }
 }

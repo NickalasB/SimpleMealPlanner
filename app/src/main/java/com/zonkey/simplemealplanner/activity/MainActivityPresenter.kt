@@ -86,4 +86,11 @@ class MainActivityPresenter(
       view.smoothScrollToNewestFavoritesRecipe(currentFavoritesCount)
     }
   }
+
+  fun refreshSavedRecipes(loggedIn: Boolean, hasRefreshedSavedRecipes: Boolean) {
+    if (loggedIn && !hasRefreshedSavedRecipes) {
+      view.refreshSavedRecipeViews()
+      view.saveHasRefreshedToSharedPrefs()
+    }
+  }
 }

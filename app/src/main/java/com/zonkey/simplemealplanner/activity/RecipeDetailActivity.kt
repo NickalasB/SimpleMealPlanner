@@ -56,6 +56,7 @@ private const val RC_SIGN_IN_DETAIL = 200
 private const val RC_CONTACT_PICKER = 300
 private const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000
 internal const val PREFS_FIRST_TIME_KEY = "firstTime"
+internal const val PREFS_SEEN_SHARE_TUTORIAL_KEY = "hasSeenShareTutorial"
 
 class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
@@ -76,6 +77,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   private var destinationUserEmail = ""
   private var destinationUserDisplayName = ""
   private var firstTimeInActivity = true
+  private var hasSeenShareButtonTutorial = false
+  private var contactPermissionGranted = false
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -88,6 +91,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
     firstTimeInActivity = sharedPreferences.getBoolean(PREFS_FIRST_TIME_KEY, true)
+    hasSeenShareButtonTutorial = sharedPreferences.getBoolean(PREFS_SEEN_SHARE_TUTORIAL_KEY, false)
 
     presenter = RecipeDetailActivityPresenter(this, firebaseRepo)
 
@@ -109,9 +113,11 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     setupMealPlanDialog(recipe)
 
-    presenter.setUpMealPlanButtonText(recipe)
+    presenter.setupMealPlanButtonText(recipe)
 
-    val contactPermissionGranted = ContextCompat.checkSelfPermission(this,
+    presenter.setupShareButton(recipe)
+
+    contactPermissionGranted = ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
 
     setUpShareButton(contactPermissionGranted)
@@ -173,6 +179,33 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     )
   }
 
+  override fun showShareButtonTutorialCircle() {
+    TapTargetView.showFor(this,
+        TapTarget.forView(
+            findViewById<LottieAnimationView>(R.id.detail_share_button),
+            getString(R.string.share_button_tutorial_title),
+            getString(R.string.share_button_tutorial_message))
+            .outerCircleColor(R.color.colorAccent)
+            .outerCircleAlpha(0.96f)
+            .transparentTarget(true)
+            .titleTextSize(36)
+            .titleTextColor(R.color.whiteText)
+            .descriptionTextColor(R.color.whiteText)
+            .descriptionTextAlpha(1f)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .targetRadius(40),
+        object : TapTargetView.Listener() {
+          override fun onTargetClick(view: TapTargetView?) {
+            super.onTargetClick(view)
+            onShareButtonClicked(contactPermissionGranted)
+          }
+        }
+    )
+    sharedPreferences.edit().putBoolean(PREFS_SEEN_SHARE_TUTORIAL_KEY, true).apply()
+  }
+
   override fun setIsFirstTimeInActivity(isFirstTime: Boolean) {
     sharedPreferences.edit().putBoolean(PREFS_FIRST_TIME_KEY, isFirstTime).apply()
   }
@@ -214,6 +247,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   private fun setUpShareButton(permissionGranted: Boolean) {
 
+    presenter.showShareButtonTutorial(isSavedRecipe, hasSeenShareButtonTutorial)
+
+
     detail_share_button.playAnimation()
     detail_share_button.repeatCount = 1
     detail_share_button.speed = 2f
@@ -221,15 +257,16 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     //ToDo handle disabling of button from the start if needed
 
     detail_share_button.setOnClickListener {
-      if (!permissionGranted) {
-        handlePermissionRequest()
-      } else {
-        launchContactPicker()
-      }
+      onShareButtonClicked(permissionGranted)
     }
   }
 
-  private fun handlePermissionRequest() {
+  private fun onShareButtonClicked(permissionGranted: Boolean) {
+    isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
+    presenter.onShareButtonClicked(permissionGranted)
+  }
+
+  override fun handlePermissionRequest() {
     if (ActivityCompat.shouldShowRequestPermissionRationale(this,
             permission.READ_CONTACTS)) {
 
@@ -265,7 +302,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     }
   }
 
-  private fun launchContactPicker() {
+  override fun launchContactPicker() {
     val contactPickerIntent = Intent(Intent.ACTION_PICK,
         ContactsContract.CommonDataKinds.Email.CONTENT_URI)
     startActivityForResult(contactPickerIntent, RC_CONTACT_PICKER)
@@ -298,6 +335,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override fun setFavoritedButtonAnimationDirection(speed: Float) {
     detail_favorite_button.speed = speed
     detail_favorite_button.playAnimation()
+  }
+
+  override fun setShareButtonVisibility(visibility: Int) {
+    detail_share_button.visibility = visibility
   }
 
   //TODO this needs some work

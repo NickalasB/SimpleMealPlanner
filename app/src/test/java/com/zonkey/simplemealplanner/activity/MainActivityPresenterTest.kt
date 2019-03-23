@@ -101,6 +101,27 @@ class MainActivityPresenterTest {
     thenSmoothScrollToFavoriteRecipeAtPosition(never(), 10)
   }
 
+  @Test
+  fun shouldRefreshSavedRecipeViewsAndSaveHasRefreshedStateIfLoggedInAndHasNotRefreshedSavedRecipesWhenRefreshSavedRecipesCalled() {
+    whenRefreshSavedRecipesCalled(loggedIn = true, hasRefreshed = false)
+    thenRefreshSavedRecipeViews(Times(1))
+    thenSaveHasRefreshedToSharedPrefs(Times(1))
+  }
+
+  @Test
+  fun shouldNotRefreshSavedRecipeViewsAndSaveHasRefreshedStateIfNotLoggedInAndHasNotRefreshedSavedRecipesWhenRefreshSavedRecipesCalled() {
+    whenRefreshSavedRecipesCalled(loggedIn = false, hasRefreshed = false)
+    thenRefreshSavedRecipeViews(never())
+    thenSaveHasRefreshedToSharedPrefs(never())
+  }
+
+  @Test
+  fun shouldNotRefreshSavedRecipeViewsAndSaveHasRefreshedStateIfLoggedInAndHasRefreshedSavedRecipesWhenRefreshSavedRecipesCalled() {
+    whenRefreshSavedRecipesCalled(loggedIn = true, hasRefreshed = true)
+    thenRefreshSavedRecipeViews(never())
+    thenSaveHasRefreshedToSharedPrefs(never())
+  }
+
   private fun givenDbRecipes() {
     dbRecipes = listOf(
         Recipe(
@@ -169,6 +190,10 @@ class MainActivityPresenterTest {
     presenter.scrollToNewMealPlanMealIfAdded(currentMealPlanCount, savedMealPlanCount)
   }
 
+  private fun whenRefreshSavedRecipesCalled(loggedIn: Boolean, hasRefreshed: Boolean) {
+    presenter.refreshSavedRecipes(loggedIn, hasRefreshed)
+  }
+
   private fun thenSetEmptySearchViewVisibility(times: VerificationMode, visibility: Int) {
     verify(view, times).setEmptySearchViewVisibility(visibility)
   }
@@ -199,4 +224,11 @@ class MainActivityPresenterTest {
     verify(view, times).smoothScrollToNewestMealPlanRecipe(recipePosition)
   }
 
+  private fun thenRefreshSavedRecipeViews(times: VerificationMode) {
+    verify(view, times).refreshSavedRecipeViews()
+  }
+
+  private fun thenSaveHasRefreshedToSharedPrefs(times: VerificationMode) {
+    verify(view, times).saveHasRefreshedToSharedPrefs()
+  }
 }

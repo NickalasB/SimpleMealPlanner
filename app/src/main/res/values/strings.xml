@@ -35,4 +35,6 @@
   <string name="share_dialog_message">Would You like to share this recipe with %s?</string>
   <string name="favorite_button_tutorial_title">Easily save your favorite recipes!</string>
   <string name="favorite_button_tutorial_message">Click on the heart to save a recipe. Click it again to remove it.</string>
+  <string name="share_button_tutorial_title">Now you can share this recipe!</string>
+  <string name="share_button_tutorial_message">Click the share button to add this recipe to someone else\'s app using your Google account.</string>
 </resources>

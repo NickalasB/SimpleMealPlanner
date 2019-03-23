@@ -21,4 +21,12 @@ interface RecipeDetailView {
   fun showFavoriteButtonTutorialCircle()
 
   fun setIsFirstTimeInActivity(isFirstTime: Boolean)
+
+  fun showShareButtonTutorialCircle()
+
+  fun setShareButtonVisibility(visibility: Int)
+
+  fun handlePermissionRequest()
+
+  fun launchContactPicker()
 }

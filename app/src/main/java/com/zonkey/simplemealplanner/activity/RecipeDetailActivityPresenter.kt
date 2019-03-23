@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.activity
 
+import android.view.View
 import com.google.android.gms.tasks.Task
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
@@ -82,7 +83,7 @@ class RecipeDetailActivityPresenter(
     }
   }
 
-  fun setUpMealPlanButtonText(recipe: Recipe) {
+  fun setupMealPlanButtonText(recipe: Recipe) {
     if (recipe.mealPlan && recipe.day.name.isNotEmpty()) {
       view.setMealPlanButtonText(selectedDayString = recipe.day.name)
     }
@@ -118,5 +119,28 @@ class RecipeDetailActivityPresenter(
       }
     }
 
+  }
+
+  fun showShareButtonTutorial(savedRecipe: Boolean, hasSeenShareButtonTutorial: Boolean) {
+    if (savedRecipe && !hasSeenShareButtonTutorial) {
+      view.showShareButtonTutorialCircle()
+    }
+  }
+
+  fun setupShareButton(recipe: Recipe) {
+    if(recipe.favorite || recipe.mealPlan) {
+      view.setShareButtonVisibility(View.VISIBLE)
+    } else {
+      view.setShareButtonVisibility(View.GONE)
+    }
+
+  }
+
+  fun onShareButtonClicked(permissionGranted: Boolean) {
+    if (!permissionGranted) {
+      view.handlePermissionRequest()
+    } else {
+      view.launchContactPicker()
+    }
   }
 }
