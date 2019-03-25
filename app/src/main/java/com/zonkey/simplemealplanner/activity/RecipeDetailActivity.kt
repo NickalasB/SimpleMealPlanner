@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.firebase.ui.auth.IdpResponse
 import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
@@ -33,6 +34,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
@@ -154,7 +156,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   }
 
   override fun showFavoriteButtonTutorialCircle() {
-    TapTargetView.showFor(this,
+    TapTargetSequence(this).targets(
         TapTarget.forView(
             findViewById<LottieAnimationView>(R.id.detail_favorite_button),
             getString(R.string.favorite_button_tutorial_title),
@@ -170,13 +172,24 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             .cancelable(true)
             .tintTarget(true)
             .targetRadius(40),
-        object : TapTargetView.Listener() {
-          override fun onTargetClick(view: TapTargetView?) {
-            super.onTargetClick(view)
-            handleFavoriteButtonClick(recipe)
-          }
-        }
-    )
+
+        TapTarget.forView(
+            findViewById<LottieAnimationView>(R.id.detail_save_to_meal_plan_button),
+            getString(string.meal_plan_button_tutorial_title),
+            getString(string.meal_plan_button_tutorial_message))
+            .outerCircleColor(R.color.midTranslucentBlue)
+            .outerCircleAlpha(0.96f)
+            .transparentTarget(true)
+            .titleTextSize(36)
+            .titleTextColor(R.color.whiteText)
+            .descriptionTextColor(R.color.whiteText)
+            .descriptionTextAlpha(1f)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .targetRadius(70)
+
+    ).start()
   }
 
   override fun showShareButtonTutorialCircle() {
@@ -195,13 +208,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             .drawShadow(true)
             .cancelable(true)
             .tintTarget(true)
-            .targetRadius(40),
-        object : TapTargetView.Listener() {
-          override fun onTargetClick(view: TapTargetView?) {
-            super.onTargetClick(view)
-            onShareButtonClicked(contactPermissionGranted)
-          }
-        }
+            .targetRadius(40)
     )
     sharedPreferences.edit().putBoolean(PREFS_SEEN_SHARE_TUTORIAL_KEY, true).apply()
   }
@@ -247,7 +254,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   private fun setUpShareButton(permissionGranted: Boolean) {
 
-    presenter.showShareButtonTutorial(isSavedRecipe, hasSeenShareButtonTutorial)
+    presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan,
+        hasSeenShareButtonTutorial)
 
 
     detail_share_button.playAnimation()
