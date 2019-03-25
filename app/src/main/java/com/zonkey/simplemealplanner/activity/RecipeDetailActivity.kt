@@ -14,6 +14,7 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -195,7 +196,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override fun showShareButtonTutorialCircle() {
     TapTargetView.showFor(this,
         TapTarget.forView(
-            findViewById<LottieAnimationView>(R.id.detail_share_button),
+            findViewById<View>(R.id.detail_share_button),
             getString(R.string.share_button_tutorial_title),
             getString(R.string.share_button_tutorial_message))
             .outerCircleColor(R.color.colorAccent)
@@ -256,13 +257,6 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan,
         hasSeenShareButtonTutorial)
-
-
-    detail_share_button.playAnimation()
-    detail_share_button.repeatCount = 1
-    detail_share_button.speed = 2f
-
-    //ToDo handle disabling of button from the start if needed
 
     detail_share_button.setOnClickListener {
       onShareButtonClicked(permissionGranted)

@@ -105,15 +105,15 @@
             app:lottie_rawRes="@raw/heart_animation"
             />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <View
             android:id="@+id/detail_share_button"
             android:layout_width="@dimen/detail_share_button_width"
             android:layout_height="@dimen/detail_share_button_height"
             android:layout_marginStart="@dimen/common_margin"
+            android:background="@drawable/ic_share_index_blue_24dp"
             app:layout_constraintBottom_toBottomOf="@+id/detail_save_to_meal_plan_button"
             app:layout_constraintStart_toEndOf="@+id/detail_save_to_meal_plan_button"
             app:layout_constraintTop_toTopOf="@id/detail_save_to_meal_plan_button"
-            app:lottie_rawRes="@raw/share_button_animation_index_blue"
             style="@style/ShareButton"
             />
 
