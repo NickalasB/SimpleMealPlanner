@@ -37,7 +37,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
@@ -124,40 +123,6 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
 
     setUpTutorialsAndButtonsAfterTransitionAnimation()
-  }
-
-  private fun setUpTutorialsAndButtonsAfterTransitionAnimation() {
-    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-      val sharedElementEnterTransition = window.sharedElementEnterTransition
-      sharedElementEnterTransition.addListener(object : TransitionListener {
-        override fun onTransitionStart(transition: Transition) {
-          //NoOp
-        }
-
-        override fun onTransitionEnd(transition: Transition) {
-          setUpButtonsAndTutorials()
-        }
-
-        override fun onTransitionCancel(transition: Transition) {
-          //NoOp
-        }
-
-        override fun onTransitionPause(transition: Transition) {
-          //NoOp
-        }
-
-        override fun onTransitionResume(transition: Transition) {
-          //NoOp
-        }
-      })
-    } else {
-      setUpButtonsAndTutorials() // still need to show tutorials and set click listeners
-    }
-  }
-
-  private fun setUpButtonsAndTutorials() {
-    setUpShareButton(contactPermissionGranted)
-    setupFavoriteButton(recipe)
   }
 
   private fun loadRecipeImage(recipe: Recipe) {
@@ -284,6 +249,40 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       }
       builder.create().show()
     }
+  }
+
+  private fun setUpTutorialsAndButtonsAfterTransitionAnimation() {
+    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+      val sharedElementEnterTransition = window.sharedElementEnterTransition
+      sharedElementEnterTransition.addListener(object : TransitionListener {
+        override fun onTransitionStart(transition: Transition) {
+          //NoOp
+        }
+
+        override fun onTransitionEnd(transition: Transition) {
+          setUpButtonsAndTutorials()
+        }
+
+        override fun onTransitionCancel(transition: Transition) {
+          //NoOp
+        }
+
+        override fun onTransitionPause(transition: Transition) {
+          //NoOp
+        }
+
+        override fun onTransitionResume(transition: Transition) {
+          //NoOp
+        }
+      })
+    } else {
+      setUpButtonsAndTutorials() // still need to show tutorials and set click listeners
+    }
+  }
+
+  private fun setUpButtonsAndTutorials() {
+    setUpShareButton(contactPermissionGranted)
+    setupFavoriteButton(recipe)
   }
 
   private fun setUpShareButton(permissionGranted: Boolean) {
