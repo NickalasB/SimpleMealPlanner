@@ -114,7 +114,7 @@ class RecipeDetailActivityPresenter(
       setSavedRecipeIcon(isSavedRecipe)
     } else {
       if (firstTimeInActivity) {
-        view.showFavoriteButtonTutorialCircle()
+        view.showFavoriteButtonAndMealPlanButtonTutorialCircles()
         view.setIsFirstTimeInActivity(false)
       }
     }
@@ -127,7 +127,7 @@ class RecipeDetailActivityPresenter(
     }
   }
 
-  fun setupShareButton(recipe: Recipe) {
+  fun setupShareButtonVisibility(recipe: Recipe) {
     if(recipe.favorite || recipe.mealPlan) {
       view.setShareButtonVisibility(View.VISIBLE)
     } else {

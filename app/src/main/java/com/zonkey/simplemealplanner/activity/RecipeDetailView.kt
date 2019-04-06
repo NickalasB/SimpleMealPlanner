@@ -18,7 +18,7 @@ interface RecipeDetailView {
 
   fun showSnackbar(@StringRes snackbarStringRes: Int = 0, snackbarString: String = "", snackbarstringParameter: String = "")
 
-  fun showFavoriteButtonTutorialCircle()
+  fun showFavoriteButtonAndMealPlanButtonTutorialCircles()
 
   fun setIsFirstTimeInActivity(isFirstTime: Boolean)
 

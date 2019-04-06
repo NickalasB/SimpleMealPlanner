@@ -279,23 +279,23 @@ class RecipeDetailActivityPresenterTest {
   }
 
   @Test
-  fun shouldShowShareButtonIfFavoriteRecipeWhenSetupShareButtonCalled() {
+  fun shouldShowShareButtonIfFavoriteRecipeWhenSetupShareButtonVisibilityCalled() {
     givenRecipe(TUESDAY, favorite = true, mealPlan = false)
-    whenSetupShareButtonCalled(mockRecipe)
+    whenSetupShareButtonVisibilityCalled(mockRecipe)
     thenSetShareButtonVisibility(Times(1), View.VISIBLE)
   }
 
   @Test
-  fun shouldShowShareButtonIfMealPlanRecipeWhenSetupShareButtonCalled() {
+  fun shouldShowShareButtonIfMealPlanRecipeWhenSetupShareButtonVisibilityCalled() {
     givenRecipe(TUESDAY, favorite = false, mealPlan = true)
-    whenSetupShareButtonCalled(mockRecipe)
+    whenSetupShareButtonVisibilityCalled(mockRecipe)
     thenSetShareButtonVisibility(Times(1), View.VISIBLE)
   }
 
   @Test
-  fun shouldNotShowShareButtonIfNotMealPlanRecipeOrFavoriteRecipeWhenSetupShareButtonCalled() {
+  fun shouldNotShowShareButtonIfNotMealPlanRecipeOrFavoriteRecipeWhenSetupShareButtonVisibilityCalled() {
     givenRecipe(TUESDAY, favorite = false, mealPlan = false)
-    whenSetupShareButtonCalled(mockRecipe)
+    whenSetupShareButtonVisibilityCalled(mockRecipe)
     thenSetShareButtonVisibility(Times(1), View.GONE)
   }
 
@@ -382,8 +382,8 @@ class RecipeDetailActivityPresenterTest {
     presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan, hasSeenTutorial)
   }
 
-  private fun whenSetupShareButtonCalled(recipe: Recipe) {
-    presenter.setupShareButton(recipe)
+  private fun whenSetupShareButtonVisibilityCalled(recipe: Recipe) {
+    presenter.setupShareButtonVisibility(recipe)
   }
 
   private fun whenOnShareButtonClickedCalled(permissionGranted: Boolean) {
@@ -439,7 +439,7 @@ class RecipeDetailActivityPresenterTest {
   }
 
   private fun thenShowFavoriteButtonTutorialCircle(times: VerificationMode) {
-    verify(view, times).showFavoriteButtonTutorialCircle()
+    verify(view, times).showFavoriteButtonAndMealPlanButtonTutorialCircles()
   }
 
   private fun thenSetIsFirstTimeInActivity(times: VerificationMode, firstTime: Boolean) {

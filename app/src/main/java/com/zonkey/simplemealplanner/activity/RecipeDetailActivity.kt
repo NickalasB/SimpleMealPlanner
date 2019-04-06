@@ -14,6 +14,8 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.transition.Transition
+import android.transition.Transition.TransitionListener
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -112,19 +114,50 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     detailed_recipe_card_view.setRecipeDetailCardItems(recipe)
 
-    setupFavoriteButton(recipe)
-
     setupMealPlanDialog(recipe)
 
     presenter.setupMealPlanButtonText(recipe)
 
-    presenter.setupShareButton(recipe)
+    presenter.setupShareButtonVisibility(recipe)
 
     contactPermissionGranted = ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
 
-    setUpShareButton(contactPermissionGranted)
+    setUpTutorialsAndButtonsAfterTransitionAnimation()
+  }
 
+  private fun setUpTutorialsAndButtonsAfterTransitionAnimation() {
+    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+      val sharedElementEnterTransition = window.sharedElementEnterTransition
+      sharedElementEnterTransition.addListener(object : TransitionListener {
+        override fun onTransitionStart(transition: Transition) {
+          //NoOp
+        }
+
+        override fun onTransitionEnd(transition: Transition) {
+          setUpButtonsAndTutorials()
+        }
+
+        override fun onTransitionCancel(transition: Transition) {
+          //NoOp
+        }
+
+        override fun onTransitionPause(transition: Transition) {
+          //NoOp
+        }
+
+        override fun onTransitionResume(transition: Transition) {
+          //NoOp
+        }
+      })
+    } else {
+      setUpButtonsAndTutorials() // still need to show tutorials and set click listeners
+    }
+  }
+
+  private fun setUpButtonsAndTutorials() {
+    setUpShareButton(contactPermissionGranted)
+    setupFavoriteButton(recipe)
   }
 
   private fun loadRecipeImage(recipe: Recipe) {
@@ -156,7 +189,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     }
   }
 
-  override fun showFavoriteButtonTutorialCircle() {
+  override fun showFavoriteButtonAndMealPlanButtonTutorialCircles() {
     TapTargetSequence(this).targets(
         TapTarget.forView(
             findViewById<LottieAnimationView>(R.id.detail_favorite_button),
