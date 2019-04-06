@@ -209,9 +209,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
         TapTarget.forView(
             findViewById<LottieAnimationView>(R.id.detail_save_to_meal_plan_button),
-            getString(string.meal_plan_button_tutorial_title),
-            getString(string.meal_plan_button_tutorial_message))
-            .outerCircleColor(R.color.midTranslucentBlue)
+            getString(R.string.meal_plan_button_tutorial_title),
+            getString(R.string.meal_plan_button_tutorial_message))
+            .outerCircleColor(R.color.colorPrimary)
             .outerCircleAlpha(0.96f)
             .transparentTarget(true)
             .titleTextSize(36)
