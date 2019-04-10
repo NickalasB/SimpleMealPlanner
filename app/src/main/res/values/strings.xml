@@ -39,4 +39,5 @@
   <string name="share_button_tutorial_message">Click the share button to add this recipe to another Simple Meal Planner user\'s app to easily coordinate meals.</string>
   <string name="meal_plan_button_tutorial_title">Plan your meals for the week!</string>
   <string name="meal_plan_button_tutorial_message">Click this button to save a recipe to any day of the week for quick and simple meal planning.</string>
+  <string name="disabled_share_button_snackbar_message">Add recipe to meal plan to share</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.zonkey.simplemealplanner.activity
 
-import android.view.View
 import com.google.android.gms.tasks.Task
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
@@ -66,12 +65,14 @@ class RecipeDetailActivityPresenter(
           view.setMealPlanButtonText(
               mealPlanButtonStringRes = R.string.detail_meal_plan_button_text)
           firebaseRepo.removeRecipeFromMealPlan(recipe)
+          view.addedToMealPlan = false
         }
         else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
       }
       showRecipeDetailSnackBar(selectedDay)
       firebaseRepo.saveUserIdAndUserEmail()
     }
+    setShareButtonBackground(view.addedToMealPlan)
   }
 
   fun showRecipeDetailSnackBar(selectedDay: String) {
@@ -93,9 +94,10 @@ class RecipeDetailActivityPresenter(
       destinationEmail: String) {
 
     if (userToShareWith != null) {
-      val action: List<Task<Void>> = firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId, recipe, recipe.day)
+      val action: List<Task<Void>> = firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId,
+          recipe, recipe.day)
 
-          action.last()
+      action.last()
           .addOnSuccessListener {
             view.showSnackbar(
                 snackbarStringRes = R.string.share_snackbar_success_text,
@@ -127,20 +129,27 @@ class RecipeDetailActivityPresenter(
     }
   }
 
-  fun setupShareButtonVisibility(recipe: Recipe) {
-    if(recipe.favorite || recipe.mealPlan) {
-      view.setShareButtonVisibility(View.VISIBLE)
+  fun setShareButtonBackground(isMealPlanRecipe: Boolean) {
+    if (isMealPlanRecipe) {
+      view.setShareButtonBackground(R.drawable.ic_share_index_blue_24dp)
     } else {
-      view.setShareButtonVisibility(View.GONE)
+      view.setShareButtonBackground(R.drawable.ic_share_disabled_24dp)
     }
-
   }
 
-  fun onShareButtonClicked(permissionGranted: Boolean) {
-    if (!permissionGranted) {
-      view.handlePermissionRequest()
-    } else {
-      view.launchContactPicker()
+  fun onShareButtonClicked(permissionGranted: Boolean, savedToMealPlanAlready: Boolean) {
+    when (savedToMealPlanAlready) {
+      true -> {
+        when (permissionGranted) {
+          true -> view.launchContactPicker()
+          false -> view.handlePermissionRequest()
+        }
+      }
+      false -> {
+        view.showRecipeDetailSnackBar(
+            snackBarStringRes = R.string.disabled_share_button_snackbar_message)
+        return
+      }
     }
   }
 }

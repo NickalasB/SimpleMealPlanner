@@ -1,6 +1,6 @@
 package com.zonkey.simplemealplanner.activity
 
-import android.view.View
+import androidx.annotation.DrawableRes
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -16,6 +16,8 @@ import com.zonkey.simplemealplanner.model.Diet
 import com.zonkey.simplemealplanner.model.Ingredient
 import com.zonkey.simplemealplanner.model.NutrientInfo
 import com.zonkey.simplemealplanner.model.Recipe
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -71,14 +73,10 @@ class RecipeDetailActivityPresenterTest {
     givenRecipe(MONDAY)
     givenSavedRecipe(true)
     whenFavoriteButtonClicked(false, isSavedRecipe, mockRecipe)
-    theLaunchUiAuthActivity(Times(1))
+    thenLaunchUiAuthActivity(Times(1))
     thenDeleteRecipeFromFirebase(never(), mockRecipe)
     thenSetFavoriteButtonIcon(never(), unselectedAnimation)
     thenShowSnackBar(never(), R.string.snackbar_recipe_deleted)
-  }
-
-  private fun theLaunchUiAuthActivity(times: Times) {
-    verify(view, times).launchUIAuthActivity()
   }
 
   @Test
@@ -107,12 +105,12 @@ class RecipeDetailActivityPresenterTest {
   fun shouldLaunchUIAuthActivityWhenLoggedOutWhenMealPlanDialogPositiveButtonClicked() {
     givenDay(DayOfWeek.MONDAY.name)
     givenRecipe(valueOf(selectedDay))
-    givenAddedToMealPlanAlready(true)
+    givenAddedToMealPlan(true)
     givenSavedRecipe(true)
     whenOnMealPlanDialogPositiveButtonClickedCalled(false, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
-    theLaunchUiAuthActivity(Times(1))
+    thenLaunchUiAuthActivity(Times(1))
     thenUpdateMealPlanRecipeDayCalled(never())
     thenSaveRecipeToMealPlanDb(never())
     thenSetMealPlanButtonText(never(), selectedDay)
@@ -122,7 +120,7 @@ class RecipeDetailActivityPresenterTest {
   fun shouldUpdateMealPlanRecipeDayIfAlreadyAddedToMealPlanDbWhenMealPlanDialogPositiveButtonClicked() {
     givenDay(DayOfWeek.MONDAY.name)
     givenRecipe(valueOf(selectedDay))
-    givenAddedToMealPlanAlready(true)
+    givenAddedToMealPlan(true)
     givenSavedRecipe(true)
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
@@ -135,8 +133,6 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSaveRecipeToMealPlanDbAndSetAddedToMealPlanTrueIfNotAlreadyAddedToMealPlanDbWhenMealPlanDialogPositiveButtonClicked() {
     givenDay(DayOfWeek.FRIDAY.name)
     givenRecipe(valueOf(selectedDay))
-    givenAddedToMealPlanAlready(false)
-    givenSavedRecipe(true)
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
@@ -159,11 +155,13 @@ class RecipeDetailActivityPresenterTest {
   fun shouldSetMealPlanButtonTextToDefaultIfRemovedWhenOnMealPlanDialogPositiveButtonClicked() {
     givenDay(DayOfWeek.REMOVE.name)
     givenRecipe(valueOf(selectedDay))
+    givenAddedToMealPlan(mockRecipe.mealPlan)
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay, isSavedRecipe)
     thenSetMealPlanButtonTextToDefault(Times(1), R.string.detail_meal_plan_button_text)
     thenRemoveRecipeFromMealPlan(Times(1), mockRecipe)
     thenSetMealPlanButtonText(never(), selectedDay)
+    thenRecipeAddedToMealPlan(false)
   }
 
   @Test
@@ -279,37 +277,60 @@ class RecipeDetailActivityPresenterTest {
   }
 
   @Test
-  fun shouldShowShareButtonIfFavoriteRecipeWhenSetupShareButtonVisibilityCalled() {
-    givenRecipe(TUESDAY, favorite = true, mealPlan = false)
-    whenSetupShareButtonVisibilityCalled(mockRecipe)
-    thenSetShareButtonVisibility(Times(1), View.VISIBLE)
+  fun shouldSetShareButtonEnabledBackgroundIfIsMealPlanRecipeWhenSetShareButtonBackgroundCalled() {
+    givenRecipe(TUESDAY, mealPlan = true)
+    givenAddedToMealPlan(mockRecipe.mealPlan)
+    whenSetShareButtonBackgroundCalled(mockRecipe)
+    thenSetShareButtonBackground(Times(1), R.drawable.ic_share_index_blue_24dp)
   }
 
   @Test
-  fun shouldShowShareButtonIfMealPlanRecipeWhenSetupShareButtonVisibilityCalled() {
-    givenRecipe(TUESDAY, favorite = false, mealPlan = true)
-    whenSetupShareButtonVisibilityCalled(mockRecipe)
-    thenSetShareButtonVisibility(Times(1), View.VISIBLE)
+  fun shouldSethareButtonDisabledBackgroundIfIsMealPlanRecipeWhenSetShareButtonBackgroundCalled() {
+    givenRecipe(TUESDAY, mealPlan = false)
+    givenAddedToMealPlan(mockRecipe.mealPlan)
+    whenSetShareButtonBackgroundCalled(mockRecipe)
+    thenSetShareButtonBackground(Times(1), R.drawable.ic_share_disabled_24dp)
   }
 
   @Test
   fun shouldNotShowShareButtonIfNotMealPlanRecipeOrFavoriteRecipeWhenSetupShareButtonVisibilityCalled() {
     givenRecipe(TUESDAY, favorite = false, mealPlan = false)
-    whenSetupShareButtonVisibilityCalled(mockRecipe)
-    thenSetShareButtonVisibility(Times(1), View.GONE)
+    givenAddedToMealPlan(mockRecipe.mealPlan)
+    whenSetShareButtonBackgroundCalled(mockRecipe)
+    thenSetShareButtonBackground(Times(1), R.drawable.ic_share_disabled_24dp)
   }
 
   @Test
   fun shouldHandlePermissionRequestIfPermissionNotGrantedWhenOnShareButtonClickedCalled() {
-    whenOnShareButtonClickedCalled(permissionGranted = false)
+    givenAddedToMealPlan(true)
+    whenOnShareButtonClickedCalled(
+        permissionGranted = false,
+        savedToMealPlanAlready = view.addedToMealPlan)
     thenHandlePermissionRequest(Times(1))
     thenLaunchContactPicker(never())
+    thenShowSnackBar(never(), R.string.disabled_share_button_snackbar_message)
   }
 
   @Test
   fun shouldLaunchContactPickerIfPermissionGrantedWhenOnShareButtonClickedCalled() {
-    whenOnShareButtonClickedCalled(permissionGranted = true)
+    givenAddedToMealPlan(true)
+    whenOnShareButtonClickedCalled(
+        permissionGranted = true,
+        savedToMealPlanAlready = view.addedToMealPlan)
     thenLaunchContactPicker(Times(1))
+    thenHandlePermissionRequest(never())
+    thenShowSnackBar(never(), R.string.disabled_share_button_snackbar_message)
+  }
+
+  @Test
+  fun shouldShowShareButtonDisabledSnackBarWhenOnShareButtonClickedIfNotSavedToMealPlanAready() {
+    givenAddedToMealPlan(false)
+    whenOnShareButtonClickedCalled(
+        permissionGranted = false,
+        savedToMealPlanAlready = view.addedToMealPlan
+    )
+    thenShowSnackBar(Times(1), R.string.disabled_share_button_snackbar_message)
+    thenLaunchContactPicker(never())
     thenHandlePermissionRequest(never())
   }
 
@@ -336,7 +357,7 @@ class RecipeDetailActivityPresenterTest {
     )
   }
 
-  private fun givenAddedToMealPlanAlready(added: Boolean) {
+  private fun givenAddedToMealPlan(added: Boolean) {
     whenever(view.addedToMealPlan).thenReturn(added)
   }
 
@@ -382,12 +403,13 @@ class RecipeDetailActivityPresenterTest {
     presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan, hasSeenTutorial)
   }
 
-  private fun whenSetupShareButtonVisibilityCalled(recipe: Recipe) {
-    presenter.setupShareButtonVisibility(recipe)
+  private fun whenSetShareButtonBackgroundCalled(recipe: Recipe) {
+    presenter.setShareButtonBackground(recipe.mealPlan)
   }
 
-  private fun whenOnShareButtonClickedCalled(permissionGranted: Boolean) {
-    presenter.onShareButtonClicked(permissionGranted)
+  private fun whenOnShareButtonClickedCalled(permissionGranted: Boolean,
+      savedToMealPlanAlready: Boolean) {
+    presenter.onShareButtonClicked(permissionGranted, savedToMealPlanAlready)
   }
 
   private fun thenSetFavoriteButtonIcon(times: VerificationMode, speed: Float) {
@@ -450,15 +472,27 @@ class RecipeDetailActivityPresenterTest {
     verify(view, times).showShareButtonTutorialCircle()
   }
 
-  private fun thenSetShareButtonVisibility(times: VerificationMode, visibility: Int) {
-    verify(view, times).setShareButtonVisibility(visibility)
-  }
-
   private fun thenHandlePermissionRequest(times: VerificationMode) {
     verify(view, times).handlePermissionRequest()
   }
 
   private fun thenLaunchContactPicker(times: VerificationMode) {
     verify(view, times).launchContactPicker()
+  }
+
+  private fun thenSetShareButtonBackground(
+      times: VerificationMode, @DrawableRes buttonBackgroundId: Int) {
+    verify(view, times).setShareButtonBackground(buttonBackgroundId)
+  }
+
+  private fun thenRecipeAddedToMealPlan(addedToMealPlan: Boolean) {
+    when (addedToMealPlan) {
+      true -> assertTrue("addedToMealPlan expected to be true", view.addedToMealPlan)
+      false -> assertFalse("addedToMealPlan expected to be false", view.addedToMealPlan)
+    }
+  }
+
+  private fun thenLaunchUiAuthActivity(times: Times) {
+    verify(view, times).launchUIAuthActivity()
   }
 }

@@ -1,5 +1,6 @@
 package com.zonkey.simplemealplanner.activity
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
 interface RecipeDetailView {
@@ -24,9 +25,9 @@ interface RecipeDetailView {
 
   fun showShareButtonTutorialCircle()
 
-  fun setShareButtonVisibility(visibility: Int)
-
   fun handlePermissionRequest()
 
   fun launchContactPicker()
+
+  fun setShareButtonBackground(@DrawableRes shareButtonResId: Int)
 }

@@ -17,6 +17,7 @@ import android.provider.ContactsContract.CommonDataKinds.Email
 import android.transition.Transition
 import android.transition.Transition.TransitionListener
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -117,12 +118,20 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     presenter.setupMealPlanButtonText(recipe)
 
-    presenter.setupShareButtonVisibility(recipe)
+    presenter.setShareButtonBackground(recipe.mealPlan)
 
     contactPermissionGranted = ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
 
+  }
+
+  override fun onResume() {
+    super.onResume()
     setUpTutorialsAndButtonsAfterTransitionAnimation()
+  }
+
+  override fun setShareButtonBackground(@DrawableRes shareButtonResId: Int) {
+    detail_share_button.background = ContextCompat.getDrawable(this, shareButtonResId)
   }
 
   private fun loadRecipeImage(recipe: Recipe) {
@@ -291,13 +300,13 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         hasSeenShareButtonTutorial)
 
     detail_share_button.setOnClickListener {
-      onShareButtonClicked(permissionGranted)
+      onShareButtonClicked(permissionGranted, recipe.mealPlan || addedToMealPlan)
     }
   }
 
-  private fun onShareButtonClicked(permissionGranted: Boolean) {
+  private fun onShareButtonClicked(permissionGranted: Boolean, savedToMealPLan: Boolean) {
     isSavedRecipe = intent.getBooleanExtra(FROM_FAVORITE, false)
-    presenter.onShareButtonClicked(permissionGranted)
+    presenter.onShareButtonClicked(permissionGranted, savedToMealPLan)
   }
 
   override fun handlePermissionRequest() {
@@ -328,8 +337,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
           launchContactPicker()
         } else {
-          detail_share_button.background = ContextCompat.getDrawable(this,
-              R.drawable.ic_share_disabled_24dp)
+          setShareButtonBackground(R.drawable.ic_share_disabled_24dp)
         }
         return
       }
@@ -369,10 +377,6 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   override fun setFavoritedButtonAnimationDirection(speed: Float) {
     detail_favorite_button.speed = speed
     detail_favorite_button.playAnimation()
-  }
-
-  override fun setShareButtonVisibility(visibility: Int) {
-    detail_share_button.visibility = visibility
   }
 
   //TODO this needs some work
