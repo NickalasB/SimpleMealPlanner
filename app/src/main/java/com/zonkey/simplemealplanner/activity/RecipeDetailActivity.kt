@@ -486,6 +486,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       snackbarStringRes != 0 -> getString(snackbarStringRes, snackbarstringParameter)
       else -> snackbarString
     }
-    Snackbar.make(detail_recipe_parent_layout, snackBarText, Snackbar.LENGTH_LONG).show()
+    val snackbar = Snackbar.make(detail_recipe_parent_layout, snackBarText, Snackbar.LENGTH_LONG)
+    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+    snackbar.show()
   }
 }

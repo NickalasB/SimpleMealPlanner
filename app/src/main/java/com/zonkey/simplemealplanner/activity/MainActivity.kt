@@ -11,7 +11,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
@@ -219,8 +221,7 @@ class MainActivity : AppCompatActivity(), MainView {
       R.id.sign_out -> {
         authUI.signOut(this).addOnCompleteListener {
           refreshSavedRecipeViews()
-          Snackbar.make(recipe_main_constraint_layout,
-              getString(string.snack_bar_sign_out_message), Snackbar.LENGTH_SHORT).show()
+          showSnackbar(R.string.snack_bar_sign_out_message)
         }
         true
       }
@@ -239,8 +240,7 @@ class MainActivity : AppCompatActivity(), MainView {
       val response = IdpResponse.fromResultIntent(data)
 
       if (resultCode == Activity.RESULT_OK) {
-        Snackbar.make(recipe_main_constraint_layout, getString(string.snackbar_sign_in_message),
-            Snackbar.LENGTH_SHORT).show()
+        showSnackbar(R.string.snackbar_sign_in_message)
         firebaseRecipeRepository.saveUserIdAndUserEmail()
         updateMenuItems(firebaseAuthRepository.currentUser != null)
         refreshSavedRecipeViews()
@@ -248,6 +248,13 @@ class MainActivity : AppCompatActivity(), MainView {
         Timber.e(response?.error, "Failed to log-in")
       }
     }
+  }
+
+  private fun showSnackbar(@StringRes messageId: Int) {
+    val snackbar = Snackbar.make(recipe_main_constraint_layout,
+        getString(messageId), Snackbar.LENGTH_SHORT)
+    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+    snackbar.show()
   }
 
   override fun refreshSavedRecipeViews() {
