@@ -11,7 +11,7 @@ interface FirebaseRecipeRepository {
 
   val userRecipeDatabase: DatabaseReference
 
-  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): List<Task<Void>>
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): Task<Void>
 
   fun saveUserIdAndUserEmail()
 
@@ -19,11 +19,11 @@ interface FirebaseRecipeRepository {
 
   fun removeRecipeAsFavorite(recipe: Recipe)
 
-  fun saveRecipeToMealPlan(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean)
+  fun saveRecipeToMealPlan(recipe: Recipe, dayOfWeek: DayOfWeek, isSavedRecipe: Boolean): Task<Void>
 
   fun purgeUnsavedRecipe(recipe: Recipe)
 
   fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek)
 
-  fun removeRecipeFromMealPlan(recipe: Recipe)
+  fun removeRecipeFromMealPlan(recipe: Recipe): Task<Void>
 }

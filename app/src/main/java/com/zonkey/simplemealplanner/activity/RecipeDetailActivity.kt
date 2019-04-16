@@ -83,7 +83,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   private var destinationUserDisplayName = ""
   private var firstTimeInActivity = true
   private var hasSeenShareButtonTutorial = false
-  private var contactPermissionGranted = false
+  override var contactPermissionGranted = false
 
   companion object {
     fun buildIntent(context: Context): Intent = Intent(context, RecipeDetailActivity::class.java)
@@ -290,17 +290,17 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   }
 
   private fun setUpButtonsAndTutorials() {
-    setUpShareButton(contactPermissionGranted)
+    setUpShareButton(contactPermissionGranted, recipe.mealPlan)
     setupFavoriteButton(recipe)
   }
 
-  private fun setUpShareButton(permissionGranted: Boolean) {
+  override fun setUpShareButton(permissionGranted: Boolean, addedToMealPlan: Boolean) {
 
     presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan,
         hasSeenShareButtonTutorial)
 
     detail_share_button.setOnClickListener {
-      onShareButtonClicked(permissionGranted, recipe.mealPlan || addedToMealPlan)
+      onShareButtonClicked(permissionGranted, addedToMealPlan)
     }
   }
 

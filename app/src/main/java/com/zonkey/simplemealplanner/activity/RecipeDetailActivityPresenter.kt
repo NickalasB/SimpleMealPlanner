@@ -1,6 +1,5 @@
 package com.zonkey.simplemealplanner.activity
 
-import com.google.android.gms.tasks.Task
 import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
@@ -57,22 +56,28 @@ class RecipeDetailActivityPresenter(
             DayOfWeek.valueOf(selectedDay))
         else -> {
           firebaseRepo.saveRecipeToMealPlan(recipe, DayOfWeek.valueOf(selectedDay), isSavedRecipe)
-          view.addedToMealPlan = true
+              .addOnSuccessListener {
+                view.addedToMealPlan = true
+                view.setUpShareButton(view.contactPermissionGranted, view.addedToMealPlan)
+                setShareButtonBackground(view.addedToMealPlan)
+              }
         }
       }
       when (DayOfWeek.valueOf(selectedDay)) {
         REMOVE -> {
           view.setMealPlanButtonText(
               mealPlanButtonStringRes = R.string.detail_meal_plan_button_text)
-          firebaseRepo.removeRecipeFromMealPlan(recipe)
-          view.addedToMealPlan = false
+          firebaseRepo.removeRecipeFromMealPlan(recipe).addOnSuccessListener {
+            view.addedToMealPlan = false
+            view.setUpShareButton(view.contactPermissionGranted, view.addedToMealPlan)
+            setShareButtonBackground(view.addedToMealPlan)
+          }
         }
         else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
       }
       showRecipeDetailSnackBar(selectedDay)
       firebaseRepo.saveUserIdAndUserEmail()
     }
-    setShareButtonBackground(view.addedToMealPlan)
   }
 
   fun showRecipeDetailSnackBar(selectedDay: String) {
@@ -94,10 +99,8 @@ class RecipeDetailActivityPresenter(
       destinationEmail: String) {
 
     if (userToShareWith != null) {
-      val action: List<Task<Void>> = firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId,
+      firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId,
           recipe, recipe.day)
-
-      action.last()
           .addOnSuccessListener {
             view.showSnackbar(
                 snackbarStringRes = R.string.share_snackbar_success_text,

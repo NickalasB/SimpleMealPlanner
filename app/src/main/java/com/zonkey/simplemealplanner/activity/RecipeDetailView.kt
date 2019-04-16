@@ -9,6 +9,8 @@ interface RecipeDetailView {
 
   var addedToMealPlan: Boolean
 
+  var contactPermissionGranted: Boolean
+
   fun setFavoritedButtonAnimationDirection(speed: Float)
 
   fun showRecipeDetailSnackBar(@StringRes snackBarStringRes: Int = 0, snackBarString: String? = "", dayOfWeek: String? = "")
@@ -30,4 +32,6 @@ interface RecipeDetailView {
   fun launchContactPicker()
 
   fun setShareButtonBackground(@DrawableRes shareButtonResId: Int)
+
+  fun setUpShareButton(permissionGranted: Boolean, addedToMealPlan: Boolean)
 }

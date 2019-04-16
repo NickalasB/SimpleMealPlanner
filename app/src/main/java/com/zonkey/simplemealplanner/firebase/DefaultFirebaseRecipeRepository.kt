@@ -1,6 +1,7 @@
 package com.zonkey.simplemealplanner.firebase
 
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -58,22 +59,26 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
   }
 
   override fun saveRecipeToMealPlan(recipe: Recipe, dayOfWeek: DayOfWeek,
-      isSavedRecipe: Boolean) {
+      isSavedRecipe: Boolean): Task<Void> {
     val favoriteRecipeDbRef = userRecipeDatabase
-    if ((favoriteRecipeDbRef.child(recipe.key).key != recipe.key)) {
+    return if ((favoriteRecipeDbRef.child(recipe.key).key != recipe.key)) {
       val key = favoriteRecipeDbRef.push().key ?: ""
       recipe.key = key
-      favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
-      favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
-      favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+      Tasks.whenAll(
+          favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
+          favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
+          favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+      )
     } else {
-      favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek)
-      favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+      Tasks.whenAll(
+          favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
+          favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+      )
     }
   }
 
   override
-  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): List<Task<Void>> {
+  fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): Task<Void> {
     val favoriteRecipeDbRef =
         firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
             .child(USERS)
@@ -81,10 +86,10 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
             .child(RECIPES)
     val key = favoriteRecipeDbRef.push().key ?: ""
     recipe.key = key
-    return listOf(
-    favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
-    favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
-    favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
+    return Tasks.whenAll(
+        favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
+        favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
+        favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
     )
   }
 
@@ -95,10 +100,10 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
         .setValue(dayOfWeek)
   }
 
-  override fun removeRecipeFromMealPlan(recipe: Recipe) {
+  override fun removeRecipeFromMealPlan(recipe: Recipe): Task<Void> {
     val recipeDbRef = userRecipeDatabase
         .child(recipe.key)
-    recipeDbRef.child(MEAL_PLAN).setValue(false)
+    return recipeDbRef.child(MEAL_PLAN).setValue(false)
   }
 
   override fun saveUserIdAndUserEmail() {
