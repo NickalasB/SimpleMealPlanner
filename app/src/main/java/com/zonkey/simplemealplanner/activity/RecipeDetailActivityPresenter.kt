@@ -126,8 +126,8 @@ class RecipeDetailActivityPresenter(
 
   }
 
-  fun showShareButtonTutorial(savedRecipe: Boolean, hasSeenShareButtonTutorial: Boolean) {
-    if (savedRecipe && !hasSeenShareButtonTutorial) {
+  fun showShareButtonTutorial(firstTimeInActivity: Boolean, savedRecipe: Boolean, hasSeenShareButtonTutorial: Boolean) {
+    if (firstTimeInActivity && savedRecipe && !hasSeenShareButtonTutorial) {
       view.showShareButtonTutorialCircle()
     }
   }

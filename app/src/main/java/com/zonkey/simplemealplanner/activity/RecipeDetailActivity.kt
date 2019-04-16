@@ -296,7 +296,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   override fun setUpShareButton(permissionGranted: Boolean, addedToMealPlan: Boolean) {
 
-    presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan,
+    presenter.showShareButtonTutorial(
+        firstTimeInActivity,
+        (recipe.favorite || recipe.mealPlan),
         hasSeenShareButtonTutorial)
 
     detail_share_button.setOnClickListener {
@@ -336,6 +338,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
         if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
           launchContactPicker()
+          setShareButtonBackground(R.drawable.ic_share_index_blue_24dp)
         } else {
           setShareButtonBackground(R.drawable.ic_share_disabled_24dp)
         }
