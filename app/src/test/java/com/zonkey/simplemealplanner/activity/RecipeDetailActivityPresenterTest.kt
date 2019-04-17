@@ -221,58 +221,82 @@ class RecipeDetailActivityPresenterTest {
   }
 
   @Test
-  fun shouldShowShareButtonTutorialIfSavedRecipeAndHasNotSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldShowShareButtonTutorialIfFavoriteRecipeAndHasNotSeenTutorialAndIsFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, favorite = true)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = false)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = true,
+        savedRecipe = mockRecipe.favorite,
+        hasSeenTutorial = false)
     thenShowShareButtonTutorialCircle(Times(1))
   }
 
   @Test
-  fun shouldShowShareButtonTutorialIfMealPlanRecipeAndHasNotSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldShowShareButtonTutorialIfMealPlanRecipeAndHasNotSeenTutorialAndIsFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, mealPlan = true)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = false)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = true,
+        savedRecipe = mockRecipe.mealPlan,
+        hasSeenTutorial = false)
     thenShowShareButtonTutorialCircle(Times(1))
   }
 
   @Test
-  fun shouldNotShowShareButtonTutorialIfNotSavedRecipeAndHasNotSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldNotShowShareButtonTutorialIfNotFavoriteRecipeAndHasNotSeenTutorialAndIsNotFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, favorite = false)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = false)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = false,
+        savedRecipe = mockRecipe.favorite,
+        hasSeenTutorial = false)
     thenShowShareButtonTutorialCircle(never())
   }
 
   @Test
-  fun shouldNotShowShareButtonTutorialIfNotMealPlanRecipeOrFavoriteAndHasNotSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldNotShowShareButtonTutorialIfNotMealPlanRecipeOrFavoriteAndHasNotSeenTutorialAndIsNotFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, favorite = false, mealPlan = false)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = false)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = false,
+        savedRecipe = mockRecipe.mealPlan,
+        hasSeenTutorial = false)
     thenShowShareButtonTutorialCircle(never())
   }
 
   @Test
-  fun shouldNotShowShareButtonTutorialIfSavedRecipeAndHasSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldNotShowShareButtonTutorialIfFavoriteRecipeAndHasSeenTutorialAndIsNotFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, favorite = true)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = true)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = false,
+        savedRecipe = mockRecipe.favorite,
+        hasSeenTutorial = true)
     thenShowShareButtonTutorialCircle(never())
   }
 
   @Test
-  fun shouldNotShowShareButtonTutorialIfMealPlanRecipeeAndHasSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldNotShowShareButtonTutorialIfMealPlanRecipeeAndHasSeenTutorialAndIsNotFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, mealPlan = true)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = true)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = false,
+        savedRecipe = mockRecipe.mealPlan,
+        hasSeenTutorial = true)
     thenShowShareButtonTutorialCircle(never())
   }
 
   @Test
-  fun shouldNotShowShareButtonTutorialIfNotSavedRecipeAndHasSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldNotShowShareButtonTutorialIfNotSavedRecipeAndHasSeenTutorialAndIsNotFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, favorite = false)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = true)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = false,
+        savedRecipe = mockRecipe.favorite,
+        hasSeenTutorial = true)
     thenShowShareButtonTutorialCircle(never())
   }
 
   @Test
-  fun shouldNotShowShareButtonTutorialIfNotMealPlanRecipeAndHasSeenTutorialWhenShowShareButtonTutorialCalled() {
+  fun shouldNotShowShareButtonTutorialIfNotMealPlanRecipeAndHasSeenTutorialAndIsNotFirstTimeInActivityWhenShowShareButtonTutorialCalled() {
     givenRecipe(MONDAY, mealPlan = false)
-    whenShowShareButtonTutorialCalled(recipe = mockRecipe, hasSeenTutorial = true)
+    whenShowShareButtonTutorialCalled(
+        firstTimeInActivity = false,
+        savedRecipe = mockRecipe.mealPlan,
+        hasSeenTutorial = true)
     thenShowShareButtonTutorialCircle(never())
   }
 
@@ -399,8 +423,11 @@ class RecipeDetailActivityPresenterTest {
     presenter.setUpFavoriteButton(isSavedRecipe, firstTimeInActivity)
   }
 
-  private fun whenShowShareButtonTutorialCalled(recipe: Recipe, hasSeenTutorial: Boolean) {
-    presenter.showShareButtonTutorial(recipe.favorite || recipe.mealPlan, hasSeenTutorial)
+  private fun whenShowShareButtonTutorialCalled(firstTimeInActivity: Boolean, savedRecipe: Boolean, hasSeenTutorial: Boolean) {
+    presenter.showShareButtonTutorial(
+        firstTimeInActivity = firstTimeInActivity,
+        savedRecipe = savedRecipe,
+        hasSeenShareButtonTutorial = hasSeenTutorial)
   }
 
   private fun whenSetShareButtonBackgroundCalled(recipe: Recipe) {
