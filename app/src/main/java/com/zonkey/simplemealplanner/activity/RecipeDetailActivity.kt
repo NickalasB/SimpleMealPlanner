@@ -290,16 +290,13 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
   }
 
   private fun setUpButtonsAndTutorials() {
-    setUpShareButton(contactPermissionGranted, recipe.mealPlan)
+    setUpShareButton(contactPermissionGranted, (recipe.mealPlan || addedToMealPlan))
     setupFavoriteButton(recipe)
   }
 
   override fun setUpShareButton(permissionGranted: Boolean, addedToMealPlan: Boolean) {
 
-    presenter.showShareButtonTutorial(
-        firstTimeInActivity,
-        (recipe.favorite || recipe.mealPlan),
-        hasSeenShareButtonTutorial)
+    presenter.showShareButtonTutorial(addedToMealPlan, hasSeenShareButtonTutorial)
 
     detail_share_button.setOnClickListener {
       onShareButtonClicked(permissionGranted, addedToMealPlan)
