@@ -472,6 +472,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             presenter.saveRecipeToSharedDB(
                 userToShareWith = userToShareWith,
                 recipe = recipe,
+                dayOfWeek = DayOfWeek.valueOf(detail_save_to_meal_plan_button.text.toString()),
                 destinationUserName = destinationUserName,
                 destinationEmail = destinationEmail)
           }

@@ -95,12 +95,18 @@ class RecipeDetailActivityPresenter(
     }
   }
 
-  fun saveRecipeToSharedDB(userToShareWith: User?, recipe: Recipe, destinationUserName: String?,
+  fun saveRecipeToSharedDB(
+      userToShareWith: User?,
+      recipe: Recipe,
+      dayOfWeek: DayOfWeek,
+      destinationUserName: String?,
       destinationEmail: String) {
 
     if (userToShareWith != null) {
-      firebaseRepo.saveRecipeToSharedDB(userToShareWith.userId,
-          recipe, recipe.day)
+      firebaseRepo.saveRecipeToSharedDB(
+          userId = userToShareWith.userId,
+          recipe = recipe,
+          dayOfWeek = dayOfWeek)
           .addOnSuccessListener {
             view.showSnackbar(
                 snackbarStringRes = R.string.share_snackbar_success_text,
