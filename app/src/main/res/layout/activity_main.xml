@@ -47,16 +47,9 @@
         app:layout_constraintTop_toBottomOf="@+id/recipe_card_query_title"
         >
 
-      <TextView
-          android:id="@+id/recipe_empty_search_view"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/common_margin_double"
-          android:gravity="center"
-          android:text="@string/recipe_empty_error_text"
-          android:textSize="@dimen/title_text_size"
-          android:visibility="gone"
-          />
+      <include
+          android:id="@+id/search_message_layout"
+          layout="@layout/empty_search_or_errror_message_and_image"/>
 
       <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
           android:id="@+id/main_search_recipe_card_widget"

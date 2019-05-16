@@ -8,6 +8,10 @@ class DefaultRecipeRepository @Inject constructor(
     private val recipeService: RecipeService) : RecipeRepository {
 
   override fun getEdamamHits(queryText: String): Observable<List<Hit>> {
-    return recipeService.getEdamamHitsQuery(queryText).map { it.hits }
+    return try {
+      recipeService.getEdamamHitsQuery(queryText).map { it.hits }
+    } catch (e: NetworkConnectivityException) {
+      Observable.just(emptyList())
+    }
   }
 }

@@ -1,7 +1,9 @@
 package com.zonkey.simplemealplanner.activity
 
 import android.view.View
+import com.zonkey.simplemealplanner.R
 import com.zonkey.simplemealplanner.model.Recipe
+import com.zonkey.simplemealplanner.network.NetworkConnectivityException
 import com.zonkey.simplemealplanner.network.RecipeRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -33,10 +35,20 @@ class MainActivityPresenter(
               view.setEmptySearchViewVisibility(View.GONE)
             }
             .doOnComplete { view.setHomePageProgressVisibility(View.GONE) }
-            .doOnError { error ->
+            .onErrorReturn { error ->
+              when (error) {
+                is NetworkConnectivityException -> {
+                  view.setSearchErrorMessage(R.string.no_network_error_message)
+                  view.showErrorAnimation(R.raw.connectivity_error_animation)
+                }
+                else -> {
+                  view.setSearchErrorMessage(R.string.share_snackbar_error_text)
+                  view.showErrorAnimation(R.raw.generic_error_animation)
+                }
+              }
               view.setHomePageProgressVisibility(View.GONE)
-              view.setEmptySearchViewVisibility(View.VISIBLE)
               Timber.e(error, "Bad Search")
+              emptyList()
             }
             .subscribe()
     )

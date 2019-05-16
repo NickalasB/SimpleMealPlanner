@@ -14,8 +14,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
 
-class RecipeApp : Application(),
-    HasActivityInjector {
+class RecipeApp : Application(), HasActivityInjector {
 
   companion object {
     lateinit var instance: RecipeApp

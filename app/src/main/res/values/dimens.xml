@@ -4,6 +4,7 @@
   <dimen name="common_margin_half">4dp</dimen>
   <dimen name="common_margin">8dp</dimen>
   <dimen name="common_margin_double">16dp</dimen>
+  <dimen name="common_margin_triple">24dp</dimen>
   <dimen name="recipe_card_corner_radius">4dp</dimen>
   <dimen name="title_text_size">24sp</dimen>
   <dimen name="label_text_size">16sp</dimen>
@@ -26,4 +27,5 @@
   <dimen name="detail_favorite_button_height">56dp</dimen>
   <dimen name="detail_share_button_width">36dp</dimen>
   <dimen name="detail_share_button_height">36dp</dimen>
+  <dimen name="plate_animation_height">240dp</dimen>
 </resources>

@@ -1,5 +1,7 @@
 package com.zonkey.simplemealplanner.activity
 
+import androidx.annotation.RawRes
+import androidx.annotation.StringRes
 import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.model.Recipe
 
@@ -8,6 +10,10 @@ interface MainView {
   fun setQueryTitleText(queryText: String)
 
   fun setEmptySearchViewVisibility(visibility: Int)
+
+  fun setSearchErrorMessage(@StringRes messageId: Int)
+
+  fun showErrorAnimation(@RawRes errorAnimation: Int)
 
   fun setHomePageProgressVisibility(visibility: Int)
 

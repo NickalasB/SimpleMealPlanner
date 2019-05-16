@@ -11,9 +11,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
@@ -21,7 +23,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.zonkey.simplemealplanner.R
-import com.zonkey.simplemealplanner.R.string
 import com.zonkey.simplemealplanner.firebase.FirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.Hit
@@ -36,9 +37,11 @@ import kotlinx.android.synthetic.main.activity_main.meal_plan_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.recipe_card_favorites_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_meal_plan_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
-import kotlinx.android.synthetic.main.activity_main.recipe_empty_search_view
 import kotlinx.android.synthetic.main.activity_main.recipe_main_constraint_layout
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
+import kotlinx.android.synthetic.main.empty_search_or_errror_message_and_image.recipe_empty_search_animation
+import kotlinx.android.synthetic.main.empty_search_or_errror_message_and_image.recipe_empty_search_view
+import kotlinx.android.synthetic.main.empty_search_or_errror_message_and_image.recipe_search_error_animation
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -107,7 +110,7 @@ class MainActivity : AppCompatActivity(), MainView {
       }
     } else {
       recipe_empty_search_view.visibility = View.VISIBLE
-      recipe_empty_search_view.text = getString(string.recipe_empty_start_text)
+      recipe_empty_search_view.text = getString(R.string.recipe_empty_start_text)
     }
   }
 
@@ -280,6 +283,20 @@ class MainActivity : AppCompatActivity(), MainView {
 
   override fun setEmptySearchViewVisibility(visibility: Int) {
     recipe_empty_search_view.visibility = visibility
+    recipe_empty_search_animation.visibility = visibility
+  }
+
+  override fun setSearchErrorMessage(@StringRes messageId: Int) {
+    recipe_empty_search_view.visibility = View.VISIBLE
+    recipe_empty_search_view.text = this.getText(messageId)
+  }
+
+  override fun showErrorAnimation(@RawRes errorAnimation: Int) {
+    recipe_empty_search_animation.visibility = View.GONE
+    recipe_search_error_animation.setAnimation(errorAnimation)
+    recipe_search_error_animation.visibility = View.VISIBLE
+    recipe_search_error_animation.animate()
+    recipe_search_error_animation.repeatCount = INFINITE
   }
 
   override fun setQueryTitleText(queryText: String) {
@@ -317,7 +334,7 @@ class MainActivity : AppCompatActivity(), MainView {
   }
 
   override fun saveHasRefreshedToSharedPrefs() {
-    sharedPreferences.edit().putBoolean(MainActivity.HAS_REFRESHED_PREF_KEY, true).apply()
+    sharedPreferences.edit().putBoolean(HAS_REFRESHED_PREF_KEY, true).apply()
   }
 
   override fun onDestroy() {

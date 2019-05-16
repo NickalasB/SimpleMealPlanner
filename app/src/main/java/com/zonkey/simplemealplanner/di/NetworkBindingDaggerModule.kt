@@ -1,9 +1,13 @@
 package com.zonkey.simplemealplanner.di
 
 import android.app.Application
+import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.zonkey.simplemealplanner.network.DefaultNetworkChecker
 import com.zonkey.simplemealplanner.network.EDAMAM_BASE_URL
+import com.zonkey.simplemealplanner.network.NetworkChecker
+import com.zonkey.simplemealplanner.network.NetworkConnectionInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -12,6 +16,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
 
@@ -35,8 +40,20 @@ class NetworkBindingDaggerModule {
 
   @Provides
   @Singleton
-  fun provideOkHttpClient(cache: Cache): OkHttpClient =
-      OkHttpClient.Builder().cache(cache).build()
+  fun provideNetworkChecker(context: Context): NetworkChecker = DefaultNetworkChecker(context)
+
+  @Provides
+  @Singleton
+  fun provideOkHttpClient(
+      cache: Cache,
+      networkChecker: NetworkChecker): OkHttpClient {
+    val okHttpClientBuilder = OkHttpClient.Builder()
+    okHttpClientBuilder.connectTimeout(30, SECONDS)
+    okHttpClientBuilder.readTimeout(30, SECONDS)
+    okHttpClientBuilder.writeTimeout(30, SECONDS)
+    okHttpClientBuilder.addInterceptor(NetworkConnectionInterceptor(networkChecker))
+    return okHttpClientBuilder.cache(cache).build()
+  }
 
   @Provides
   @Singleton
