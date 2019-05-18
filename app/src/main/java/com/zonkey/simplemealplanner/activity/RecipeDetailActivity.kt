@@ -28,11 +28,11 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.getkeepsafe.taptargetview.TapTargetView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -45,6 +45,7 @@ import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
+import com.zonkey.simplemealplanner.utils.UiUtils
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_collapsing_toolbar
 import kotlinx.android.synthetic.main.activity_recipe_detail.detail_favorite_button
@@ -70,6 +71,9 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
   @Inject
   lateinit var firebaseAuthRepository: DefaultFirebaseAuthRepository
+
+  @Inject
+  lateinit var uiUtils: UiUtils
 
   private lateinit var presenter: RecipeDetailActivityPresenter
   private lateinit var sharedPreferences: SharedPreferences
@@ -350,6 +354,17 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     startActivityForResult(contactPickerIntent, RC_CONTACT_PICKER)
   }
 
+  override fun showSnackbar(
+      snackbarStringRes: Int,
+      snackbarString: String,
+      snackbarstringParameter: String) {
+    uiUtils.showSnackbar(
+        view = detail_recipe_parent_layout,
+        snackbarStringRes = snackbarStringRes,
+        snackbarString = snackbarString,
+        snackbarStringParameter = snackbarstringParameter)
+  }
+
   private fun requestContactPermission() {
     ActivityCompat.requestPermissions(this, arrayOf(permission.READ_CONTACTS),
         MY_PERMISSIONS_REQUEST_READ_CONTACTS)
@@ -371,7 +386,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       !snackBarString.isNullOrBlank() -> snackBarString
       else -> ""
     }
-    showSnackbar(snackbarString = snackBarText)
+   uiUtils.showSnackbar(view = detail_recipe_parent_layout, snackbarString = snackBarText)
   }
 
   override fun setFavoritedButtonAnimationDirection(speed: Float) {
@@ -410,6 +425,15 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
           }
 
         } else {
+          when (response?.error?.errorCode) {
+            ErrorCodes.NO_NETWORK -> uiUtils.showSnackbar(
+                view = detail_recipe_parent_layout,
+                snackbarStringRes = R.string.no_network_error_message)
+            else -> uiUtils.showSnackbar(
+                view = detail_recipe_parent_layout,
+                snackbarStringRes = R.string.generic_error_message
+            )
+          }
           Timber.e(response?.error, "Failed to log-in")
         }
       }
@@ -476,19 +500,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Failed to share recipe")
-            showSnackbar(snackbarStringRes = R.string.share_snackbar_error_text)
+            uiUtils.showSnackbar(
+                view = detail_recipe_parent_layout,
+                snackbarStringRes = R.string.share_snackbar_error_text)
           }
         })
-  }
-
-  override fun showSnackbar(snackbarStringRes: Int, snackbarString: String,
-      snackbarstringParameter: String) {
-    val snackBarText = when {
-      snackbarStringRes != 0 -> getString(snackbarStringRes, snackbarstringParameter)
-      else -> snackbarString
-    }
-    val snackbar = Snackbar.make(detail_recipe_parent_layout, snackBarText, Snackbar.LENGTH_LONG)
-    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
-    snackbar.show()
   }
 }

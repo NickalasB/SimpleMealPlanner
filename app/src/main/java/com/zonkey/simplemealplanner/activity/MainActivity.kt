@@ -14,11 +14,10 @@ import android.view.WindowManager
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -28,6 +27,7 @@ import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.Hit
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.network.RecipeRepository
+import com.zonkey.simplemealplanner.utils.UiUtils
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.favorites_recipe_card_widget
@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity(), MainView {
 
   @Inject
   lateinit var firebaseAuthRepository: FirebaseAuthRepository
+
+  @Inject
+  lateinit var uiUtils: UiUtils
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -224,7 +227,9 @@ class MainActivity : AppCompatActivity(), MainView {
       R.id.sign_out -> {
         authUI.signOut(this).addOnCompleteListener {
           refreshSavedRecipeViews()
-          showSnackbar(R.string.snack_bar_sign_out_message)
+          uiUtils.showSnackbar(
+              view = recipe_main_constraint_layout,
+              snackbarStringRes = R.string.snack_bar_sign_out_message)
         }
         true
       }
@@ -243,21 +248,26 @@ class MainActivity : AppCompatActivity(), MainView {
       val response = IdpResponse.fromResultIntent(data)
 
       if (resultCode == Activity.RESULT_OK) {
-        showSnackbar(R.string.snackbar_sign_in_message)
+        uiUtils.showSnackbar(
+            view = recipe_main_constraint_layout,
+            snackbarStringRes = R.string.snackbar_sign_in_message)
         firebaseRecipeRepository.saveUserIdAndUserEmail()
         updateMenuItems(firebaseAuthRepository.currentUser != null)
         refreshSavedRecipeViews()
       } else {
+        when (response?.error?.errorCode) {
+          ErrorCodes.NO_NETWORK -> {
+            uiUtils.showSnackbar(
+                view = recipe_main_constraint_layout,
+                snackbarStringRes = R.string.no_network_error_message)
+          }
+          else -> uiUtils.showSnackbar(
+              view = recipe_main_constraint_layout,
+              snackbarStringRes = R.string.share_snackbar_error_text)
+        }
         Timber.e(response?.error, "Failed to log-in")
       }
     }
-  }
-
-  private fun showSnackbar(@StringRes messageId: Int) {
-    val snackbar = Snackbar.make(recipe_main_constraint_layout,
-        getString(messageId), Snackbar.LENGTH_SHORT)
-    snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-    snackbar.show()
   }
 
   override fun refreshSavedRecipeViews() {
