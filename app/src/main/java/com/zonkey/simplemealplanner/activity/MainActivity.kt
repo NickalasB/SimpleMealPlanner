@@ -11,10 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import androidx.annotation.RawRes
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -39,9 +36,8 @@ import kotlinx.android.synthetic.main.activity_main.recipe_card_meal_plan_title
 import kotlinx.android.synthetic.main.activity_main.recipe_card_query_title
 import kotlinx.android.synthetic.main.activity_main.recipe_main_constraint_layout
 import kotlinx.android.synthetic.main.activity_main.recipe_search_view
-import kotlinx.android.synthetic.main.empty_search_or_errror_message_and_image.recipe_empty_search_animation
-import kotlinx.android.synthetic.main.empty_search_or_errror_message_and_image.recipe_empty_search_view
-import kotlinx.android.synthetic.main.empty_search_or_errror_message_and_image.recipe_search_error_animation
+import kotlinx.android.synthetic.main.empty_search_message_and_image.recipe_empty_search_animation
+import kotlinx.android.synthetic.main.empty_search_message_and_image.recipe_empty_search_view
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -112,7 +108,7 @@ class MainActivity : AppCompatActivity(), MainView {
         }
       }
     } else {
-      recipe_empty_search_view.visibility = View.VISIBLE
+      setEmptySearchViewVisibility(View.VISIBLE)
       recipe_empty_search_view.text = getString(R.string.recipe_empty_start_text)
     }
   }
@@ -145,7 +141,7 @@ class MainActivity : AppCompatActivity(), MainView {
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem retrieving favorite recipes from database")
-            recipe_empty_search_view.visibility = View.VISIBLE
+            setEmptySearchViewVisibility(View.VISIBLE)
           }
 
           override fun onDataChange(snapshot: DataSnapshot) {
@@ -163,7 +159,7 @@ class MainActivity : AppCompatActivity(), MainView {
         .addValueEventListener(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
             Timber.e(error.toException(), "Problem retrieving meal plan recipes from database")
-            recipe_empty_search_view.visibility = View.VISIBLE
+            setEmptySearchViewVisibility(View.VISIBLE)
           }
 
           override fun onDataChange(snapshot: DataSnapshot) {
@@ -296,19 +292,6 @@ class MainActivity : AppCompatActivity(), MainView {
     recipe_empty_search_animation.visibility = visibility
   }
 
-  override fun setSearchErrorMessage(@StringRes messageId: Int) {
-    recipe_empty_search_view.visibility = View.VISIBLE
-    recipe_empty_search_view.text = this.getText(messageId)
-  }
-
-  override fun showErrorAnimation(@RawRes errorAnimation: Int) {
-    recipe_empty_search_animation.visibility = View.GONE
-    recipe_search_error_animation.setAnimation(errorAnimation)
-    recipe_search_error_animation.visibility = View.VISIBLE
-    recipe_search_error_animation.animate()
-    recipe_search_error_animation.repeatCount = INFINITE
-  }
-
   override fun setQueryTitleText(queryText: String) {
     recipe_card_query_title.text = queryText.split(' ').joinToString(" ") { it.capitalize() }
   }
@@ -350,5 +333,12 @@ class MainActivity : AppCompatActivity(), MainView {
   override fun onDestroy() {
     super.onDestroy()
     presenter.onDestroy(compositeDisposable)
+  }
+
+  override fun showSnackbar(messageId: Int) {
+    uiUtils.showSnackbar(
+        view = recipe_main_constraint_layout,
+        snackbarStringRes = messageId,
+        backgroundColor = R.color.colorPrimary)
   }
 }

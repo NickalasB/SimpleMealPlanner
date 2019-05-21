@@ -38,12 +38,10 @@ class MainActivityPresenter(
             .onErrorReturn { error ->
               when (error) {
                 is NetworkConnectivityException -> {
-                  view.setSearchErrorMessage(R.string.no_network_error_message)
-                  view.showErrorAnimation(R.raw.connectivity_error_animation)
+                  view.showSnackbar(R.string.no_network_error_message)
                 }
                 else -> {
-                  view.setSearchErrorMessage(R.string.share_snackbar_error_text)
-                  view.showErrorAnimation(R.raw.generic_error_animation)
+                  view.showSnackbar(R.string.generic_error_message)
                 }
               }
               view.setHomePageProgressVisibility(View.GONE)
@@ -82,7 +80,6 @@ class MainActivityPresenter(
         view.setEmptySearchViewVisibility(View.GONE)
         view.setMealPlanTitleVisibility(View.VISIBLE)
         view.setMealPlanRecipes(mealPlanRecipes)
-
       }
     }
   }

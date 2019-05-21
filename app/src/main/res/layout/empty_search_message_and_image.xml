@@ -15,7 +15,6 @@
       android:gravity="center"
       android:text="@string/recipe_empty_error_text"
       android:textSize="@dimen/title_text_size"
-      android:visibility="gone"
       tools:text="Need a little inspiration for dinner tonight? Search for something to tasty to get started!"
       />
 
@@ -28,16 +27,5 @@
       android:scaleType="center"
       app:lottie_autoPlay="true"
       app:lottie_rawRes="@raw/plate_animation"
-      />
-
-  <com.airbnb.lottie.LottieAnimationView
-      android:id="@+id/recipe_search_error_animation"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/plate_animation_height"
-      android:paddingBottom="@dimen/common_margin_triple"
-      android:paddingTop="@dimen/common_margin_triple"
-      android:scaleType="fitCenter"
-      app:lottie_autoPlay="true"
-      android:visibility="gone"
       />
 </LinearLayout>
