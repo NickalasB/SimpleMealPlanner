@@ -20,7 +20,9 @@ data class Recipe(
     var key: String,
     var day: DayOfWeek,
     var favorite: Boolean,
-    var mealPlan: Boolean
+    var mealPlan: Boolean,
+    var fromShare: Boolean,
+    var sharedFromUser: String?
 ) {
 
   constructor() : this(
@@ -41,7 +43,9 @@ data class Recipe(
       key = "",
       day = REMOVE,
       favorite = false,
-      mealPlan = false
+      mealPlan = false,
+      fromShare = false,
+      sharedFromUser = null
   )
 
 }

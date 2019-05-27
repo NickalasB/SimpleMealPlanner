@@ -13,7 +13,7 @@ interface FirebaseRecipeRepository {
 
   fun saveRecipeToSharedDB(userId: String, recipe: Recipe, dayOfWeek: DayOfWeek): Task<Void>
 
-  fun saveUserIdAndUserEmail()
+  fun saveUserIdEmailAndMessagingToken(): Task<Void>
 
   fun saveRecipeAsFavorite(recipe: Recipe)
 

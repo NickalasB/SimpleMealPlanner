@@ -244,12 +244,14 @@ class MainActivity : AppCompatActivity(), MainView {
       val response = IdpResponse.fromResultIntent(data)
 
       if (resultCode == Activity.RESULT_OK) {
-        uiUtils.showSnackbar(
-            view = recipe_main_constraint_layout,
-            snackbarStringRes = R.string.snackbar_sign_in_message)
-        firebaseRecipeRepository.saveUserIdAndUserEmail()
-        updateMenuItems(firebaseAuthRepository.currentUser != null)
-        refreshSavedRecipeViews()
+        firebaseRecipeRepository.saveUserIdEmailAndMessagingToken().addOnSuccessListener {
+          uiUtils.showSnackbar(
+              view = recipe_main_constraint_layout,
+              snackbarStringRes = R.string.snackbar_sign_in_message)
+          updateMenuItems(firebaseAuthRepository.currentUser != null)
+          refreshSavedRecipeViews()
+        }
+
       } else {
         when (response?.error?.errorCode) {
           ErrorCodes.NO_NETWORK -> {

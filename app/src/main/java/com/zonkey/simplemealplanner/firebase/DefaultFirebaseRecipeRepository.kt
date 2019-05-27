@@ -16,6 +16,7 @@ const val MEAL_PLANNER_DB_REF = "simple_meal_planner"
 const val USERS = "users"
 const val EMAIL = "email"
 const val USER_ID = "userId"
+const val FCM_TOKEN = "messagingToken"
 const val RECIPES = "recipes"
 const val DAY = "day"
 const val MEAL_PLAN = "mealPlan"
@@ -23,7 +24,8 @@ const val FAVORITE = "favorite"
 
 class DefaultFirebaseRecipeRepository @Inject constructor(
     private val firebaseDbInstance: FirebaseDatabase,
-    private val firebaseAuthRepository: FirebaseAuthRepository) : FirebaseRecipeRepository {
+    private val firebaseAuthRepository: FirebaseAuthRepository,
+    private val firebaseInstanceIdRepository: FirebaseInstanceIdRepository) : FirebaseRecipeRepository {
 
 
   override val usersReference: DatabaseReference
@@ -106,19 +108,28 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
     return recipeDbRef.child(MEAL_PLAN).setValue(false)
   }
 
-  override fun saveUserIdAndUserEmail() {
+  override fun saveUserIdEmailAndMessagingToken(): Task<Void> {
+
     val userId = firebaseAuthRepository.currentUser?.uid.toString()
     val singleUserReference = firebaseDbInstance.getReference(MEAL_PLANNER_DB_REF)
         .child(USERS)
         .child(userId)
 
-    singleUserReference
-        .child(USER_ID)
-        .setValue(userId)
+    return firebaseInstanceIdRepository.getToken().continueWithTask { getTokenTask ->
 
-    singleUserReference
-        .child(EMAIL)
-        .setValue(firebaseAuthRepository.currentUser?.email)
+      Tasks.whenAll(
+          singleUserReference
+              .child(USER_ID)
+              .setValue(userId),
+
+          singleUserReference
+              .child(EMAIL)
+              .setValue(firebaseAuthRepository.currentUser?.email),
+
+          singleUserReference
+              .child(FCM_TOKEN)
+              .setValue(getTokenTask.result?.token))
+    }
   }
 
   override fun purgeUnsavedRecipe(recipe: Recipe) {

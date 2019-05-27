@@ -42,4 +42,7 @@
   <string name="disabled_share_button_snackbar_message">Add recipe to meal plan to share</string>
   <string name="no_network_error_message">Please double check your internet connection.</string>
   <string name="generic_error_message">Something went wrong. Please try again</string>
+  <string name="shared_recipes_notification_channel_name">Shared Recipes</string>
+  <string name="shared_recipes_notification_title">%1$s has shared a recipe with you</string>
+  <string name="shared_recipes_notification_body">Let\'s make %1$s!</string>
 </resources>

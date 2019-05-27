@@ -142,7 +142,9 @@ class MainActivityPresenterTest {
             key = "testKey1",
             day = MONDAY,
             favorite = true,
-            mealPlan = false
+            mealPlan = false,
+            fromShare = false,
+            sharedFromUser = ""
         ),
         Recipe(
             uri = "testUri2",
@@ -162,7 +164,9 @@ class MainActivityPresenterTest {
             key = "testKey2",
             day = FRIDAY,
             favorite = false,
-            mealPlan = true
+            mealPlan = true,
+            fromShare = false,
+            sharedFromUser = ""
         )
     )
   }

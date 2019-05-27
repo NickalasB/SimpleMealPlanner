@@ -4,8 +4,10 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
+import com.zonkey.simplemealplanner.firebase.DefaultFirebaseInstanceIdRepository
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseRecipeRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseAuthRepository
+import com.zonkey.simplemealplanner.firebase.FirebaseInstanceIdRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import dagger.Module
 import dagger.Provides
@@ -18,10 +20,18 @@ class FirebaseBindingDaggerModule {
   @Singleton
   fun providesFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance()
 
+
   @Provides
   @Singleton
-  fun provideFirebaseRecipeRepository(firebaseInstance: FirebaseDatabase, firebaseAuthRepo: FirebaseAuthRepository): FirebaseRecipeRepository =
-      DefaultFirebaseRecipeRepository(firebaseInstance, firebaseAuthRepo)
+  fun providesFirebaseInstanceRepository() : FirebaseInstanceIdRepository = DefaultFirebaseInstanceIdRepository()
+
+  @Provides
+  @Singleton
+  fun provideFirebaseRecipeRepository(
+      firebaseInstance: FirebaseDatabase,
+      firebaseAuthRepo: FirebaseAuthRepository,
+      firebaseInstanceIdRepository: FirebaseInstanceIdRepository): FirebaseRecipeRepository =
+      DefaultFirebaseRecipeRepository(firebaseInstance, firebaseAuthRepo, firebaseInstanceIdRepository)
 
   @Provides
   @Singleton

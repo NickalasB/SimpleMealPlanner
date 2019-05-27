@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.firebase.FirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.MONDAY
@@ -35,6 +36,9 @@ class RecipeDetailActivityPresenterTest {
   @Mock
   private lateinit var firebaseRecipeRepository: FirebaseRecipeRepository
 
+  @Mock
+  private lateinit var firebaseAuthRepository: FirebaseAuthRepository
+
   private lateinit var presenter: RecipeDetailActivityPresenter
 
   private lateinit var mockRecipe: Recipe
@@ -50,7 +54,7 @@ class RecipeDetailActivityPresenterTest {
   fun setUp() {
     MockitoAnnotations.initMocks(this)
 
-    presenter = RecipeDetailActivityPresenter(view, firebaseRecipeRepository)
+    presenter = RecipeDetailActivityPresenter(view, firebaseRecipeRepository, firebaseAuthRepository)
   }
 
   @Test
@@ -93,7 +97,7 @@ class RecipeDetailActivityPresenterTest {
     givenRecipe(MONDAY)
     givenSavedRecipe(false)
     whenFavoriteButtonClicked(true, isSavedRecipe, mockRecipe)
-    thenSaveUserIdAndEmail(Times(1))
+    thenSaveUserIdEmailAndMessagingToken(Times(1))
     thenSaveRecipeToFirebase(mockRecipe)
     thenIsSavedRecipe(true)
     thenSetFavoriteButtonIcon(Times(1), selectedAnimation)
@@ -124,7 +128,7 @@ class RecipeDetailActivityPresenterTest {
     whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
         selectedDay,
         isSavedRecipe)
-    thenSaveUserIdAndEmail(Times(1))
+    thenSaveUserIdEmailAndMessagingToken(Times(1))
     thenUpdateMealPlanRecipeDayCalled(Times(1))
   }
 
@@ -136,7 +140,7 @@ class RecipeDetailActivityPresenterTest {
 //    whenOnMealPlanDialogPositiveButtonClickedCalled(true, mockRecipe, view.addedToMealPlan,
 //        selectedDay,
 //        isSavedRecipe)
-//    thenSaveUserIdAndEmail(Times(1))
+//    thenSaveUserIdEmailAndMessagingToken(Times(1))
 //    thenSaveRecipeToMealPlanDb(Times(1))
 //  }
 
@@ -333,7 +337,9 @@ class RecipeDetailActivityPresenterTest {
         key = "testKey1",
         day = day,
         favorite = favorite,
-        mealPlan = mealPlan
+        mealPlan = mealPlan,
+        fromShare = false,
+        sharedFromUser = ""
     )
   }
 
@@ -439,8 +445,8 @@ class RecipeDetailActivityPresenterTest {
     verify(firebaseRecipeRepository, times).removeRecipeFromMealPlan(recipe)
   }
 
-  private fun thenSaveUserIdAndEmail(times: VerificationMode) {
-    verify(firebaseRecipeRepository, times).saveUserIdAndUserEmail()
+  private fun thenSaveUserIdEmailAndMessagingToken(times: VerificationMode) {
+    verify(firebaseRecipeRepository, times).saveUserIdEmailAndMessagingToken()
   }
 
   private fun thenShowFavoriteButtonTutorialCircle(times: VerificationMode) {

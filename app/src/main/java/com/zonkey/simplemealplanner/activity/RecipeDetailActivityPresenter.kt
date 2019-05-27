@@ -1,6 +1,7 @@
 package com.zonkey.simplemealplanner.activity
 
 import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.firebase.FirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.DayOfWeek.REMOVE
@@ -12,7 +13,8 @@ private const val FAVORITE_BUTTON_BACKWARDS_SPEED = -1f //setting speed to -1 re
 
 class RecipeDetailActivityPresenter(
     private val view: RecipeDetailView,
-    private val firebaseRepo: FirebaseRecipeRepository
+    private val firebaseRepo: FirebaseRecipeRepository,
+    private val firebaseAuthRepository: FirebaseAuthRepository
 ) {
 
   fun onFavoriteButtonClicked(isSignedIn: Boolean, savedRecipe: Boolean, recipe: Recipe) {
@@ -25,7 +27,7 @@ class RecipeDetailActivityPresenter(
         setSavedRecipeIcon(false)
         view.showRecipeDetailSnackBar(R.string.snackbar_recipe_deleted)
       } else {
-        firebaseRepo.saveUserIdAndUserEmail()
+        firebaseRepo.saveUserIdEmailAndMessagingToken()
         firebaseRepo.saveRecipeAsFavorite(recipe)
         view.isSavedRecipe = true
         setSavedRecipeIcon(true)
@@ -76,7 +78,7 @@ class RecipeDetailActivityPresenter(
         else -> view.setMealPlanButtonText(selectedDayString = selectedDay)
       }
       showRecipeDetailSnackBar(selectedDay)
-      firebaseRepo.saveUserIdAndUserEmail()
+      firebaseRepo.saveUserIdEmailAndMessagingToken()
     }
   }
 
@@ -103,9 +105,12 @@ class RecipeDetailActivityPresenter(
       destinationEmail: String) {
 
     if (userToShareWith != null) {
+      val sharedRecipe = recipe.copy(
+          fromShare = true,
+          sharedFromUser = firebaseAuthRepository.currentUser?.displayName ?: "A friend")
       firebaseRepo.saveRecipeToSharedDB(
           userId = userToShareWith.userId,
-          recipe = recipe,
+          recipe = sharedRecipe,
           dayOfWeek = dayOfWeek)
           .addOnSuccessListener {
             view.showSnackbar(

@@ -102,7 +102,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     firstTimeInActivity = sharedPreferences.getBoolean(PREFS_FIRST_TIME_KEY, true)
     hasSeenShareButtonTutorial = sharedPreferences.getBoolean(PREFS_SEEN_SHARE_TUTORIAL_KEY, false)
 
-    presenter = RecipeDetailActivityPresenter(this, firebaseRepo)
+    presenter = RecipeDetailActivityPresenter(this, firebaseRepo, firebaseAuthRepository)
 
     if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
       postponeEnterTransition()
@@ -413,7 +413,10 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
         if (resultCode == Activity.RESULT_OK) {
           if (fromFavoriteClick) {
-            presenter.onFavoriteButtonClicked(true, isSavedRecipe, recipe)
+            presenter.onFavoriteButtonClicked(
+                isSignedIn = true,
+                savedRecipe = isSavedRecipe,
+                recipe = recipe)
           }
           if (fromMealPlanClick) {
             presenter.onMealPlanDialogPositiveButtonClicked(

@@ -32,8 +32,8 @@ exports.sendRecipeSharedNotification = functions.database.ref('/simple_meal_plan
 
     var message = {
     	notification: {
-    		title: userWhoShared + ' has shared a recipe with you',
-    		body: 'Check out this recipe for ' + recipeName + '!',
+    		title: userWhoShared,
+    		body:  recipeName,
     		icon: recipeImageUrl
     	}
     };
