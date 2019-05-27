@@ -22,7 +22,6 @@ class RecipeMessagingService : FirebaseMessagingService() {
 
   override fun onMessageReceived(remoteMessage: RemoteMessage?) {
 
-
     remoteMessage?.let {
       val notificationTitle = String.format(getString(R.string.shared_recipes_notification_title,
           remoteMessage.notification?.title))
