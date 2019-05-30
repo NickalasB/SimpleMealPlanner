@@ -15,6 +15,9 @@ exports.sendRecipeSharedNotification = functions.database.ref('/simple_meal_plan
   const sharedRecipe = change.after;
   console.log('Recipe = ', sharedRecipe.val());
 
+  const recipeJson = JSON.stringify(sharedRecipe.val());
+  console.log('Recipe String= ', recipeJson);
+
   const recipeName = sharedRecipe.child('label').val();
   console.log('Recipe Name = ', recipeName);
 
@@ -31,10 +34,11 @@ exports.sendRecipeSharedNotification = functions.database.ref('/simple_meal_plan
   console.log('Target user token = ', token);
 
     var message = {
-    	notification: {
+    	data: {
     		title: userWhoShared,
     		body:  recipeName,
-    		icon: recipeImageUrl
+    		image: recipeImageUrl,
+    		recipeJson: recipeJson
     	}
     };
 

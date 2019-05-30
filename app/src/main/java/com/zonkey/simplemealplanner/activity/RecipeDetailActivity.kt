@@ -42,6 +42,7 @@ import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
+import com.zonkey.simplemealplanner.firebase.NOTIFICATION_FULL_RECIPE
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
@@ -108,7 +109,14 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
       postponeEnterTransition()
     }
 
-    recipe = Gson().fromJson(intent.getStringExtra(FULL_RECIPE), Recipe::class.java)
+    val recipeFromMainActivity = Gson().fromJson(intent.getStringExtra(FULL_RECIPE), Recipe::class.java)
+
+    if (recipeFromMainActivity != null) {
+      recipe = recipeFromMainActivity
+    } else {
+      recipe = Gson().fromJson(intent.getStringExtra(NOTIFICATION_FULL_RECIPE), Recipe::class.java)
+    }
+
     loadRecipeImage(recipe)
 
     detail_collapsing_toolbar.title = recipe.label
