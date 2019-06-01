@@ -12,6 +12,7 @@ import android.os.Build.VERSION_CODES
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -84,6 +85,7 @@ class RecipeMessagingService : FirebaseMessagingService() {
         .setSmallIcon(R.drawable.ic_notifcation_icon_primary_24dp)
         .setContentTitle(notificationTitle)
         .setContentText(notificationBody)
+        .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
         .setSound(defaultSoundUri)
         .setChannelId(RECIPE_SHARE_NOTIFICATION_CHANNEL_ID)
         .setContentIntent(pendingIntent)
