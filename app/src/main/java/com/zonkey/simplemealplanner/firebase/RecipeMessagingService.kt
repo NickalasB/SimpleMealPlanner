@@ -87,6 +87,7 @@ class RecipeMessagingService : FirebaseMessagingService() {
         .setSound(defaultSoundUri)
         .setChannelId(RECIPE_SHARE_NOTIFICATION_CHANNEL_ID)
         .setContentIntent(pendingIntent)
+        .setAutoCancel(true)
         .priority = (PRIORITY_DEFAULT)
 
     Glide.with(this)
