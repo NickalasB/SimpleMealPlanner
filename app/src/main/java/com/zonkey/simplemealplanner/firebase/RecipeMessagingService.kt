@@ -42,19 +42,23 @@ class RecipeMessagingService : FirebaseMessagingService() {
       val sharedRecipe = Gson().fromJson<Recipe>(recipeJsonString, Recipe::class.java)
 
       val notificationTitle = String.format(
-          getString(com.zonkey.simplemealplanner.R.string.shared_recipes_notification_title,
+          getString(R.string.shared_recipes_notification_title,
               sharedRecipe.sharedFromUser))
 
       val notificationBody = String.format(
-          getString(com.zonkey.simplemealplanner.R.string.shared_recipes_notification_body,
+          getString(R.string.shared_recipes_notification_body,
               sharedRecipe.label))
 
       val notificationImageUrl = sharedRecipe.image
 
       val mealPlanDay = sharedRecipe.day.name.toLowerCase().capitalize()
 
-      buildNotification(notificationTitle, notificationBody, notificationImageUrl, recipeJsonString,
-          mealPlanDay)
+      buildNotification(
+          notificationTitle = notificationTitle,
+          notificationBody = notificationBody,
+          notificationImageUrl = notificationImageUrl,
+          recipeJsonString = recipeJsonString,
+          day = mealPlanDay)
     }
   }
 
