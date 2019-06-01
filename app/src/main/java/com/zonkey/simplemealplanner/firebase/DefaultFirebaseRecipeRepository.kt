@@ -66,11 +66,9 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
     return if ((favoriteRecipeDbRef.child(recipe.key).key != recipe.key)) {
       val key = favoriteRecipeDbRef.push().key ?: ""
       recipe.key = key
-      Tasks.whenAll(
-          favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
-          favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
-          favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
-      )
+      recipe.day = dayOfWeek
+      recipe.mealPlan = true
+      favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
     } else {
       Tasks.whenAll(
           favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
@@ -88,11 +86,9 @@ class DefaultFirebaseRecipeRepository @Inject constructor(
             .child(RECIPES)
     val key = favoriteRecipeDbRef.push().key ?: ""
     recipe.key = key
-    return Tasks.whenAll(
-        favoriteRecipeDbRef.child(recipe.key).setValue(recipe),
-        favoriteRecipeDbRef.child(recipe.key).child(DAY).setValue(dayOfWeek),
-        favoriteRecipeDbRef.child(recipe.key).child(MEAL_PLAN).setValue(true)
-    )
+    recipe.day = dayOfWeek
+    recipe.mealPlan = true
+    return favoriteRecipeDbRef.child(recipe.key).setValue(recipe)
   }
 
   override fun updateMealPlanRecipeDay(recipe: Recipe, dayOfWeek: DayOfWeek) {

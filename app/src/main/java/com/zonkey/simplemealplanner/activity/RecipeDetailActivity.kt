@@ -42,7 +42,7 @@ import com.zonkey.simplemealplanner.adapter.FROM_FAVORITE
 import com.zonkey.simplemealplanner.adapter.FULL_RECIPE
 import com.zonkey.simplemealplanner.firebase.DefaultFirebaseAuthRepository
 import com.zonkey.simplemealplanner.firebase.FirebaseRecipeRepository
-import com.zonkey.simplemealplanner.firebase.NOTIFICATION_FULL_RECIPE
+import com.zonkey.simplemealplanner.firebase.RECIPE_FROM_NOTIFICATION
 import com.zonkey.simplemealplanner.model.DayOfWeek
 import com.zonkey.simplemealplanner.model.Recipe
 import com.zonkey.simplemealplanner.model.User
@@ -114,7 +114,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     if (recipeFromMainActivity != null) {
       recipe = recipeFromMainActivity
     } else {
-      recipe = Gson().fromJson(intent.getStringExtra(NOTIFICATION_FULL_RECIPE), Recipe::class.java)
+      recipe = Gson().fromJson(intent.getStringExtra(RECIPE_FROM_NOTIFICATION), Recipe::class.java)
     }
 
     loadRecipeImage(recipe)

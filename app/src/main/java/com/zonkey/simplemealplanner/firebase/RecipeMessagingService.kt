@@ -1,8 +1,6 @@
 package com.zonkey.simplemealplanner.firebase
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
@@ -11,7 +9,9 @@ import android.graphics.Bitmap
 import android.media.RingtoneManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
+import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -20,35 +20,40 @@ import com.bumptech.glide.request.target.Target
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import com.zonkey.simplemealplanner.R
+import com.zonkey.simplemealplanner.RECIPE_SHARE_NOTIFICATION_CHANNEL_ID
 import com.zonkey.simplemealplanner.activity.RecipeDetailActivity
 import com.zonkey.simplemealplanner.model.Recipe
 import timber.log.Timber
 
 
-private const val NOTIFICATION_CHANNEL_ID = "RecipeNotifications"
-internal const val NOTIFICATION_FULL_RECIPE = "notification_recipe"
-private const val REMOTE_MESSAGE_TITLE_DATA = "title"
-private const val REMOTE_MESSAGE_BODY_DATA = "body"
-private const val REMOTE_MESSAGE_IMAGE_DATA = "image"
-private const val REMOTE_MESSAGE_RECIPE_DATA = "recipeJson"
+internal const val RECIPE_FROM_NOTIFICATION = "recipeFromNotification"
+private const val REMOTE_MESSAGE_RECIPE_DATA = "notificationRecipe"
 
 class RecipeMessagingService : FirebaseMessagingService() {
 
   override fun onMessageReceived(remoteMessage: RemoteMessage?) {
 
     remoteMessage?.let {
+
+      val recipeJsonString = remoteMessage.data[REMOTE_MESSAGE_RECIPE_DATA]
+
+      val sharedRecipe = Gson().fromJson<Recipe>(recipeJsonString, Recipe::class.java)
+
       val notificationTitle = String.format(
           getString(com.zonkey.simplemealplanner.R.string.shared_recipes_notification_title,
-              remoteMessage.data[REMOTE_MESSAGE_TITLE_DATA]))
+              sharedRecipe.sharedFromUser))
+
       val notificationBody = String.format(
           getString(com.zonkey.simplemealplanner.R.string.shared_recipes_notification_body,
-              remoteMessage.data[REMOTE_MESSAGE_BODY_DATA]))
-      val notificationImageUrl = remoteMessage.data[REMOTE_MESSAGE_IMAGE_DATA]
-      val recipe = remoteMessage.data[REMOTE_MESSAGE_RECIPE_DATA]
+              sharedRecipe.label))
 
-      Gson().fromJson<Recipe>(remoteMessage.data[REMOTE_MESSAGE_RECIPE_DATA], Recipe::class.java)
+      val notificationImageUrl = sharedRecipe.image
 
-      buildNotification(notificationTitle, notificationBody, notificationImageUrl, recipe)
+      val mealPlanDay = sharedRecipe.day.name.toLowerCase().capitalize()
+
+      buildNotification(notificationTitle, notificationBody, notificationImageUrl, recipeJsonString,
+          mealPlanDay)
     }
   }
 
@@ -56,24 +61,19 @@ class RecipeMessagingService : FirebaseMessagingService() {
       notificationTitle: String?,
       notificationBody: String?,
       notificationImageUrl: String?,
-      recipe: String?) {
+      recipeJsonString: String?,
+      day: String) {
 
-    val notificationChannelName = getString(
-        com.zonkey.simplemealplanner.R.string.shared_recipes_notification_channel_name)
 
     val notificationBuilder = if (VERSION.SDK_INT >= VERSION_CODES.O) {
-      val notificationChannel = NotificationChannel(
-          NOTIFICATION_CHANNEL_ID,
-          notificationChannelName,
-          IMPORTANCE_DEFAULT)
-      Builder(this, notificationChannel.id)
+      Builder(this, RECIPE_SHARE_NOTIFICATION_CHANNEL_ID)
     } else {
       @Suppress("DEPRECATION")
       Builder(this)
     }
 
     val intent = Intent(this, RecipeDetailActivity::class.java)
-    intent.putExtra(NOTIFICATION_FULL_RECIPE, recipe)
+    intent.putExtra(RECIPE_FROM_NOTIFICATION, recipeJsonString)
 
     val pendingIntent = TaskStackBuilder.create(this)
         .addNextIntentWithParentStack(intent)
@@ -81,11 +81,13 @@ class RecipeMessagingService : FirebaseMessagingService() {
     val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
     notificationBuilder
-        .setSmallIcon(com.zonkey.simplemealplanner.R.mipmap.ic_launcher)
+        .setSmallIcon(R.drawable.ic_notifcation_icon_primary_24dp)
         .setContentTitle(notificationTitle)
         .setContentText(notificationBody)
         .setSound(defaultSoundUri)
+        .setChannelId(RECIPE_SHARE_NOTIFICATION_CHANNEL_ID)
         .setContentIntent(pendingIntent)
+        .priority = (PRIORITY_DEFAULT)
 
     Glide.with(this)
         .asBitmap()
@@ -102,6 +104,12 @@ class RecipeMessagingService : FirebaseMessagingService() {
           override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?,
               dataSource: DataSource?, isFirstResource: Boolean): Boolean {
             notificationBuilder.setLargeIcon(resource)
+            notificationBuilder.setStyle(NotificationCompat.BigPictureStyle()
+                .bigPicture(resource)
+                .setSummaryText(
+                    String.format(getString(R.string.shared_recipes_notification_big_summary_text),
+                        day))
+                .bigLargeIcon(null))
             sendNotification(notificationBuilder)
             return true
           }

@@ -45,4 +45,5 @@
   <string name="shared_recipes_notification_channel_name">Shared Recipes</string>
   <string name="shared_recipes_notification_title">%1$s has shared a recipe with you</string>
   <string name="shared_recipes_notification_body">Let\'s make %1$s!</string>
+  <string name="shared_recipes_notification_big_summary_text">"Added to your meal plan for %1$s!</string>
 </resources>
