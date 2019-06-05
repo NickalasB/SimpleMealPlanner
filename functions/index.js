@@ -39,7 +39,9 @@ exports.sendRecipeSharedNotification = functions.database.ref('/simple_meal_plan
     	}
     };
 
-   admin.messaging().sendToDevice(token, message);
+    if (userWhoShared !== null) {
+       admin.messaging().sendToDevice(token, message);
+    }
   });
 
   return Promise.all([targetUserMessageTokenVal]);

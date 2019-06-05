@@ -41,6 +41,8 @@ class RecipeMessagingService : FirebaseMessagingService() {
 
       val sharedRecipe = Gson().fromJson<Recipe>(recipeJsonString, Recipe::class.java)
 
+      val notificationId = kotlin.random.Random.nextInt()
+
       val notificationTitle = String.format(
           getString(R.string.shared_recipes_notification_title,
               sharedRecipe.sharedFromUser))
@@ -54,6 +56,7 @@ class RecipeMessagingService : FirebaseMessagingService() {
       val mealPlanDay = sharedRecipe.day.name.toLowerCase().capitalize()
 
       buildNotification(
+          notificationId = notificationId,
           notificationTitle = notificationTitle,
           notificationBody = notificationBody,
           notificationImageUrl = notificationImageUrl,
@@ -63,6 +66,7 @@ class RecipeMessagingService : FirebaseMessagingService() {
   }
 
   private fun buildNotification(
+      notificationId: Int,
       notificationTitle: String?,
       notificationBody: String?,
       notificationImageUrl: String?,
@@ -103,7 +107,7 @@ class RecipeMessagingService : FirebaseMessagingService() {
           override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?,
               isFirstResource: Boolean): Boolean {
             //Send the notification but just don't set the large icon if we fail to load bitmap
-            sendNotification(notificationBuilder)
+            sendNotification(notificationId, notificationBuilder)
             Timber.e(e, "Problem loading notification bitmap")
             return false
           }
@@ -117,14 +121,14 @@ class RecipeMessagingService : FirebaseMessagingService() {
                     String.format(getString(R.string.shared_recipes_notification_big_summary_text),
                         day))
                 .bigLargeIcon(null))
-            sendNotification(notificationBuilder)
+            sendNotification(notificationId, notificationBuilder)
             return true
           }
         }).submit()
   }
 
-  private fun sendNotification(notificationBuilder: Builder) {
+  private fun sendNotification(notificationId: Int, notificationBuilder: Builder) {
     (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-        .notify(0, notificationBuilder.build())
+        .notify(notificationId, notificationBuilder.build())
   }
 }
