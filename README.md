@@ -27,7 +27,7 @@ There are a few things you need to setup if you want to build and run the app lo
 EDAMAM_APP_ID="[YOUR APP_ID]"
 EDAMAM_APP_KEY="[YOUR APP_KEY]"
 ```
-* Nest you need to configure the app to use Firebase. Follow the directions found [here](https://firebase.google.com/docs/android/setup#assistant)
+* Next you need to configure the app to use Firebase. Follow the directions found [here](https://firebase.google.com/docs/android/setup#assistant)
     * For the package name use com.zonkey.simplemealplanner
     * When you get to the _"Add Firebase to your Android App"_ step, you will need to generate a _Debug signing certificate SHA-1_. Follow the steps [here](https://developers.google.com/android/guides/client-auth) to obtain your signing certificate.
     * Once configured and added you need to set up your Realtime Database by selecting the following on the left-side of the portal: _Develop -> Database -> Create database (under Realtime Database) -> Start in test mode_
