@@ -27,6 +27,7 @@ import com.zonkey.simplemealplanner.network.RecipeRepository
 import com.zonkey.simplemealplanner.utils.UiUtils
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_main.create_recipe_fab
 import kotlinx.android.synthetic.main.activity_main.favorites_recipe_card_widget
 import kotlinx.android.synthetic.main.activity_main.home_page_progress
 import kotlinx.android.synthetic.main.activity_main.main_search_recipe_card_widget
@@ -97,6 +98,10 @@ class MainActivity : AppCompatActivity(), MainView {
     refreshSavedRecipeViews()
 
     handleSearchQuery()
+
+    create_recipe_fab.setOnClickListener {
+      startActivity(CreateRecipeActivity.buildIntent(this))
+    }
 
   }
 

@@ -15,45 +15,47 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true">
-    <service
-        android:name=".firebase.RecipeMessagingService"
-        android:exported="false">
-      <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-      </intent-filter>
-
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_icon"
-          android:resource="@drawable/ic_notifcation_icon_primary_24dp"
-          />
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_color"
-          android:resource="@color/colorPrimary"/>
-    </service>
 
     <activity
         android:name=".activity.RecipeDetailActivity"
         android:parentActivityName=".activity.MainActivity"
         android:theme="@style/NoActionBar">
-
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
-          android:value=".activity.MainActivity"/>
+          android:value=".activity.MainActivity" />
     </activity>
+
     <activity android:name=".activity.MainActivity">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
+        <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
       <intent-filter>
-        <action android:name="android.intent.action.SEARCH"/>
+        <action android:name="android.intent.action.SEARCH" />
       </intent-filter>
 
       <meta-data
           android:name="android.app.searchable"
-          android:resource="@xml/searchable"/>
+          android:resource="@xml/searchable" />
     </activity>
+
+    <activity android:name=".activity.CreateRecipeActivity"/>
+
+    <service
+        android:name=".firebase.RecipeMessagingService"
+        android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+      </intent-filter>
+
+      <meta-data
+          android:name="com.google.firebase.messaging.default_notification_icon"
+          android:resource="@drawable/ic_notifcation_icon_primary_24dp" />
+      <meta-data
+          android:name="com.google.firebase.messaging.default_notification_color"
+          android:resource="@color/colorPrimary" />
+    </service>
   </application>
 
 </manifest>

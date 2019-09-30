@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zonkey.simplemealplanner.widgets.IndexCardEditText
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_detail_ingredient_line"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:lineColor="@color/indexCardBlue"
+    tools:text="Test"
+    style="@style/IndexCardLine"
+    />
+

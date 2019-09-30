@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/lightBackground"
+      >
+
+    <ImageView
+        android:id="@+id/create_recipe_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/recipe_image_content_description"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY"
+        android:transitionName="@string/recipe_image_transition"
+        app:layout_collapseMode="parallax"
+        tools:targetApi="lollipop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/create_recipe_horizontal_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/create_recipe_recipe_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title"
+        android:textSize="24sp"
+        android:background="@android:color/transparent"
+        android:layout_margin="@dimen/common_margin_double"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/create_recipe_horizontal_guideline"
+        />
+
+    <View
+        android:id="@+id/create_recipe_title_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detail_scrim_height"
+        android:layout_gravity="bottom"
+        android:background="@drawable/detail_image_scrim_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/create_recipe_recipe_title"
+        />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/create_recipe_horizontal_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".40"/>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/create_recipe_detail_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_recipe_horizontal_guideline"
+        >
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/indexCardYellow"
+          >
+
+        <Button
+            android:id="@+id/create_save_to_meal_plan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/meal_plan_button_min_width"
+            android:text="@string/detail_meal_plan_button_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/AccentColorPill"
+            />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/create_favorite_button"
+            android:layout_width="@dimen/detail_favorite_button_width"
+            android:layout_height="@dimen/detail_favorite_button_height"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_collapseMode="none"
+            app:layout_constraintBottom_toBottomOf="@+id/create_save_to_meal_plan_button"
+            app:layout_constraintEnd_toStartOf="@+id/create_save_to_meal_plan_button"
+            app:layout_constraintTop_toTopOf="@id/create_save_to_meal_plan_button"
+            app:lottie_rawRes="@raw/heart_animation"
+            />
+
+        <View
+            android:id="@+id/create_share_button"
+            android:layout_width="@dimen/detail_share_button_width"
+            android:layout_height="@dimen/detail_share_button_height"
+            android:layout_marginStart="@dimen/common_margin"
+            android:background="@drawable/ic_share_index_blue_24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/create_save_to_meal_plan_button"
+            app:layout_constraintStart_toEndOf="@+id/create_save_to_meal_plan_button"
+            app:layout_constraintTop_toTopOf="@id/create_save_to_meal_plan_button"
+            style="@style/ShareButton"
+            />
+
+        <com.zonkey.simplemealplanner.widgets.CreateRecipeDetailCardView
+            android:id="@+id/detailed_recipe_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ingredients_label="@string/detail_ingredients_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_save_to_meal_plan_button"
+            app:title="@string/recipe_detail_card_title"
+            app:button_text="SAVE"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+
+
+
+
+
+
+
+

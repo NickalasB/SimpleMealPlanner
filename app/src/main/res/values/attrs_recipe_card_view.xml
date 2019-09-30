@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+  <attr name="textSize" format="dimension"/>
+  <attr name="lineColor" format="color"/>
+
   <declare-styleable name="SingleRecipeCard">
     <attr name="recipe_text"/>
     <attr name="recipe_imageUrl"/>
@@ -15,10 +19,23 @@
     <attr name="button_text"/>
   </declare-styleable>
 
+  <declare-styleable name="CreateRecipeDetailCardView">
+    <attr name="title"/>
+    <attr name="ingredients_label"/>
+    <attr name="button_text"/>
+  </declare-styleable>
+
   <declare-styleable name="IndexCardTextView">
     <attr name="text"/>
     <attr name="textStyle"/>
-    <attr name="textSize" format="dimension"/>
-    <attr name="lineColor" format="color"/>
+    <attr name="textSize"/>
+    <attr name="lineColor"/>
+  </declare-styleable>
+
+  <declare-styleable name="IndexCardEditText">
+    <attr name="textStyle"/>
+    <attr name="hint"/>
+    <attr name="textSize"/>
+    <attr name="lineColor"/>
   </declare-styleable>
 </resources>

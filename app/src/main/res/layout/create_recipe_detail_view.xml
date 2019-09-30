@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/indexCardYellow"
+    android:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout"
+    >
+
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
+      android:id="@+id/create_recipe_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/common_margin_double"
+      app:lineColor="@color/indexCardRed"
+      app:textSize="@dimen/title_text_size"
+      app:textStyle="bold"
+      tools:text="Details"
+      />
+
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
+      android:id="@+id/create_ingredients_label"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/common_margin_half"
+      android:layout_marginTop="@dimen/common_margin_half"
+      app:lineColor="@color/indexCardBlue"
+      app:textSize="@dimen/headline_text_size"
+      app:textStyle="bold"
+      tools:text="Ingredients"
+      style="@style/IndexCardLine"
+      />
+
+  <com.zonkey.simplemealplanner.widgets.IndexCardEditText
+      android:id="@+id/create_detail_ingredient_line"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:lineColor="@color/indexCardBlue"
+      tools:text="Test"
+      style="@style/IndexCardLine"
+      app:textSize="@dimen/default_text_size"
+      />
+
+  <com.zonkey.simplemealplanner.widgets.IndexCardTextView
+      android:id="@+id/create_extra_line"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/common_margin_half"
+      android:layout_marginTop="@dimen/common_margin_half"
+      app:lineColor="@color/indexCardBlue"
+      app:textSize="@dimen/headline_text_size"
+      app:textStyle="bold"
+      style="@style/IndexCardLine"
+      />
+
+  <Button
+      android:id="@+id/create_recipe_save_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/common_margin"
+      android:layout_marginStart="@dimen/common_margin"
+      android:layout_marginTop="@dimen/common_margin_half"
+      style="@style/PrimaryColorButton"
+      />
+
+</merge>

@@ -46,4 +46,6 @@
   <string name="shared_recipes_notification_title">%1$s has shared a recipe with you</string>
   <string name="shared_recipes_notification_body">Let\'s make %1$s!</string>
   <string name="shared_recipes_notification_big_summary_text">"Added to your meal plan for %1$s!</string>
+  <string name="create_recipe_title">Title</string>
+  <string name="add_recipe_ingredient_line_hint">Ingredient #%s</string>
 </resources>

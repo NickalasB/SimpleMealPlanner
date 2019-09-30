@@ -1,114 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
     >
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/recipe_main_constraint_layout"
+  <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/common_margin"
-      android:layout_marginStart="@dimen/common_margin"
-      android:paddingBottom="@dimen/common_margin_double"
+      android:layout_height="match_parent"
+      tools:context=".activity.MainActivity"
       >
 
-    <SearchView
-        android:id="@+id/recipe_search_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipe_main_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/recipe_card_query_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin_double"
-        android:textSize="@dimen/title_text_size"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_search_view"
-        tools:text="Corn"
-        />
-
-    <FrameLayout
-        android:id="@+id/recipe_main_search_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_card_query_title"
+        android:layout_marginEnd="@dimen/common_margin"
+        android:layout_marginStart="@dimen/common_margin"
+        android:paddingBottom="@dimen/common_margin_double"
         >
 
-      <include
-          android:id="@+id/search_message_layout"
-          layout="@layout/empty_search_message_and_image"/>
+      <FrameLayout
+          android:id="@+id/recipe_main_search_layout"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/recipe_card_query_title"
+          >
+
+        <ProgressBar
+            android:id="@+id/home_page_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin"
+            android:visibility="gone"
+            />
+
+        <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
+            android:id="@+id/main_search_recipe_card_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_margin"
+            />
+
+        <include
+            layout="@layout/empty_search_message_and_image"
+            android:id="@+id/search_message_layout"
+            />
+      </FrameLayout>
+
+      <SearchView
+          android:id="@+id/recipe_search_view"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/common_margin"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          />
+
+      <TextView
+          android:id="@+id/recipe_card_query_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/common_margin_double"
+          android:textSize="@dimen/title_text_size"
+          android:textStyle="bold"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/recipe_search_view"
+          tools:text="Corn"
+          />
+
+      <TextView
+          android:id="@+id/recipe_card_meal_plan_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/common_margin_double"
+          android:text="@string/common_meal_plan"
+          android:textSize="@dimen/title_text_size"
+          android:textStyle="bold"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/recipe_main_search_layout"
+          />
+
+      <TextView
+          android:id="@+id/recipe_card_favorites_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/common_margin_double"
+          android:text="@string/common_favorites"
+          android:textSize="@dimen/title_text_size"
+          android:textStyle="bold"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/meal_plan_recipe_card_widget"
+          />
 
       <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
-          android:id="@+id/main_search_recipe_card_widget"
+          android:id="@+id/meal_plan_recipe_card_widget"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_height="0dp"
           android:layout_marginBottom="@dimen/common_margin"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/recipe_card_meal_plan_title"
           />
 
-      <ProgressBar
-          android:id="@+id/home_page_progress"
+      <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
+          android:id="@+id/favorites_recipe_card_widget"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/common_margin"
-          android:visibility="gone"
+          android:layout_height="0dp"
+          android:layout_marginBottom="@dimen/common_margin"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/recipe_card_favorites_title"
           />
-    </FrameLayout>
 
-    <TextView
-        android:id="@+id/recipe_card_meal_plan_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin_double"
-        android:text="@string/common_meal_plan"
-        android:textSize="@dimen/title_text_size"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_main_search_layout"
-        />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
-        android:id="@+id/meal_plan_recipe_card_widget"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/common_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_card_meal_plan_title"
-        />
+  </ScrollView>
 
-    <TextView
-        android:id="@+id/recipe_card_favorites_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin_double"
-        android:text="@string/common_favorites"
-        android:textSize="@dimen/title_text_size"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/meal_plan_recipe_card_widget"
-        />
-
-    <com.zonkey.simplemealplanner.widgets.RecipeRecyclerView
-        android:id="@+id/favorites_recipe_card_widget"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/common_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_card_favorites_title"
-        />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/create_recipe_fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/common_margin_double"
+      android:src="@drawable/ic_add_white_24dp"
+      app:backgroundTint="@color/colorPrimary"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      />
+</androidx.constraintlayout.widget.ConstraintLayout>
