@@ -33,36 +33,33 @@ private const val REMOTE_MESSAGE_RECIPE_DATA = "notificationRecipe"
 
 class RecipeMessagingService : FirebaseMessagingService() {
 
-  override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+  override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
-    remoteMessage?.let {
+    val recipeJsonString = remoteMessage.data[REMOTE_MESSAGE_RECIPE_DATA]
 
-      val recipeJsonString = remoteMessage.data[REMOTE_MESSAGE_RECIPE_DATA]
+    val sharedRecipe = Gson().fromJson<Recipe>(recipeJsonString, Recipe::class.java)
 
-      val sharedRecipe = Gson().fromJson<Recipe>(recipeJsonString, Recipe::class.java)
+    val notificationId = kotlin.random.Random.nextInt()
 
-      val notificationId = kotlin.random.Random.nextInt()
+    val notificationTitle = String.format(
+        getString(R.string.shared_recipes_notification_title,
+            sharedRecipe.sharedFromUser))
 
-      val notificationTitle = String.format(
-          getString(R.string.shared_recipes_notification_title,
-              sharedRecipe.sharedFromUser))
+    val notificationBody = String.format(
+        getString(R.string.shared_recipes_notification_body,
+            sharedRecipe.label))
 
-      val notificationBody = String.format(
-          getString(R.string.shared_recipes_notification_body,
-              sharedRecipe.label))
+    val notificationImageUrl = sharedRecipe.image
 
-      val notificationImageUrl = sharedRecipe.image
+    val mealPlanDay = sharedRecipe.day.name.toLowerCase().capitalize()
 
-      val mealPlanDay = sharedRecipe.day.name.toLowerCase().capitalize()
-
-      buildNotification(
-          notificationId = notificationId,
-          notificationTitle = notificationTitle,
-          notificationBody = notificationBody,
-          notificationImageUrl = notificationImageUrl,
-          recipeJsonString = recipeJsonString,
-          day = mealPlanDay)
-    }
+    buildNotification(
+        notificationId = notificationId,
+        notificationTitle = notificationTitle,
+        notificationBody = notificationBody,
+        notificationImageUrl = notificationImageUrl,
+        recipeJsonString = recipeJsonString,
+        day = mealPlanDay)
   }
 
   private fun buildNotification(
