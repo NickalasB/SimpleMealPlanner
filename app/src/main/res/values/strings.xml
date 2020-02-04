@@ -22,7 +22,7 @@
   <string name="common_favorites">Favorites</string>
   <string name="common_meal_plan">Meal Plan</string>
   <string name="detail_snackbar_meal_plan_removed">Recipe removed from meal plan</string>
-  <string name="menu_sign_out">Sign Out</string>
+  <string name="menu_sign_out">Sign Out: %s</string>
   <string name="snack_bar_sign_out_message">Successfully signed out!</string>
   <string name="menu_sign_in">Sign In</string>
   <string name="snackbar_sign_in_message">Successfully Signed In!</string>
