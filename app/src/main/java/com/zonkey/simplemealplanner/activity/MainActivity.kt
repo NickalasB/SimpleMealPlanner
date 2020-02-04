@@ -185,7 +185,8 @@ class MainActivity : AppCompatActivity(), MainView {
       true -> {
         activityMenu?.removeItem(R.id.sign_in)
         if (activityMenu?.findItem(R.id.sign_out) == null) {
-          activityMenu?.add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+          activityMenu?.add(Menu.NONE, R.id.sign_out, Menu.NONE,
+              getString(R.string.menu_sign_out, firebaseAuthRepository.currentUser?.email))
         }
         true
       }
@@ -205,7 +206,8 @@ class MainActivity : AppCompatActivity(), MainView {
         true -> {
           removeItem(R.id.sign_in)
           if (findItem(R.id.sign_out) == null) {
-            add(Menu.NONE, R.id.sign_out, Menu.NONE, R.string.menu_sign_out)
+            add(Menu.NONE, R.id.sign_out, Menu.NONE,
+                getString(R.string.menu_sign_out, firebaseAuthRepository.currentUser?.email))
           }
         }
         false -> {
