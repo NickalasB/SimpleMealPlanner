@@ -3,7 +3,7 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 exports.sendRecipeSharedNotification = functions.database.ref('/simple_meal_planner/users/{userId}/recipes/{recipeId}')
 .onWrite((change, context) => {
